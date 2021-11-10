@@ -1,5 +1,8 @@
 /**
  * 앞이 F면 앞 앞이 T면 뒤
+ * let c = c === true ? a || b;
+ * return c;
+ * => return a || b;
  */
 console.log(true && "hello");
 console.log(false && "hello");

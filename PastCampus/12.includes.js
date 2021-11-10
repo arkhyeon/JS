@@ -1,3 +1,4 @@
+//배열이 특정 요소를 포함하고 있는지 판별
 function isAnimal(text) {
     return (
         text === "개" ||

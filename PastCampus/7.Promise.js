@@ -1,3 +1,13 @@
+/**
+ * new Promise() => Pending
+ * or => resolve => then
+ * or => reject => catch [Error]
+ * => finally
+ */
+
+/**
+ * Resolve Then
+ */
 const p = new Promise((resolve, reject) => {
     /**pending 대기상태 */
     setTimeout(() => {
@@ -10,22 +20,6 @@ const p = new Promise((resolve, reject) => {
 p.then(() => {
     /** 콜백작성 */
     console.log("1000ms 후에 시작");
-});
-
-/**
- * Resolve Then
- */
-function p() {
-    return new Promise((resolve, reject) => {
-        /**pending 대기상태 */
-        setTimeout(() => {
-            resolve(); //이행된 상태
-        }, 1000);
-    });
-}
-
-p().then(() => {
-    console.log("1000ms 후 실행");
 });
 
 /**
@@ -45,6 +39,7 @@ p()
         console.log("1000ms 후 실행");
     })
     .catch(() => {
+        //실행
         console.log("1000ms rejected");
     });
 
