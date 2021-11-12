@@ -2,11 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
+import CustomHook from "./CustomHook";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <CustomHook />
+        {/* <App /> */}
     </React.StrictMode>,
     document.getElementById("root")
 );
