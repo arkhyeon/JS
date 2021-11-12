@@ -2,6 +2,11 @@ import UserList from "./UserList";
 import React, { useReducer, useRef, useMemo, useCallback } from "react";
 import CreateUser from "./CreateUser";
 
+function countActiveUsers(users) {
+    console.log("활성 사용자 수를 세는중...");
+    return users.filter((user) => user.active).length;
+}
+
 const initialState = {
     inputs: {
         username: "",
@@ -56,14 +61,14 @@ function reducer(state, action) {
         case "REMOVE_USER":
             return {
                 ...state,
-                users: state.userfilter((user) => user.id !== action.id),
+                users: state.users.filter((user) => user.id !== action.id),
             };
         default:
             throw new Error("default Error");
     }
 }
 
-function CustomHook() {
+function Reducer() {
     const [state, dispatch] = useReducer(reducer, initialState);
     const nextId = useRef(4);
     const { users } = state;
@@ -96,6 +101,16 @@ function CustomHook() {
             id,
         });
     }, []);
+
+    const onRemove = useCallback((id) => {
+        dispatch({
+            type: "REMOVE_USER",
+            id,
+        });
+    }, []);
+
+    const count = useMemo(() => countActiveUsers(users), [users]);
+
     return (
         <>
             <CreateUser
@@ -104,10 +119,10 @@ function CustomHook() {
                 onChange={onChange}
                 onCreate={onCreate}
             />
-            <UserList users={users} />
-            <div>활성 사용자 수 : 0 </div>
+            <UserList users={users} onToggle={onToggle} onRemove={onRemove} />
+            <div>활성 사용자 수 : {count} </div>
         </>
     );
 }
 
-export default CustomHook;
+export default Reducer;
