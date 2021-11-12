@@ -34,6 +34,7 @@ const initialState = {
     ],
 };
 
+//간단할 것 같으면 userState, 아니면 useReducer
 function reducer(state, action) {
     switch (action.type) {
         case "CHANGE_INPUT":
