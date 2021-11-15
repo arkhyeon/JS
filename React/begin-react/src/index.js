@@ -5,11 +5,13 @@ import App from "./App";
 import Reducer from "./Reducer";
 import reportWebVitals from "./reportWebVitals";
 import ContextSample from "./ContextSample";
+import Hello from "./Hello";
 
 ReactDOM.render(
     <React.StrictMode>
         {/* <ContextSample /> */}
-        <Reducer />
+        {/* <Reducer /> */}
+        {<Hello name="react" isSpecial />}
         {/* <App /> */}
     </React.StrictMode>,
     document.getElementById("root")
