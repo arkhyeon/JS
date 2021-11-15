@@ -1,6 +1,28 @@
-import React from "react";
+import React, { useContext, useRef, useCallback } from "react";
+import { UserDispatch } from "./Reducer";
+import useInputs from "./hooks/useInput";
 
-function CreateUser({ username, email, onChange, onCreate }) {
+function CreateUser() {
+    const dispatch = useContext(UserDispatch);
+    const [form, onChange, reset] = useInputs({ username: "", email: "" });
+    const { username, email } = form;
+    const nextId = useRef(4);
+    const nameInput = useRef();
+
+    const onCreate = useCallback(() => {
+        dispatch({
+            type: "CREATE_USER",
+            user: {
+                id: nextId.current,
+                username,
+                email,
+            },
+        });
+        nextId.current++;
+        reset();
+        nameInput.current.focus();
+    }, [dispatch, username, email, reset]);
+
     return (
         <div>
             <input
@@ -8,6 +30,7 @@ function CreateUser({ username, email, onChange, onCreate }) {
                 placeholder="계정명"
                 onChange={onChange}
                 value={username}
+                ref={nameInput}
             />
             <input
                 name="email"

@@ -4,9 +4,11 @@ import "./index.css";
 import App from "./App";
 import Reducer from "./Reducer";
 import reportWebVitals from "./reportWebVitals";
+import ContextSample from "./ContextSample";
 
 ReactDOM.render(
     <React.StrictMode>
+        {/* <ContextSample /> */}
         <Reducer />
         {/* <App /> */}
     </React.StrictMode>,
