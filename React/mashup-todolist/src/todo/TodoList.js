@@ -11,11 +11,11 @@ const TodoListBlock = styled.div`
 `;
 
 function TodoList() {
-    const items = useTodoState("state");
+    const items = useTodoState();
 
     return (
         <TodoListBlock>
-            <TodoItem items={items} />
+            <TodoItem items={items} key={items.id} />
         </TodoListBlock>
     );
 }

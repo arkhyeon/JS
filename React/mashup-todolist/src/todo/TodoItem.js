@@ -81,12 +81,12 @@ const Item = React.memo(function Item({ item }) {
 
 function TodoItem({ items }) {
     return (
-        <div>
+        <>
             {items.map((item) => (
                 <Item item={item} key={item.id} />
             ))}
-        </div>
+        </>
     );
 }
 
-export default TodoItem;
+export default React.memo(TodoItem);

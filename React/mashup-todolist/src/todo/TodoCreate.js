@@ -77,11 +77,11 @@ const Input = styled.input`
 
 function TodoCreate() {
     const [open, setOpen] = useState(false);
-    const onToggle = () => setOpen(!open);
-
+    const [value, setValue] = useState("");
     const dispatch = useTodoDispatch();
     const nextId = useTodoNextId();
-    const [value, setValue] = useState("");
+
+    const onToggle = () => setOpen(!open);
     const onChange = (e) => {
         setValue(e.target.value);
     };
@@ -105,7 +105,7 @@ function TodoCreate() {
         <>
             {open && (
                 <InsertFormPositioner>
-                    <InsertForm onSubmit={(e) => onSubmit(e)}>
+                    <InsertForm onSubmit={onSubmit}>
                         <Input
                             value={value}
                             autoFocus
@@ -122,4 +122,4 @@ function TodoCreate() {
     );
 }
 
-export default TodoCreate;
+export default React.memo(TodoCreate);
