@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import "./scss/header.scss";
 
 const HeaderWrap = styled.div`
@@ -52,64 +53,76 @@ function Header() {
             </h1>
             <Menu>
                 <MenuItem>
-                    <img
-                        src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_01.png"
-                        alt=""
-                    />
+                    <Link to="/main">
+                        <img
+                            src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_01.png"
+                            alt=""
+                        />
+                    </Link>
                 </MenuItem>
                 <MenuItem>
-                    <img
-                        src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_02.png"
-                        alt=""
-                    />
+                    <Link to="/menu">
+                        <img
+                            src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_02.png"
+                            alt=""
+                        />
+                    </Link>
                 </MenuItem>
                 <MenuItem>
-                    <img
-                        src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_03.png"
-                        alt=""
-                    />
+                    <Link to="/menu1">
+                        <img
+                            src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_03.png"
+                            alt=""
+                        />
+                    </Link>
                 </MenuItem>
                 <MenuItem>
-                    <img
-                        src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_04.png"
-                        alt=""
-                    />
+                    <Link to="/menu2">
+                        <img
+                            src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_04.png"
+                            alt=""
+                        />
+                    </Link>
                 </MenuItem>
                 <MenuItem>
-                    <img
-                        src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_05.png"
-                        alt=""
-                    />
+                    <Link to="/menu3">
+                        <img
+                            src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_05.png"
+                            alt=""
+                        />
+                    </Link>
                 </MenuItem>
                 <MenuItem>
-                    <img
-                        src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_06.png"
-                        alt=""
-                    />
+                    <Link to="/menu4">
+                        <img
+                            src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_06.png"
+                            alt=""
+                        />
+                    </Link>
                 </MenuItem>
                 <MenuItem>
-                    <img
-                        src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_07.png"
-                        alt=""
-                    />
+                    <Link to="/menu5">
+                        <img
+                            src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_07.png"
+                            alt=""
+                        />
+                    </Link>
                 </MenuItem>
                 <MenuItem>
-                    <img
-                        src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_08.png"
-                        alt=""
-                    />
+                    <Link to="/menu6">
+                        <img
+                            src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_08.png"
+                            alt=""
+                        />
+                    </Link>
                 </MenuItem>
                 <MenuItem>
-                    <img
-                        src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_09.png"
-                        alt=""
-                    />
-                </MenuItem>
-                <MenuItem>
-                    <img
-                        src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_10.png"
-                        alt=""
-                    />
+                    <Link to="/menu7">
+                        <img
+                            src="http://192.168.10.26:8080/Trans4.7/image/header/top_icon_off_09.png"
+                            alt=""
+                        />
+                    </Link>
                 </MenuItem>
             </Menu>
             <LoginInfoTextWrap>
@@ -119,10 +132,12 @@ function Header() {
                 </LoginInfoText>
             </LoginInfoTextWrap>
             <LogOut>
-                <img
-                    src="http://192.168.10.26:8080/Trans4.7/image/admin/logout.png"
-                    alt=""
-                />
+                <Link to="/">
+                    <img
+                        src="http://192.168.10.26:8080/Trans4.7/image/admin/logout.png"
+                        alt=""
+                    />
+                </Link>
             </LogOut>
         </HeaderWrap>
     );
