@@ -1,9 +1,17 @@
 import "./App.css";
-import styled, { css } from "styled-components";
+import { Routes, Route } from "react-router-dom";
 import Login from "./template/Login";
+import Main from "./template/Main";
 
 function App() {
-    return <Login />;
+    return (
+        <>
+            <Routes>
+                <Route path="/" element={<Login />} exact />
+                <Route path="/main" element={<Main />} exact />
+            </Routes>
+        </>
+    );
 }
 
 export default App;
