@@ -97,10 +97,16 @@ function Login({ history }) {
     };
 
     async function loginCheck(id, pwd) {
-        console.log("?");
         try {
             const res = await axios.get(
-                "Trans4.7/app_info/test_sample.jsp?id=" + id + "&pwd=" + pwd
+                process.env.REACT_APP_DB_HOST +
+                    "/Trans4.7/app_info/test_sample.jsp?id=" +
+                    id +
+                    "&pwd=" +
+                    pwd,
+                {
+                    crossDomain: true,
+                }
             );
             console.log(res);
             if (res.data === 1) {
