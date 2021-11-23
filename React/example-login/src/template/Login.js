@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+const axios = require("axios");
 const LoginHead = styled.div`
     width: 100%;
     background: url("http://192.168.10.26:8080/Trans4.7/image/login/login_bg.png");
@@ -55,7 +56,20 @@ const LoginSaveIdLabel = styled.label`
     cursor: pointer;
 `;
 
+// function a(id, pwd) {
+//     axios
+//         .get("Trans4.7/app_info/test_sample.jsp?id=" + id + "&pwd=" + pwd)
+//         .then(function (response) {
+//             alert(response.data.trim() + "성공");
+//             console.log(response.data.trim());
+//         })
+//         .catch(function (error) {
+//             console.log(error);
+//         });
+// }
+
 function Login({ history }) {
+    const navigate = useNavigate();
     const [userId, setUserId] = useState("");
     const [userPwd, setUserPwd] = useState("");
     const onChangeId = (e) => {
@@ -64,20 +78,42 @@ function Login({ history }) {
     const onChangePwd = (e) => {
         setUserPwd(e.target.value);
     };
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+
+        if (!userId && !userPwd) {
+            alert("아이디와 비밀번호를 입력해주세요.");
+            return;
+        }
+
+        loginCheck(userId, userPwd);
+    };
+
     const onKeyPressPwd = (e) => {
         if (e.charCode === 13) {
-            loginCheck();
+            onSubmit(e);
         }
     };
 
-    const navigate = useNavigate();
-    const loginCheck = () => {
-        if (userId && userPwd) {
-            navigate("/main");
-        } else {
-            alert("아이디와 비밀번호를 입력해주세요.");
+    async function loginCheck(id, pwd) {
+        console.log("?");
+        try {
+            const res = await axios.get(
+                "Trans4.7/app_info/test_sample.jsp?id=" + id + "&pwd=" + pwd
+            );
+            console.log(res);
+            if (res.data === 1) {
+                alert("로그인 성공");
+                navigate("/main");
+            } else {
+                alert("Login Check : " + res.data);
+            }
+        } catch (error) {
+            console.error(error);
         }
-    };
+    }
+
     return (
         <>
             <LoginHead>
@@ -88,26 +124,28 @@ function Login({ history }) {
             </LoginHead>
             <LoginMain>
                 <LoginWrap>
-                    <LoginIdInput
-                        className="login-input"
-                        type={"text"}
-                        placeholder="아이디"
-                        userId={userId}
-                        onChange={onChangeId}
-                    />
-                    <LoginPwdInput
-                        className="login-input"
-                        type={"password"}
-                        placeholder="비밀번호"
-                        userPwd={userPwd}
-                        onChange={onChangePwd}
-                        onKeyPress={onKeyPressPwd}
-                    />
-                    <LoginBtn onClick={loginCheck}>로그인</LoginBtn>
-                    <LoginSaveId id="login-save-id" type={"checkbox"} />
-                    <LoginSaveIdLabel htmlFor="login-save-id">
-                        사용자 계정 저장
-                    </LoginSaveIdLabel>
+                    <form method="get" onSubmit={onSubmit}>
+                        <LoginIdInput
+                            className="login-input"
+                            type={"text"}
+                            placeholder="아이디"
+                            userId={userId}
+                            onChange={onChangeId}
+                        />
+                        <LoginPwdInput
+                            className="login-input"
+                            type={"password"}
+                            placeholder="비밀번호"
+                            userPwd={userPwd}
+                            onChange={onChangePwd}
+                            onKeyPress={onKeyPressPwd}
+                        />
+                        <LoginBtn>로그인</LoginBtn>
+                        <LoginSaveId id="login-save-id" type={"checkbox"} />
+                        <LoginSaveIdLabel htmlFor="login-save-id">
+                            사용자 계정 저장
+                        </LoginSaveIdLabel>
+                    </form>
                 </LoginWrap>
             </LoginMain>
         </>
