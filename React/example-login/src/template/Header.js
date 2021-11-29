@@ -27,7 +27,7 @@ const LoginInfoText = styled.p`
 `;
 
 const LoginInfoTextWrap = styled.div`
-    min-width: 222px;
+   1 min-width: 222px;
     margin: 6px 15px;
     transition: 1s;
     overflow: hidden;
@@ -41,6 +41,8 @@ const LogOut = styled.div`
     margin: 6px 15px 6px 0px;
 `;
 
+
+
 function Header() {
     return (
         <HeaderWrap>
@@ -52,6 +54,11 @@ function Header() {
                 />
             </h1>
             <Menu>
+                {
+                    for(var i = 0; i<8;i++;){
+
+                    }
+                }
                 <MenuItem>
                     <Link to="/main">
                         <img
