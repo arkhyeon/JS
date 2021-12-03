@@ -1,0 +1,46 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+}
+
+.headerWrap {
+    width: 100%;
+    min-width: 1900px;
+    background: #98b054;
+    overflow: hidden;
+    height: 70px;
+}
+
+.headerWrap h1 {
+    float: left;
+}
+
+.headerWrap > ul {
+    width: 1650px;
+    height: 70px;
+    float: left;
+}
+
+.headerWrap * {
+    color: white;
+}
+
+.headerWrap ul .subMenuItem {
+    width: 120px;
+    height: 0px;
+    position: fixed;
+    top: 70px;
+    left: 320px;
+    background-color: #98b054;
+    opacity: 0.8;
+    transition: 0.5s;
+    overflow: hidden;
+}
+
+.Menu:hover {
+    .subMenuItem {
+        height: 560px;
+    }
+}
