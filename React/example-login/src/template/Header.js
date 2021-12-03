@@ -27,7 +27,7 @@ const LoginInfoText = styled.p`
 `;
 
 const LoginInfoTextWrap = styled.div`
-   1 min-width: 222px;
+    min-width: 222px;
     margin: 6px 15px;
     transition: 1s;
     overflow: hidden;

@@ -5,7 +5,7 @@ import PostContainer from "../containers/PostContainer";
 
 function PostPage() {
     const { id } = useParams();
-    console.log(id);
+
     const postId = parseInt(id, 10);
 
     return <PostContainer postId={postId} />;

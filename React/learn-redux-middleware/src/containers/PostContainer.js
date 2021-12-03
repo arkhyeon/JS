@@ -5,7 +5,6 @@ import { reducerUtils } from "../lib/asyncUtils";
 import { getPost } from "../modules/posts";
 
 function PostContainer({ postId }) {
-    console.log(postId);
     const { data, loading, error } = useSelector(
         (state) => state.posts.post[postId] || reducerUtils.initial()
     );
@@ -15,7 +14,7 @@ function PostContainer({ postId }) {
         if (data) return;
         dispatch(getPost(postId));
     }, [postId, dispatch, data]);
-    console.log(data);
+
     if (loading && !data) return <div>로딩중...</div>;
     if (error) return <div>에러 발생!</div>;
     if (!data) return null;
