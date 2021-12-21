@@ -15,7 +15,7 @@ const MenuDiv = styled.div`
     }
 `;
 
-function Menu() {
+function Menu4() {
     const value = useParams();
 
     return (
@@ -25,4 +25,4 @@ function Menu() {
     );
 }
 
-export default Menu;
+export default Menu4;

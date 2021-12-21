@@ -1,0 +1,17 @@
+$color: #0b2444;
+
+.headerWrap {
+    width: 100%;
+    min-width: 1900px;
+    background: $color;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 12px;
+}
+
+.headerWrap > a {
+    font-weight: bold;
+    font-size: 26px;
+    color: #fafafa;
+}

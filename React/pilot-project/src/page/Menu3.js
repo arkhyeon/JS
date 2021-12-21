@@ -15,9 +15,9 @@ const MenuDiv = styled.div`
     }
 `;
 
-function Menu() {
+function Menu3() {
     const value = useParams();
-
+    console.log(window.location.pathname);
     return (
         <MenuDiv>
             <h1>SubMenu {value.id}</h1>
@@ -25,4 +25,4 @@ function Menu() {
     );
 }
 
-export default Menu;
+export default Menu3;
