@@ -4,17 +4,12 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { CookiesProvider } from "react-cookie";
 import { ThemeProvider } from "styled-components";
+import theme from "./utils/theme";
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
-            <ThemeProvider
-                theme={{
-                    menuColor: "#0b2444",
-                    menuFontColor: "#fafafa",
-                    defaultColor: "#0b2444",
-                }}
-            >
+            <ThemeProvider theme={theme}>
                 <CookiesProvider>
                     <App />
                 </CookiesProvider>

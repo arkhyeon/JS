@@ -21,12 +21,12 @@ import styled, { css } from "styled-components";
  *
  * @returns {Component} Menu Component
  */
+
 const CreateMenu = (props) => {
     const menus = props.menus[0];
     const [selectedMenus, setSelectedMenus] = useState([]);
     const handleMenuSelection = (label, depth) => {
         setSelectedMenus((selectedMenus) => {
-            console.log(selectedMenus);
             const newSelectedMenus = [...selectedMenus];
             newSelectedMenus.length = depth;
             if (label !== "") {

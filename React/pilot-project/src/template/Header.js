@@ -1,15 +1,14 @@
-import React, { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React from "react";
+import { NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { lighten } from "polished";
-import { MdAccountCircle, MdLogout, MdSettings } from "react-icons/md";
 import CreateMenu from "../utils/CreateMenu";
-import "../utils/CreateMenu.scss";
+import "../scss/header.scss";
 import { DepthList1, Common_depth_list_1 } from "../utils/DepthMenu";
+import MenuInfo from "./headerComp/MenuInfo";
 
 function Header({ getAuth, userAuth }) {
-    const navigate = useNavigate();
-    const [visible, setVisible] = useState(false);
+    // const [visible, setVisible] = useState(false);
     // const setLoginInfo = useCallback(() => {
     //     return (
     //         <>
@@ -22,26 +21,27 @@ function Header({ getAuth, userAuth }) {
     // const repleSubmit = useCallback(() => {
     //     return sessionStorage.getItem("loginTime");
     // }, []);
+    // console.log(A());
 
-    const logout = () => {
-        getAuth(null);
-        sessionStorage.removeItem("user_id");
-        sessionStorage.removeItem("userAuth");
-        navigate("/");
-    };
+    // const logout = () => {
+    //     getAuth(null);
+    //     sessionStorage.removeItem("user_id");
+    //     sessionStorage.removeItem("userAuth");
+    //     navigate("/");
+    // };
 
     return (
         <div className="headerWrap">
             <NavLink to="/">SQLCanvas Trans</NavLink>
             <CreateMenu menus={userAuth === "0" ? [DepthList1] : [Common_depth_list_1]} color={""} fontColor={""} size={"14.5px 40px"} />
             <LogintInfo>
-                <MdAccountCircle
+                {/* <MdAccountCircle
                     onClick={() => {
                         visible ? setVisible(false) : setVisible(true);
                     }}
-                />
+                /> */}
                 {/* <span>최근 접속 시간 : {repleSubmit()}</span> */}
-                {visible && (
+                {/* {visible && (
                     <ul>
                         <li>
                             <MdAccountCircle /> 로그인 정보
@@ -53,7 +53,8 @@ function Header({ getAuth, userAuth }) {
                             <MdLogout /> 로그아웃
                         </li>
                     </ul>
-                )}
+                )} */}
+                <MenuInfo getAuth={getAuth} />
             </LogintInfo>
         </div>
     );
