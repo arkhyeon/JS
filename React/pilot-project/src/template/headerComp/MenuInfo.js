@@ -1,32 +1,49 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { BsFillChatDotsFill, BsPersonFill } from "react-icons/bs";
+import { BsPersonFill } from "react-icons/bs";
 import Badge from "react-bootstrap/Badge";
 import AccountInfo from "./AccountInfo";
 import MessageTab from "./MessageTab";
-import { MsgContents } from "./MessageContents";
+import axios from "axios";
+import { MdMessage } from "react-icons/md";
 
 function MenuInfo({ getAuth }) {
-    const [notify, setNotify] = useState(MsgContents.length + 3);
+    const [notify, setNotify] = useState();
+    const [unReadMsg, setUnReadMsg] = useState([]);
     const [toggleAccount, setToggleAccount] = useState(false);
     const [toggleMessage, setToggleMessage] = useState(false);
-    const refId = useRef();
+
+    const getMessages = () => {
+        axios
+            .get(process.env.REACT_APP_DB_HOST + "/Messages")
+            .then((res) => {
+                setUnReadMsg(res.data.filter((item) => item.read === 1));
+            })
+            .catch((Error) => {
+                console.log(Error);
+            });
+    };
+
+    useEffect(() => {
+        getMessages();
+        setNotify(unReadMsg.length);
+    }, [unReadMsg.length]);
 
     return (
-        <Container ref={refId}>
-            <ItemWrap onMouseDown={() => setToggleMessage(!toggleMessage)}>
-                <BsFillChatDotsFill />
-                {!toggleMessage && (
-                    <Badge pill bg="danger">
-                        {notify}
-                    </Badge>
-                )}
+        <Container>
+            <ItemWrap
+                onClick={() => {
+                    setToggleMessage(!toggleMessage);
+                }}
+            >
+                <MdMessage />
+                {!toggleMessage && notify !== 0 && <Badge>{notify}</Badge>}
             </ItemWrap>
-            <ItemWrap onMouseDown={() => setToggleAccount(!toggleAccount)}>
+            <ItemWrap onClick={() => setToggleAccount(!toggleAccount)}>
                 <BsPersonFill />
             </ItemWrap>
-            {toggleMessage && <MessageTab refId={refId} setToggleMessage={setToggleMessage} MsgContents={MsgContents} />}
-            {toggleAccount && <AccountInfo toggleAccount={true} setToggleAccount={setToggleAccount} getAuth={getAuth} />}
+            {toggleMessage && <MessageTab toggleMessage setToggleMessage={setToggleMessage} unReadMsg={unReadMsg} setUnReadMsg={setUnReadMsg} />}
+            {toggleAccount && <AccountInfo toggleAccount setToggleAccount={setToggleAccount} getAuth={getAuth} />}
         </Container>
     );
 }
@@ -39,6 +56,7 @@ const Container = styled.div`
 const ItemWrap = styled.div`
     position: relative;
     color: ${({ theme }) => theme.colors.normal};
+    margin: 0px 10px;
     cursor: pointer;
 
     &:hover {
@@ -50,14 +68,20 @@ const ItemWrap = styled.div`
 
     & > svg {
         margin: 0.5rem 0.5rem;
-        width: 1.5rem;
-        height: 1.5rem;
+        font-size: 1.8rem;
     }
 
     .badge {
+        width: 12px;
+        height: 12px;
+        background-color: #07ff47 !important;
+        color: black;
+        border-radius: 3px;
+        font-size: 0.7rem;
         position: absolute;
-        left: 1rem;
-        top: 0.2rem;
+        left: 2.3rem;
+        top: 0.1rem;
+        padding: 1px;
     }
 `;
 

@@ -34,9 +34,9 @@ const theme = {
     paddings,
     margins,
     colors,
-    menuColor: "#0b2444",
+    menuColor: "#3f525c",
     menuFontColor: "#fafafa",
-    defaultColor: "#0b2444",
+    defaultColor: "#3f525c",
 };
 
 export default theme;

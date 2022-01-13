@@ -1,4 +1,4 @@
-$color: #0b2444;
+$color: #3f525c;
 
 .headerWrap {
     width: 100%;
@@ -7,11 +7,58 @@ $color: #0b2444;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0px 12px;
+    padding: 0px 15px;
+    height: 50px;
+    position: relative;
+    z-index: 10;
 }
 
 .headerWrap > a {
     font-weight: bold;
     font-size: 26px;
     color: #fafafa;
+}
+
+div.offcanvas {
+    top: 49px;
+}
+
+.offcanvas .offcanvas-title {
+    margin-bottom: 0px;
+}
+
+.offcanvas .offcanvas-body {
+    padding-top: 0px;
+    overflow: auto;
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        height: 17%;
+        background-color: rgba(0, 0, 0, 0.12);
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: rgba(0, 0, 0, 0);
+    }
+}
+
+.offcanvas-body .toast svg {
+    width: 18px;
+    height: 18px;
+}
+
+.offcanvas-body .toast-body p {
+    color: #212529;
+    font-size: 14px;
+    margin-bottom: 0px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.offcanvas-body .toast a:hover div {
+    background-color: #f9f9f9;
 }

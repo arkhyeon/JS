@@ -1,6 +1,6 @@
 import { darken, lighten } from "polished";
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useRef, useState } from "react";
+import { Route, NavLink } from "react-router-dom";
 import styled, { css } from "styled-components";
 
 /**
@@ -189,5 +189,38 @@ SidebarItem.Item = styled.li`
         background-color: ${(props) => props.color || props.theme.menuColor};
     }
 `;
+
+export const SetRoute = (props) => {
+    const routes = props;
+    const nextId = useRef(1);
+
+    return (
+        <>
+            {routes.map((route) => {
+                return SubRoute(route, nextId);
+            })}
+        </>
+    );
+};
+
+const SubRoute = (route, nextId, depth = 0) => {
+    const { component, link = "", subMenu = [] } = route;
+    nextId.current += 1;
+    return (
+        <>
+            {subMenu.length > 0 ? (
+                <Route key={route.title} path={link} element={component}>
+                    {subMenu.map((child) => {
+                        nextId.current += 1;
+                        const childDepth = depth + 1;
+                        return SubRoute(child, nextId, childDepth);
+                    })}
+                </Route>
+            ) : (
+                <Route key={route.title} path={link} element={component} />
+            )}
+        </>
+    );
+};
 
 export default CreateMenu;

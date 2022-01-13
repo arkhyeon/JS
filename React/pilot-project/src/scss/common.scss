@@ -71,7 +71,7 @@ body * {
 }
 
 body {
-    background: #e7eaec;
+    background: #ebebeb;
     font-family: Helvetica, sans-serif;
     font-size: 1rem;
     line-height: 20px;
@@ -1646,4 +1646,19 @@ fieldset:disabled .btn {
 
 .w-100 {
     width: 100% !important;
+}
+
+.grid-cell-centered {
+    justify-content: center;
+    text-align: center;
+}
+
+.ck-editor__editable {
+    min-height: 415px;
+    max-height: 415px;
+}
+
+.beforeRead {
+    font-weight: bold !important;
+    color: #000;
 }

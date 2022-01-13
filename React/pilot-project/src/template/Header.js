@@ -8,52 +8,11 @@ import { DepthList1, Common_depth_list_1 } from "../utils/DepthMenu";
 import MenuInfo from "./headerComp/MenuInfo";
 
 function Header({ getAuth, userAuth }) {
-    // const [visible, setVisible] = useState(false);
-    // const setLoginInfo = useCallback(() => {
-    //     return (
-    //         <>
-    //             <b>{sessionStorage.getItem("user_id")}</b>
-    //             <span> (솔루션 관리자)</span>
-    //         </>
-    //     );
-    // }, []);
-
-    // const repleSubmit = useCallback(() => {
-    //     return sessionStorage.getItem("loginTime");
-    // }, []);
-    // console.log(A());
-
-    // const logout = () => {
-    //     getAuth(null);
-    //     sessionStorage.removeItem("user_id");
-    //     sessionStorage.removeItem("userAuth");
-    //     navigate("/");
-    // };
-
     return (
         <div className="headerWrap">
             <NavLink to="/">SQLCanvas Trans</NavLink>
             <CreateMenu menus={userAuth === "0" ? [DepthList1] : [Common_depth_list_1]} color={""} fontColor={""} size={"14.5px 40px"} />
             <LogintInfo>
-                {/* <MdAccountCircle
-                    onClick={() => {
-                        visible ? setVisible(false) : setVisible(true);
-                    }}
-                /> */}
-                {/* <span>최근 접속 시간 : {repleSubmit()}</span> */}
-                {/* {visible && (
-                    <ul>
-                        <li>
-                            <MdAccountCircle /> 로그인 정보
-                        </li>
-                        <li>
-                            <MdSettings /> 설정
-                        </li>
-                        <li onClick={() => logout()}>
-                            <MdLogout /> 로그아웃
-                        </li>
-                    </ul>
-                )} */}
                 <MenuInfo getAuth={getAuth} />
             </LogintInfo>
         </div>
@@ -64,7 +23,7 @@ export default Header;
 
 const LogintInfo = styled.div`
     color: #fafafa;
-    width: 222px;
+    width: 130px;
     display: block;
 
     & > svg {

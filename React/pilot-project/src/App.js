@@ -6,40 +6,29 @@ import Menu from "./page/Menu";
 import Menu2 from "./page/Menu2";
 import Menu3 from "./page/Menu3";
 import Menu4 from "./page/Menu4";
+import Message from "./page/message/Message";
+import MessageDetail from "./page/message/MessageDetail";
+import MessageWrite from "./page/message/MessageWrite";
+import MessageList from "./page/message/MessageList";
+import Login2 from "./template/Login2";
+import { SetRoute } from "./utils/CreateMenu";
+import { DepthList1 } from "./utils/DepthMenu";
 
 function App() {
     return (
         <div className="App">
             <Routes>
+                <Route path="/login2" element={<Login2 />} />
                 <Route path="/" element={<Layout />}>
                     <Route path="/" element={<Main />} />
-                    <Route path="/menu" element={<Menu />} />
-                    <Route path="/a" element={<Menu2 />}>
-                        <Route path="/a/1" element={<Menu2 />} />
-                        <Route path="/a/2" element={<Menu2 />}>
-                            <Route path="/a/2:id" element={<Menu2 />} />
-                        </Route>
-                        <Route path="/a/3" element={<Menu2 />} />
-                        <Route path="/a/4" element={<Menu2 />} />
+                    {SetRoute(DepthList1)}
+                    <Route path="Message" element={<Message />}>
+                        <Route path="MessageReceive" element={<MessageList />} />
+                        <Route path="MessageReceive/MessageDetail" element={<MessageDetail />} />
+                        <Route path="MessageDispatch" element={<MessageList />} />
+                        <Route path="MessageDispatch/MessageDetail" element={<MessageDetail />} />
+                        <Route path="MessageWrite" element={<MessageWrite />} />
                     </Route>
-                    <Route path="/b" element={<Menu3 />}>
-                        <Route path="/b/1" element={<Menu3 />} />
-                        <Route path="/b/2" element={<Menu3 />} />
-                        <Route path="/b/3" element={<Menu3 />}>
-                            <Route path="/b/3/1" element={<Menu3 />} />
-                            <Route path="/b/3/2" element={<Menu3 />}>
-                                <Route path="/b/3/2/1" element={<Menu3 />} />
-                                <Route path="/b/3/2/2" element={<Menu3 />} />
-                                <Route path="/b/3/2/3" element={<Menu3 />}>
-                                    <Route path="/b/3/2/3/1" element={<Menu3 />} />
-                                </Route>
-                            </Route>
-                            <Route path="/b/3/3" element={<Menu3 />} />
-                        </Route>
-                        <Route path="/b/4" element={<Menu3 />} />
-                    </Route>
-                    <Route path="/c" element={<Menu4 />} />
-                    <Route path="/d" element={<Menu4 />} />
                 </Route>
             </Routes>
         </div>

@@ -3,10 +3,6 @@ body {
     height: 100%;
 }
 
-body {
-    background-color: #f5f5f5;
-}
-
 .loginWrap {
     position: absolute;
     top: 0;
@@ -16,7 +12,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #0b2444;
+    background: #3f525c;
     background-size: cover;
 }
 
@@ -26,15 +22,7 @@ body {
     padding: 15px;
 }
 
-.form-signin .checkbox {
-    font-weight: 400;
-}
-
-.form-signin .form-floating:focus-within {
-    z-index: 2;
-}
-
-.form-signin input[type="email"] {
+.form-signin input[type="text"] {
     margin-bottom: -1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
@@ -46,100 +34,39 @@ body {
     border-top-right-radius: 0;
 }
 
-.form-floating {
-    position: relative;
-}
-.form-floating > .form-control,
-.form-floating > .form-select {
-    height: calc(3rem + 2px);
-    line-height: 1.25;
-}
-.form-floating > label {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    padding: 1rem 0.75rem;
-    pointer-events: none;
-    border: 1px solid transparent;
-    transform-origin: 0 0;
-    transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
+.form-signin .form-control {
+    height: 52px;
 }
 
-.login-logo,
-.register-logo {
-    font-size: 2.1rem;
+.login-logo {
+    font-size: 2.5rem;
     font-weight: 400;
     margin-bottom: 0.6rem;
     text-align: center;
-}
-.login-logo a,
-.register-logo a {
-    color: rgb(255, 255, 255);
-    text-decoration: none;
-}
-
-.login-logo_left,
-.register-logo {
-    font-size: 1.6rem;
-    font-weight: 400;
-    /* margin-left:-2rem; */
-    margin-bottom: 0.6rem;
-    margin-left: -0.6rem;
-    text-align: left;
-}
-.login-logo_left a,
-.register-logo a {
-    color: rgb(197, 197, 197);
-    text-decoration: none;
-}
-
-.login-logo_left-dark,
-.register-logo {
-    font-size: 1.6rem;
-    font-weight: 400;
-    /* margin-left:-2rem; */
-    margin-bottom: 0.6rem;
-    text-align: left;
-}
-.login-logo_left-dark a,
-.register-logo a {
-    color: rgb(116, 116, 116);
-    text-decoration: none;
-}
-
-.custom-control-label {
-    vertical-align: middle;
-}
-
-.checkbox {
-    padding: 0.3rem 0.3rem;
-    margin-top: 10px;
-}
-
-.text-left {
-    text-align: left !important;
-    vertical-align: middle;
-}
-
-.text-right {
-    text-align: right !important;
-    vertical-align: middle;
+    color: #d3dce5;
 }
 
 .text-center {
     text-align: center !important;
 }
 
-.text-muted {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: #d1d1d1 !important;
-    vertical-align: middle;
+.btn-graygreen {
+    color: #fff !important;
+    background-color: #60b85d !important;
+    border-color: #60b85d !important;
 }
 
-label .text-left.text-muted {
+.text-muted-w {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: white;
+    vertical-align: middle;
     position: relative;
-    top: -4px;
-    left: 4px;
+    top: -1px;
+    left: 8px;
+}
+
+.copyright {
+    font-size: 0.8rem;
+    color: #d4d4d4;
 }

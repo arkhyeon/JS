@@ -61,28 +61,21 @@ function Login({ getAuth, getUserAuth }) {
                 <main className="form-signin">
                     <form method="get" onSubmit={onSubmit}>
                         <h3 className="login-logo">
-                            <a href="/">
-                                <b>SQLCanvas Trans</b> <span className="h4">Pilot</span>
-                            </a>
+                            <b>SQLCanvas Trans</b> <span className="h4">Pilot</span>
                         </h3>
-                        <div className="form-floating">
-                            <input value={userId} type={"text"} onChange={onChangeId} ref={inputUserId} className="form-control" placeholder="ID" />
-                        </div>
-                        <div className="form-floating">
-                            <input type={"password"} onChange={onChangePwd} ref={inputUserPwd} className="form-control" placeholder="Password" />
-                        </div>
-
-                        <div className="mb-3">
+                        <input value={userId} type={"text"} onChange={onChangeId} ref={inputUserId} className="form-control" placeholder="ID" />
+                        <input type={"password"} onChange={onChangePwd} ref={inputUserPwd} className="form-control" placeholder="Password" />
+                        <div className="my-3 mx-auto text-center">
                             <label>
                                 <input type="checkbox" checked={isRemember} color="primary" onChange={handleOnChange} />
-                                <span className="text-left text-muted">사용자 계정 저장</span>
+                                <span className="text-muted-w">사용자 계정 저장</span>
                             </label>
                         </div>
-                        <button className="w-100 btn btn-lg btn-primary" type="submit">
+                        <button className="w-100 btn btn-lg btn-graygreen" type="submit">
                             Login
                         </button>
                     </form>
-                    <div className="text-center text-muted">Copyright(c)R2ware, All rights reserved. SQLCanvas Trans Pilot</div>
+                    <div className="mt-3 mb-3 copyright text-center">Copyright(c)R2ware, All rights reserved. SQLCanvas Trans Pilot</div>
                 </main>
             </div>
         </>
@@ -90,17 +83,3 @@ function Login({ getAuth, getUserAuth }) {
 }
 
 export default Login;
-
-// const setLoginTime = () => {
-//     const time = new Date();
-//     const today = {
-//         year: time.getFullYear(),
-//         month: time.getMonth() + 1,
-//         date: time.getDate() > 10 ? time.getDate() : "0" + time.getDate(),
-//         hours: time.getHours(),
-//         minutes: time.getMinutes() > 10 ? time.getMinutes() : "0" + time.getMinutes(),
-//         second: time.getSeconds() > 10 ? time.getSeconds() : "0" + time.getSeconds(),
-//     };
-
-//     return `${today.year}-${today.month}-${today.date} ${today.hours}:${today.minutes}:${today.second}`;
-// };

@@ -20,7 +20,7 @@ function Menu4() {
 
     return (
         <MenuDiv>
-            <h1>SubMenu {value.id}</h1>
+            <h1>SubMenu4 {value.id}</h1>
         </MenuDiv>
     );
 }
