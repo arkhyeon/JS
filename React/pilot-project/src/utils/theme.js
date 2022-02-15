@@ -19,14 +19,20 @@ const margins = {
 };
 
 const colors = {
-    normal: "#78909c",
-    light: "#a7c0cd",
-    dark: "#4b636e",
-    white: "white",
-    gray_1: "#efefef",
-    gray_2: "#bdbdbd",
-    gray_3: "#8d8d8d",
-    gray_4: "#263238",
+    light_1: "#eceff1",
+    light_2: "#cfd8dc",
+    light_3: "#b0bec5",
+    normal_1: "#90a4ae",
+    normal_2: "#78909c",
+    normal_3: "#607d8b",
+    normal_4: "#546e7a",
+    dark_1: "#455a64",
+    dark_2: "#37474f",
+    gray_1: "#e9e9e9",
+    gray_2: "#c4c4c4",
+    gray_3: "#929292",
+    gray_4: "#666666",
+    gray_5: "#383838",
 };
 
 const theme = {

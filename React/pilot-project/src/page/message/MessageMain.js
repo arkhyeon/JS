@@ -12,12 +12,11 @@ function MessageMain() {
 const MessageMainWrap = styled.div`
     width: 100%;
     border-bottom: 1px solid #a9a9a9;
-    padding: 21px;
-    height: 680px;
+    padding: 15px;
+    height: 841px;
 
     & svg {
-        width: 24px;
-        height: 24px;
+        font-size: 24px;
     }
 `;
 export default MessageMain;

@@ -6,11 +6,11 @@ const FooterWrap = styled.div`
     width: 100%;
     min-width: 1900px;
     height: 46px;
-    color: #989898;
+    color: ${({ theme }) => theme.colors.gray_3};
     background-color: white;
     font-size: 0.8rem;
-    border-top: 1px solid #b6b6b6;
-    border-bottom: 1px solid #b6b6b6;
+    border-top: 1px solid ${({ theme }) => theme.colors.gray_1};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray_1};
     line-height: 46px;
     padding: 0px 15px;
     position: fixed;

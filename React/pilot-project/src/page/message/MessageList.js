@@ -4,11 +4,11 @@ import "ag-grid-enterprise";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { AgGridReact } from "ag-grid-react/lib/agGridReact";
-import { Button } from "react-bootstrap";
 import styled from "styled-components";
 import { MdNotificationImportant, MdNotifications } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import MessageHeader from "./MessageHeader";
+import { WhiteButton } from "../../component/button/R2wButton";
 
 const MessageList = () => {
     let msgGridApi = null;
@@ -17,7 +17,7 @@ const MessageList = () => {
 
     const getMessages = () => {
         axios
-            .get(process.env.REACT_APP_DB_HOST + "/Messages")
+            .get(process.env.REACT_APP_API_MESSAGES)
             .then((res) => {
                 msgGridApi.setRowData(res.data);
             })
@@ -27,7 +27,6 @@ const MessageList = () => {
     };
 
     const onGridReady = (props) => {
-        console.log(props.api);
         msgGridApi = props.api;
         getMessages();
     };
@@ -60,12 +59,11 @@ const MessageList = () => {
         for (let i = 0; i < selectedRows.length; i++) {
             axios
                 .delete(process.env.REACT_APP_DB_HOST + "/Messages/" + selectedRows[i].id)
-                .then(() => {
-                    msgGridApi.applyTransaction({ remove: selectedRows[i] });
-                })
+                .then(() => {})
                 .catch((error) => {
                     console.log(error.response);
                 });
+            msgGridApi.applyTransaction({ remove: selectedRows[i] });
         }
     };
 
@@ -101,23 +99,23 @@ const MessageList = () => {
         <>
             <MessageHeader />
             <GridContainer className="ag-theme-alpine">
-                <Button onClick={onRowDel}>삭제</Button>
-                <Button onClick={onClearData}>전체삭제</Button>
-                <Button onClick={onReloadData}>새로고침</Button>
+                <WhiteButton onClick={onRowDel}>삭제</WhiteButton>
+                <WhiteButton onClick={onClearData}>전체삭제</WhiteButton>
+                <WhiteButton onClick={onReloadData}>새로고침</WhiteButton>
                 {location.state === "RECEIVE" ? (
                     <>
-                        <Button onClick={onRowRead}>읽음</Button>
-                        <Button onClick={onRowAllRead}>전체읽음</Button>
+                        <WhiteButton onClick={onRowRead}>읽음</WhiteButton>
+                        <WhiteButton onClick={onRowAllRead}>전체읽음</WhiteButton>
                         <AgGridReact
                             onGridReady={onGridReady}
                             rowSelection="multiple"
-                            columnDefs={ColumnInfo.HeaderInfo}
-                            defaultColDef={ColumnInfo.DefaultInfo}
+                            gridOptions={ReceiveGridOption}
                             onCellClicked={onCellClicked}
                             stopEditingWhenCellsLoseFocus={true}
                             frameworkComponents={{ notificationIcon, htmlToText }}
                             animateRows={true}
                             rowClassRules={rowClassRules}
+                            rowHeight="40"
                         ></AgGridReact>
                     </>
                 ) : (
@@ -130,6 +128,7 @@ const MessageList = () => {
                         stopEditingWhenCellsLoseFocus={true}
                         frameworkComponents={{ notificationIcon, htmlToText, isRead }}
                         animateRows={true}
+                        rowHeight="40"
                     ></AgGridReact>
                 )}
             </GridContainer>
@@ -139,20 +138,31 @@ const MessageList = () => {
 
 const GridContainer = styled.div`
     width: 100%;
-    height: 500px;
+    height: 651px;
     & button {
-        margin: 0px 10px 10px 0px;
+        height: 33px;
+        margin: 0 7px 15px 0px;
     }
     & a {
         color: black;
         text-decoration: underline;
     }
+
+    & .beforeRead {
+        font-weight: bold !important;
+        color: #000;
+    }
+
+    &.ag-theme-alpine .ag-ltr .ag-cell,
+    &.ag-theme-alpine .ag-react-container {
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
 `;
 
-// let initRowData = [];
-
-const ColumnInfo = {
-    HeaderInfo: [
+const ReceiveGridOption = {
+    columnDefs: [
         {
             checkboxSelection: true,
             headerCheckboxSelection: true,
@@ -162,8 +172,6 @@ const ColumnInfo = {
             headerName: "타입",
             field: "type",
             flex: 0.38,
-            headerClass: "grid-cell-centered",
-            cellClass: "grid-cell-centered",
             cellRenderer: "notificationIcon",
         },
         {
@@ -199,7 +207,7 @@ const ColumnInfo = {
             hide: true,
         },
     ],
-    DefaultInfo: {
+    defaultColDef: {
         editable: false,
         resizable: true,
         sortable: true,
@@ -219,8 +227,6 @@ const DispatchInfo = {
             headerName: "타입",
             field: "type",
             flex: 0.4,
-            headerClass: "grid-cell-centered",
-            cellClass: "grid-cell-centered",
             cellRenderer: "notificationIcon",
         },
         {
@@ -268,10 +274,7 @@ const DispatchInfo = {
         sortable: true,
         flex: 1,
     },
-    // rowSelection: "multiple",
     cellStyle: { textAlign: "center" },
-
-    // rowMultiSelectWithClick: true,
 };
 
 const rowClassRules = {

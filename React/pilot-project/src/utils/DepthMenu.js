@@ -1,170 +1,66 @@
 import React from "react";
-import Main from "../page/Main";
-import Menu2 from "../page/Menu2";
-import Menu3 from "../page/Menu3";
-import Menu4 from "../page/Menu4";
 import Work from "../page/work/Work";
+import Macro from "../page/config/macro/Macro";
+import Sync from "../page/config/sync/Sync";
+import System from "../page/config/system/System";
+import Config from "../page/config/Config";
 
+//Fix 22.01.13
+
+/**
+ * @param {String} title
+ * 메뉴에 들어갈 텍스트, map key 역할[unique]
+ * @param {String} link(option)
+ * URL Path
+ * NavLink to={link}
+ * routePath가 없으면 link가 routePath로 설정
+ * @param {String} routePath(option)
+ * routePath
+ * Route path={routePath}
+ * @param {component} component(option)
+ * 해당 URL에 보여줄 컴포넌트
+ * Route element={component}
+ * @param {Array} subMenu(option)
+ *  - 해당 메뉴 하위로 나올 메뉴
+ *
+ * @return
+ * function CreateMenu = title, link, subMenu 사용
+ * function setRoute   = title, link, subMenu, component 사용
+ */
 export const DepthList1 = [
     {
-        id: 1,
-        title: "depth_1depth_1",
-        link: "/b",
-        // component: <Menu3 />,
-        subMenu: [
-            {
-                id: 1_1,
-                title: "depth_1_1",
-                link: "/b/1",
-                component: <Menu3 />,
-                subMenu: [],
-            },
-            {
-                id: 1_2,
-                title: "depth_1_2",
-                link: "/b/2",
-                component: <Main />,
-                subMenu: [],
-            },
-            {
-                id: 1_3,
-                title: "depth_1_3",
-                link: "/b/3",
-                component: <Menu2 />,
-                subMenu: [
-                    {
-                        id: 1_3_1,
-                        title: "depth_1_3_1",
-                        link: "/b/3/1",
-                        component: <Menu2 />,
-                        subMenu: [],
-                    },
-                    {
-                        id: 1_3_2,
-                        title: "depth_1_3_2depth_1_3_2",
-                        link: "/b/3/2",
-                        component: <Menu2 />,
-                        subMenu: [
-                            {
-                                id: 1_3_2_1,
-                                title: "depth_1_3_2_1",
-                                link: "/b/3/2/1",
-                                component: <Menu2 />,
-                                subMenu: [],
-                            },
-                            {
-                                id: 1_3_2_2,
-                                title: "depth_1_3_2_2",
-                                link: "/b/3/2/2",
-                                component: <Menu2 />,
-                                subMenu: [],
-                            },
-                            {
-                                id: 1_3_2_3,
-                                title: "depth_1_3_2_3",
-                                link: "/b/3/2/3",
-                                component: <Menu2 />,
-                                subMenu: [
-                                    {
-                                        id: 1_3_2_3_1,
-                                        title: "depth_1_3_2_3_1",
-                                        link: "/b/3/2/3/1",
-                                        component: <Menu2 />,
-                                        subMenu: [],
-                                    },
-                                ],
-                            },
-                        ],
-                    },
-                    {
-                        id: 1_3_3,
-                        title: "depth_1_3_3",
-                        link: "/b/3/3",
-                        component: <Menu2 />,
-                        subMenu: [],
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        id: 2,
-        title: "depth_2",
-        link: "/menu",
+        title: "작업",
+        link: "/",
         component: <Work />,
-        subMenu: [],
     },
     {
-        id: 3,
-        title: "depth_3",
-        link: "/a",
-        component: <Menu2 />,
+        title: "설정",
+        link: "config",
+        routePath: "config/*",
+        component: <Config />,
         subMenu: [
             {
-                id: 3_1,
-                title: "depth_3_1",
-                link: "/a/1",
-                component: <Main />,
-                subMenu: [],
+                id: 5_1,
+                title: "업무 등록",
+                link: "/work",
+                routePath: "work",
+                component: <System />,
             },
             {
-                id: 3_2,
-                title: "depth_3_2",
-                link: "/a/2",
-                component: <Main />,
-                subMenu: [
-                    {
-                        id: 3_2_1,
-                        title: "depth_3_2_1",
-                        link: "/a/2/1",
-                        component: <Main />,
-                        subMenu: [],
-                    },
-                    {
-                        id: 3_2_2,
-                        title: "depth_3_2_2",
-                        link: "/a/2/2",
-                        component: <Menu2 />,
-                        subMenu: [],
-                    },
-                    {
-                        id: 3_2_3,
-                        title: "depth_3_2_3",
-                        link: "/a/2/3",
-                        component: <Main />,
-                        subMenu: [],
-                    },
-                ],
+                id: 5_2,
+                title: "테이블 동기화",
+                link: "/sync",
+                routePath: "sync",
+                component: <Sync />,
             },
             {
-                id: 3_3,
-                title: "depth_3_3",
-                link: "/a/3",
-                component: <Main />,
-                subMenu: [],
-            },
-            {
-                id: 3_4,
-                title: "depth_3_4",
-                link: "/a/4",
-                component: <Main />,
-                subMenu: [],
+                id: 5_3,
+                title: "매크로 설정",
+                link: "/macro",
+                routePath: "macro",
+                component: <Macro />,
             },
         ],
-    },
-    {
-        id: 4,
-        title: "depth_4",
-        component: <Menu3 />,
-        link: "/c",
-        subMenu: [],
-    },
-    {
-        id: 5,
-        title: "depth_5",
-        component: <Menu4 />,
-        link: "/d",
-        subMenu: [],
     },
 ];
 
@@ -172,7 +68,7 @@ export const Common_depth_list_1 = [
     {
         id: 1,
         title: "작업",
-        link: "",
-        component: <Main />,
+        link: "/",
+        component: <Work />,
     },
 ];

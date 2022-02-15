@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { BsPersonFill } from "react-icons/bs";
+import { BsFillChatDotsFill } from "react-icons/bs";
 import Badge from "react-bootstrap/Badge";
-import AccountInfo from "./AccountInfo";
 import MessageTab from "./MessageTab";
 import axios from "axios";
-import { MdMessage } from "react-icons/md";
+import { MdLogout } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 function MenuInfo({ getAuth }) {
+    const navigate = useNavigate();
     const [notify, setNotify] = useState();
     const [unReadMsg, setUnReadMsg] = useState([]);
-    const [toggleAccount, setToggleAccount] = useState(false);
     const [toggleMessage, setToggleMessage] = useState(false);
 
     const getMessages = () => {
@@ -22,6 +22,17 @@ function MenuInfo({ getAuth }) {
             .catch((Error) => {
                 console.log(Error);
             });
+    };
+
+    const onHandleLogout = () => {
+        if (!window.confirm("로그아웃하시겠습니까?")) {
+            return;
+        }
+
+        getAuth(null);
+        sessionStorage.removeItem("user_id");
+        sessionStorage.removeItem("userAuth");
+        navigate("/");
     };
 
     useEffect(() => {
@@ -36,14 +47,13 @@ function MenuInfo({ getAuth }) {
                     setToggleMessage(!toggleMessage);
                 }}
             >
-                <MdMessage />
+                <BsFillChatDotsFill />
                 {!toggleMessage && notify !== 0 && <Badge>{notify}</Badge>}
             </ItemWrap>
-            <ItemWrap onClick={() => setToggleAccount(!toggleAccount)}>
-                <BsPersonFill />
+            <ItemWrap onClick={() => onHandleLogout()}>
+                <MdLogout />
             </ItemWrap>
             {toggleMessage && <MessageTab toggleMessage setToggleMessage={setToggleMessage} unReadMsg={unReadMsg} setUnReadMsg={setUnReadMsg} />}
-            {toggleAccount && <AccountInfo toggleAccount setToggleAccount={setToggleAccount} getAuth={getAuth} />}
         </Container>
     );
 }
@@ -55,32 +65,32 @@ const Container = styled.div`
 
 const ItemWrap = styled.div`
     position: relative;
-    color: ${({ theme }) => theme.colors.normal};
+    color: ${({ theme }) => theme.colors.light_2};
     margin: 0px 10px;
     cursor: pointer;
 
     &:hover {
-        color: ${({ theme }) => theme.colors.light};
+        color: ${({ theme }) => theme.colors.light_3};
     }
     &:active {
-        color: ${({ theme }) => theme.colors.normal};
+        color: ${({ theme }) => theme.colors.light_3};
     }
 
     & > svg {
         margin: 0.5rem 0.5rem;
-        font-size: 1.8rem;
+        font-size: 1.55rem;
     }
 
     .badge {
-        width: 12px;
-        height: 12px;
-        background-color: #07ff47 !important;
+        width: 16px;
+        height: 16px;
+        background-color: #ff5353 !important;
         color: black;
-        border-radius: 3px;
-        font-size: 0.7rem;
+        border-radius: 100%;
+        font-size: 0.75rem;
         position: absolute;
-        left: 2.3rem;
-        top: 0.1rem;
+        left: 1.5rem;
+        top: 0.2rem;
         padding: 1px;
     }
 `;

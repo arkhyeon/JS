@@ -1,274 +1,751 @@
 {
-    "Messages": [
+  "Messages": [
+    {
+      "type": 2,
+      "writer": "admin",
+      "date": "2022-01-25 09:00",
+      "contents": "[마감 공지] 2022-01-25~2022-01-26 업무가 마감되었습니다.\n<p>uhhh</p>",
+      "receiver": "user",
+      "read": 0,
+      "id": 1
+    },
+    {
+      "type": 2,
+      "writer": "admin",
+      "date": "2022-01-27 11:10",
+      "contents": "[개시 공지] 2022-01-27~2022-01-27(기준일 : 2022-01-28) 업무가 개시되었습니다.\n<p>업무개시 기준일 28일</p>",
+      "receiver": "user",
+      "read": 0,
+      "id": 2
+    },
+    {
+      "type": 2,
+      "writer": "admin",
+      "date": "2022-01-27 09:00",
+      "contents": "[마감 공지] 2022-01-27~2022-01-27 (기준일 : 2022-01-27) 업무가 마감되었습니다.\n<p>마감쳤따</p>",
+      "receiver": "user",
+      "read": 0,
+      "id": 3
+    },
+    {
+      "type": 2,
+      "writer": "admin",
+      "date": "2022-01-27 11:18",
+      "contents": "[개시 공지] 2022-01-27~2022-01-27 (기준일 : 2022-01-28) 업무가 개시되었습니다.\n<p>기준 28일</p>",
+      "receiver": "user",
+      "read": 0,
+      "id": 4
+    },
+    {
+      "type": 2,
+      "writer": "admin",
+      "date": "2022-01-27 11:18",
+      "contents": "[마감 공지] 2022-01-27~2022-01-27 (기준일 : 2022-01-28) 업무가 마감되었습니다.\n<p>마감</p>",
+      "receiver": "user",
+      "read": 0,
+      "id": 5
+    },
+    {
+      "type": 2,
+      "writer": "admin",
+      "date": "2022-01-27 11:19",
+      "contents": "[개시 공지] 2022-01-27~2022-01-29 (기준일 : 2022-01-30) 업무가 개시되었습니다.\n<p>27 29 30</p>",
+      "receiver": "user",
+      "read": 0,
+      "id": 6
+    },
+    {
+      "type": 2,
+      "writer": "admin",
+      "date": "2022-01-27 11:19",
+      "contents": "[마감 공지] 2022-01-27~2022-01-27 (기준일 : 2022-01-30) 업무가 마감되었습니다.\n<p>마아감</p>",
+      "receiver": "user",
+      "read": 0,
+      "id": 7
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-14 17:28",
+      "contents": "",
+      "receiver": "aa",
+      "read": 0,
+      "id": 8
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-14 17:28",
+      "contents": "",
+      "receiver": "ss",
+      "read": 0,
+      "id": 9
+    },
+    {
+      "type": 2,
+      "writer": "admin",
+      "date": "2022-02-15 09:45",
+      "contents": "[개시 공지] 2022-02-15~2022-02-15 (기준일 : 2022-02-17) 업무가 개시되었습니다.\n<p>업무 개시</p>",
+      "receiver": "user",
+      "read": 1,
+      "id": 10
+    },
+    {
+      "type": 2,
+      "writer": "admin",
+      "date": "2022-02-15 09:46",
+      "contents": "[마감 공지] 2022-02-15~2022-02-15 (기준일 : 2022-02-17) 업무가 마감되었습니다.\n<p>마감</p>",
+      "receiver": "user",
+      "read": 1,
+      "id": 11
+    },
+    {
+      "type": 2,
+      "writer": "admin",
+      "date": "2022-02-15 09:46",
+      "contents": "[개시 공지] 2022-02-15~2022-02-15 (기준일 : 2022-03-04) 업무가 개시되었습니다.\n<p>개시햇</p>",
+      "receiver": "user",
+      "read": 1,
+      "id": 12
+    },
+    {
+      "type": 2,
+      "writer": "admin",
+      "date": "2022-02-15 10:06",
+      "contents": "[마감 공지] 2022-02-15~2022-02-15 (기준일 : 2022-03-04) 업무가 마감되었습니다.\n<p>akrka</p><p>&nbsp;</p>",
+      "receiver": "user",
+      "read": 1,
+      "id": 13
+    }
+  ],
+  "Users": [
+    {
+      "id": 1,
+      "name": "admin"
+    },
+    {
+      "id": 2,
+      "name": "kuller"
+    },
+    {
+      "id": 3,
+      "name": "ehdtnn"
+    },
+    {
+      "id": 4,
+      "name": "sojang"
+    },
+    {
+      "id": 5,
+      "name": "bangjoo"
+    },
+    {
+      "id": 6,
+      "name": "suseok"
+    },
+    {
+      "id": 7,
+      "name": "flex"
+    },
+    {
+      "id": 8,
+      "name": "styled"
+    }
+  ],
+  "Servers": [
+    {
+      "id:": "1",
+      "name": "정보계"
+    },
+    {
+      "id:": "2",
+      "name": "계정계"
+    }
+  ],
+  "Works": [
+    {
+      "id": 1,
+      "server_name": "정보계",
+      "dbms_dbname": "INFPD",
+      "dbms_dsn": "fninfdb1",
+      "owner": "SU",
+      "table_name": "BEDTX1",
+      "table_desc": "한글하나",
+      "trrule_yn": "YES",
+      "table_status": "신규",
+      "trans_yn": "YES",
+      "ledger": "내역1",
+      "truncate_yn": "YES",
+      "users": 1,
+      "extract_sql": "select * from BEDTX1 where col_1 == 22 and col_2 < 20 order by col_3 desc",
+      "table_real_size": "1024",
+      "table_dev_size": "1025",
+      "enroll": 1,
+      "users_query": [
         {
-            "id": 1,
-            "type": 1,
-            "important": 0,
-            "writer": "admin",
-            "receiver": "seya",
-            "date": "2021-12-22 13:53",
-            "contents": "Test, which is a new approach to have all solutions astrology under one roof.",
-            "read": 0
-        },
-        {
-            "id": 2,
-            "type": 2,
-            "important": 0,
-            "writer": "admin",
-            "receiver": "seya",
-            "date": "2021-12-22 13:54",
-            "contents": "벌레는 언덕 하나에 풀이 다 파란 봅니다. 하나에 멀리 슬퍼하는 사랑과 별 위에 어머니, 내린 있습니다. , 내린 있습니다.",
-            "read": 0
-        },
-        {
-            "id": 3,
-            "type": 3,
-            "important": 0,
-            "writer": "admin",
-            "receiver": "seya",
-            "date": "2021-12-22 13:55",
-            "contents": "Test, which is a new approach to have all solutions astrology under one roof.",
-            "read": 0
-        },
-        {
-            "id": 4,
-            "type": 1,
-            "important": 1,
-            "writer": "admin",
-            "receiver": "seya",
-            "date": "2021-12-22 13:53",
-            "contents": "Test, which is a new approach to have all solutions astrology under one roof.",
-            "read": 1
-        },
-        {
-            "id": 5,
-            "type": 2,
-            "important": 1,
-            "writer": "admin",
-            "receiver": "seya",
-            "date": "2021-12-22 13:54",
-            "contents": "벌레는 언덕 하나에 풀이 다 파란 봅니다. 하나에 멀리 슬퍼하는 사랑과 별 위에 어머니, 내린 있습니다.",
-            "read": 1
-        },
-        {
-            "id": 7,
-            "type": 1,
-            "important": 1,
-            "writer": "admin",
-            "receiver": "seya",
-            "date": "2021-12-22 13:53",
-            "contents": "Test, which is a new approach to have all solutions astrology under one roof.",
-            "read": 0
-        },
-        {
-            "id": 8,
-            "type": 2,
-            "important": 0,
-            "writer": "admin",
-            "receiver": "seya",
-            "date": "2021-12-22 13:54",
-            "contents": "벌레는 언덕 하나에 풀이 다 파란 봅니다. 하나에 멀리 슬퍼하는 사랑과 별 위에 어머니, 내린 있습니다.",
-            "read": 0
-        },
-        {
-            "id": 9,
-            "type": 3,
-            "important": 1,
-            "writer": "admin",
-            "receiver": "seya",
-            "date": "2021-12-22 13:55",
-            "contents": "Test, which is a new approach to have all solutions astrology under one roof.",
-            "read": 0
-        },
-        {
-            "id": 10,
-            "type": 3,
-            "important": 1,
-            "writer": "admin",
-            "receiver": "seya",
-            "date": "2021-12-22 13:55",
-            "contents": "불러 것은 했던 이국 이름과 까닭입니다. 멀리 시와 쉬이 때 하나에 별에도 걱정도 있습니다. 나의 벌써 나는 슬퍼하는 이런 하나에 보고, 소녀들의 있습니다. 아름다운 별들을 걱정도 이네들은 나는 북간도에 있습니다.",
-            "read": 0
-        },
-        {
-            "type": 1,
-            "important": 1,
-            "writer": "admin",
-            "date": "2022-00-10 18:52",
-            "contents": "<p>안녕</p><p>&nbsp;</p><p>녕안</p>",
-            "receiver": "ehdtnn",
-            "read": 0,
-            "id": 12
-        },
-        {
-            "type": 2,
-            "important": 1,
-            "writer": "admin",
-            "date": "2022-00-12 09:13",
-            "contents": "<p>중요한 공지</p>",
-            "receiver": "admin",
-            "read": 0,
-            "id": 16
-        },
-        {
-            "type": 1,
-            "important": 0,
-            "writer": "admin",
-            "date": "2022-01-11 09:50",
-            "contents": "<p>일반</p>",
-            "receiver": "seya",
-            "read": 0,
-            "id": 17
-        },
-        {
-            "type": 1,
-            "important": 0,
-            "writer": "admin",
-            "date": "2022-01-11 10:11",
-            "contents": "<p>aaaa</p><p>aaa</p><p>aa<a href=\"www.naver.com\"><i>www.naver.com</i></a></p><ul><li>&nbsp;</li></ul>",
-            "receiver": "admin",
-            "read": 0,
-            "id": 19
-        },
-        {
-            "type": 1,
-            "important": 0,
-            "writer": "admin",
-            "date": "2022-01-11 10:13",
-            "contents": "<p>안녕 하세요 띄 어 쓰 기 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ㅇㅇㅣㅂ니다</p>",
-            "receiver": "admin",
-            "read": 0,
-            "id": 20
+          "userid": "kuller1",
+          "user_extract_sql": "select * from BEDTX1"
         }
-    ],
-    "Users": [
+      ]
+    },
+    {
+      "id": 2,
+      "server_name": "정보계",
+      "dbms_dbname": "INFPD",
+      "dbms_dsn": "fninfdb1",
+      "owner": "SU",
+      "table_name": "BEDTX2",
+      "table_desc": "한글둘",
+      "trrule_yn": "NO",
+      "table_status": "신규",
+      "trans_yn": "NO",
+      "ledger": "내역2",
+      "truncate_yn": "YES",
+      "users": 3,
+      "extract_sql": "",
+      "table_real_size": "1026",
+      "table_dev_size": "1027",
+      "enroll": 1,
+      "users_query": [
         {
-            "id": 1,
-            "name": "admin"
+          "userid": "kuller1",
+          "user_extract_sql": "select * from \"BEDTX1\" where col_1 > 10"
         },
         {
-            "id": 2,
-            "name": "kuller"
+          "userid": "kuller2",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 100"
         },
         {
-            "id": 3,
-            "name": "ehdtnn"
-        },
-        {
-            "id": 4,
-            "name": "sojang"
-        },
-        {
-            "id": 5,
-            "name": "bangjoo"
-        },
-        {
-            "id": 6,
-            "name": "suseok"
-        },
-        {
-            "id": 7,
-            "name": "flex"
-        },
-        {
-            "id": 8,
-            "name": "styled"
+          "userid": "kuller3",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 1000"
         }
-    ],
-    "Works": [
+      ]
+    },
+    {
+      "id": 3,
+      "server_name": "정보계",
+      "dbms_dbname": "INFPD",
+      "dbms_dsn": "fninfdb1",
+      "owner": "SU",
+      "table_name": "BEDTX3",
+      "table_desc": "한글삼테스트를해보자하둘셋",
+      "trrule_yn": "YES",
+      "table_status": "신규",
+      "trans_yn": "NO",
+      "ledger": "내역3",
+      "truncate_yn": "NO",
+      "users": 5,
+      "extract_sql": "",
+      "table_real_size": "1028",
+      "table_dev_size": "1029",
+      "enroll": 0,
+      "users_query": [
         {
-            "server_name": "정보계",
-            "dbms_dbname": "INFPD",
-            "dbms_dsn": "fninfdb1",
-            "owner": "SU",
-            "table_name": "BEDTX1",
-            "table_desc": "한글하나",
-            "trrule_yn": "Y",
-            "table_status": "신규",
-            "trans_yn": "YES",
-            "ledger": "내역1",
-            "truncate_yn": "YES",
-            "users": 1,
-            "extract_sql": "select * from BEDTX1 where col_1 == 22 and col_2 < 20 order by col_3 desc",
-            "table_real_size": "1024",
-            "table_dev_size": "1025",
-            "users_query": [
-                {
-                    "userid": "kuller1",
-                    "user_extract_sql": "select * from BEDTX1"
-                }
-            ]
+          "userid": "kuller1",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 1"
         },
         {
-            "server_name": "정보계",
-            "dbms_dbname": "INFPD",
-            "dbms_dsn": "fninfdb1",
-            "owner": "SU",
-            "table_name": "BEDTX2",
-            "table_desc": "한글둘",
-            "trrule_yn": "N",
-            "table_status": "신규",
-            "trans_yn": "NO",
-            "ledger": "내역2",
-            "truncate_yn": "YES",
-            "users": 3,
-            "extract_sql": "",
-            "table_real_size": "1026",
-            "table_dev_size": "1027",
-            "users_query": [
-                {
-                    "userid": "kuller1",
-                    "user_extract_sql": "select * from \"BEDTX1\" where col_1 > 10"
-                },
-                {
-                    "userid": "kuller2",
-                    "user_extract_sql": "select * from BEDTX1 where col_1 > 100"
-                },
-                {
-                    "userid": "kuller3",
-                    "user_extract_sql": "select * from BEDTX1 where col_1 > 1000"
-                }
-            ]
+          "userid": "kuller2",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 11"
         },
         {
-            "server_name": "정보계",
-            "dbms_dbname": "INFPD",
-            "dbms_dsn": "fninfdb1",
-            "owner": "SU",
-            "table_name": "BEDTX3",
-            "table_desc": "한글삼테스트를해보자하둘셋",
-            "trrule_yn": "Y",
-            "table_status": "신규",
-            "trans_yn": "NO",
-            "ledger": "내역3",
-            "truncate_yn": "NO",
-            "users": 5,
-            "extract_sql": "",
-            "table_real_size": "1028",
-            "table_dev_size": "1029",
-            "users_query": [
-                {
-                    "userid": "kuller1",
-                    "user_extract_sql": "select * from BEDTX1 where col_1 > 1"
-                },
-                {
-                    "userid": "kuller2",
-                    "user_extract_sql": "select * from BEDTX1 where col_1 > 11"
-                },
-                {
-                    "userid": "kuller3",
-                    "user_extract_sql": "select * from BEDTX1 where col_1 > 111"
-                },
-                {
-                    "userid": "kuller4",
-                    "user_extract_sql": "select * from BEDTX1 where col_1 > 1111"
-                },
-                {
-                    "userid": "kuller5",
-                    "user_extract_sql": "select * from BEDTX1 where col_1 > 11111"
-                }
-            ]
+          "userid": "kuller3",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 111"
+        },
+        {
+          "userid": "kuller4",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 1111"
+        },
+        {
+          "userid": "kuller5",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 11111"
         }
-    ],
-    "IsOpen": { "open": 1 }
+      ]
+    },
+    {
+      "id": 4,
+      "server_name": "계정계",
+      "dbms_dbname": "ACTPD",
+      "dbms_dsn": "fninfdb1",
+      "owner": "SU",
+      "table_name": "BEDTX1",
+      "table_desc": "한글하나",
+      "trrule_yn": "YES",
+      "table_status": "신규",
+      "trans_yn": "YES",
+      "ledger": "내역1",
+      "truncate_yn": "YES",
+      "users": 1,
+      "extract_sql": "select * from BEDTX1 where col_1 == 22 and col_2 < 20 order by col_3 desc",
+      "table_real_size": "1024",
+      "table_dev_size": "1025",
+      "enroll": 1,
+      "users_query": [
+        {
+          "userid": "kuller1",
+          "user_extract_sql": "select * from BEDTX1"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "server_name": "정보계",
+      "dbms_dbname": "INFPD",
+      "dbms_dsn": "fninfdb1",
+      "owner": "SU",
+      "table_name": "BEDTX1",
+      "table_desc": "한글하나",
+      "trrule_yn": "YES",
+      "table_status": "신규",
+      "trans_yn": "YES",
+      "ledger": "내역1",
+      "truncate_yn": "YES",
+      "users": 1,
+      "extract_sql": "select * from BEDTX1 where col_1 == 22 and col_2 < 20 order by col_3 desc",
+      "table_real_size": "1024",
+      "table_dev_size": "1025",
+      "enroll": 1,
+      "users_query": [
+        {
+          "userid": "kuller1",
+          "user_extract_sql": "select * from BEDTX1"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "server_name": "정보계",
+      "dbms_dbname": "INFPD",
+      "dbms_dsn": "fninfdb1",
+      "owner": "SU",
+      "table_name": "BEDTX2",
+      "table_desc": "한글둘",
+      "trrule_yn": "NO",
+      "table_status": "신규",
+      "trans_yn": "NO",
+      "ledger": "내역2",
+      "truncate_yn": "YES",
+      "users": 3,
+      "extract_sql": "",
+      "table_real_size": "1026",
+      "table_dev_size": "1027",
+      "enroll": 0,
+      "users_query": [
+        {
+          "userid": "kuller1",
+          "user_extract_sql": "select * from \"BEDTX1\" where col_1 > 10"
+        },
+        {
+          "userid": "kuller2",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 100"
+        },
+        {
+          "userid": "kuller3",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 1000"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "server_name": "정보계",
+      "dbms_dbname": "INFPD",
+      "dbms_dsn": "fninfdb1",
+      "owner": "SU",
+      "table_name": "BEDTX3",
+      "table_desc": "한글삼테스트를해보자하둘셋",
+      "trrule_yn": "YES",
+      "table_status": "신규",
+      "trans_yn": "NO",
+      "ledger": "내역3",
+      "truncate_yn": "NO",
+      "users": 5,
+      "extract_sql": "",
+      "table_real_size": "1028",
+      "table_dev_size": "1029",
+      "enroll": 0,
+      "users_query": [
+        {
+          "userid": "kuller1",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 1"
+        },
+        {
+          "userid": "kuller2",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 11"
+        },
+        {
+          "userid": "kuller3",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 111"
+        },
+        {
+          "userid": "kuller4",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 1111"
+        },
+        {
+          "userid": "kuller5",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 11111"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "server_name": "계정계",
+      "dbms_dbname": "ACTPD",
+      "dbms_dsn": "fninfdb1",
+      "owner": "SU",
+      "table_name": "BEDTX1",
+      "table_desc": "한글하나",
+      "trrule_yn": "YES",
+      "table_status": "신규",
+      "trans_yn": "YES",
+      "ledger": "내역1",
+      "truncate_yn": "YES",
+      "users": 1,
+      "extract_sql": "select * from BEDTX1 where col_1 == 22 and col_2 < 20 order by col_3 desc",
+      "table_real_size": "1024",
+      "table_dev_size": "1025",
+      "enroll": 0,
+      "users_query": [
+        {
+          "userid": "kuller1",
+          "user_extract_sql": "select * from BEDTX1"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "server_name": "정보계",
+      "dbms_dbname": "INFPD",
+      "dbms_dsn": "fninfdb1",
+      "owner": "SU",
+      "table_name": "BEDTX1",
+      "table_desc": "한글하나",
+      "trrule_yn": "YES",
+      "table_status": "신규",
+      "trans_yn": "YES",
+      "ledger": "내역1",
+      "truncate_yn": "YES",
+      "users": 1,
+      "extract_sql": "select * from BEDTX1 where col_1 == 22 and col_2 < 20 order by col_3 desc",
+      "table_real_size": "1024",
+      "table_dev_size": "1025",
+      "enroll": 0,
+      "users_query": [
+        {
+          "userid": "kuller1",
+          "user_extract_sql": "select * from BEDTX1"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "server_name": "정보계",
+      "dbms_dbname": "INFPD",
+      "dbms_dsn": "fninfdb1",
+      "owner": "SU",
+      "table_name": "BEDTX2",
+      "table_desc": "한글둘",
+      "trrule_yn": "NO",
+      "table_status": "신규",
+      "trans_yn": "NO",
+      "ledger": "내역2",
+      "truncate_yn": "YES",
+      "users": 3,
+      "extract_sql": "",
+      "table_real_size": "1026",
+      "table_dev_size": "1027",
+      "enroll": 0,
+      "users_query": [
+        {
+          "userid": "kuller1",
+          "user_extract_sql": "select * from \"BEDTX1\" where col_1 > 10"
+        },
+        {
+          "userid": "kuller2",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 100"
+        },
+        {
+          "userid": "kuller3",
+          "user_extract_sql": "select * from BEDTX1 where col_1 > 1000"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "schName": "스케줄2",
+      "schDesc": "스케줄2 설명",
+      "schPattern": "1",
+      "directRun": false,
+      "noneEndDt": false,
+      "startDate": "2022-01-25",
+      "startTime": "16:00",
+      "endDate": "2022-01-26",
+      "systemList": [
+        {
+          "id": 1,
+          "selected": false
+        },
+        {
+          "id": 2,
+          "selected": true
+        }
+      ]
+    }
+  ],
+  "SyncMain": [
+    {
+      "schName": "스케줄22",
+      "schDesc": "스케줄2 설명",
+      "schPattern": "1",
+      "directRun": true,
+      "noneEndDt": true,
+      "startDate": "2022-01-01",
+      "startTime": "21:00",
+      "endDate": "2022-02-02",
+      "systemList": [
+        {
+          "id": 1,
+          "system_name": "정보계",
+          "serverid_src": 1,
+          "serverid_dst": 4,
+          "owners": "TRANS1, TRANS2, TRANS3",
+          "selected": true
+        },
+        {
+          "id": 3,
+          "system_name": "대외계",
+          "serverid_src": 3,
+          "serverid_dst": 6,
+          "owners": "EMP1, EMP2",
+          "selected": true
+        }
+      ],
+      "id": 2
+    },
+    {
+      "schName": "1111",
+      "schDesc": "",
+      "schPattern": "7",
+      "directRun": false,
+      "noneEndDt": false,
+      "startDate": "2022-01-25",
+      "startTime": "19:49",
+      "endDate": "2022-01-25",
+      "systemList": [
+        {
+          "id": 1,
+          "system_name": "정보계",
+          "serverid_src": 1,
+          "serverid_dst": 4,
+          "owners": "TRANS1, TRANS2, TRANS3",
+          "selected": true
+        },
+        {
+          "id": 2,
+          "system_name": "계정계",
+          "serverid_src": 2,
+          "serverid_dst": 5,
+          "owners": "SCOTT1, SCOTT2",
+          "selected": true
+        },
+        {
+          "id": 3,
+          "system_name": "대외계",
+          "serverid_src": 3,
+          "serverid_dst": 6,
+          "owners": "EMP1, EMP2",
+          "selected": true
+        }
+      ],
+      "id": 3,
+      "cycle": {
+        "month": [
+          1,
+          2
+        ],
+        "day": [],
+        "week": [
+          1,
+          2,
+          5
+        ],
+        "weekDay": [
+          1,
+          2,
+          6
+        ]
+      }
+    },
+    {
+      "schName": "스케줄6",
+      "schDesc": "666",
+      "schPattern": "7",
+      "directRun": false,
+      "noneEndDt": false,
+      "startDate": "2022-01-26",
+      "startTime": "07:55",
+      "endDate": "2022-01-26",
+      "systemList": [
+        {
+          "id": 1,
+          "system_name": "정보계",
+          "serverid_src": 1,
+          "serverid_dst": 4,
+          "owners": "TRANS1, TRANS2, TRANS3",
+          "selected": true
+        },
+        {
+          "id": 3,
+          "system_name": "대외계",
+          "serverid_src": 3,
+          "serverid_dst": 6,
+          "owners": "EMP1, EMP2",
+          "selected": true
+        }
+      ],
+      "cycle": {
+        "month": [
+          8,
+          9
+        ],
+        "day": [
+          4,
+          5,
+          6,
+          30,
+          31
+        ],
+        "week": [],
+        "weekDay": []
+      },
+      "id": 4
+    }
+  ],
+  "SyncSub": [
+    {
+      "id": 1,
+      "system_name": "정보계",
+      "owner": "SU",
+      "table": "BEDTXQMT",
+      "status": "신규",
+      "real_size": 117300,
+      "dev_size": 234,
+      "etc": "비고1",
+      "main_id": 1
+    },
+    {
+      "id": 2,
+      "system_name": "계정계",
+      "owner": "SU",
+      "table": "BEDTXQMT",
+      "status": "신규",
+      "real_size": 117300,
+      "dev_size": 234,
+      "etc": "비고1",
+      "main_id": 1
+    },
+    {
+      "id": 3,
+      "system_name": "정보계",
+      "owner": "SU",
+      "table": "BEDTXQMT",
+      "status": "신규",
+      "real_size": 117300,
+      "dev_size": 234,
+      "etc": "비고1",
+      "main_id": 2
+    }
+  ],
+  "ScheduleInfo": [
+    {
+      "id": 1,
+      "schName": "스케줄1",
+      "schDesc": "스케줄1 설명",
+      "schPattern": "1",
+      "directRun": true,
+      "noneEndDt": true,
+      "startDate": "2022-01-25",
+      "startTime": "15:00",
+      "endDate": "2022-01-25",
+      "systemList": [
+        {
+          "id": 1,
+          "selected": true
+        },
+        {
+          "id": 2,
+          "selected": true
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "schName": "스케줄2",
+      "schDesc": "스케줄2 설명",
+      "schPattern": "1",
+      "directRun": false,
+      "noneEndDt": false,
+      "startDate": "2022-01-25",
+      "startTime": "16:00",
+      "endDate": "2022-01-26",
+      "systemList": [
+        {
+          "id": 1,
+          "selected": false
+        },
+        {
+          "id": 2,
+          "selected": true
+        }
+      ]
+    }
+  ],
+  "IsOpen": {
+    "startDate": "2022-02-15",
+    "endDate": "2022-02-15",
+    "open": false,
+    "refDate": "2022-03-04"
+  },
+  "SystemList": [
+    {
+      "id": 1,
+      "system_name": "정보계",
+      "serverid_src": 1,
+      "serverid_dst": 4,
+      "owners": "TRANS1, TRANS2, TRANS3"
+    },
+    {
+      "id": 2,
+      "system_name": "계정계",
+      "serverid_src": 2,
+      "serverid_dst": 5,
+      "owners": "SCOTT1, SCOTT2"
+    },
+    {
+      "id": 3,
+      "system_name": "대외계",
+      "serverid_src": 3,
+      "serverid_dst": 6,
+      "owners": "EMP1, EMP2"
+    }
+  ],
+  "server_master": [
+    {
+      "id": 1,
+      "jconnect_flag": 1,
+      "server_id": 1,
+      "dbms_type": 2
+    },
+    {
+      "id": 2,
+      "jconnect_flag": 1,
+      "server_id": 2,
+      "dbms_type": 2
+    }
+  ],
+  "app_global": {
+    "use_r2wotr": 1,
+    "use_r2watr": 1,
+    "use_r2wetr": 0,
+    "use_r2wjtr": 1
+  }
 }

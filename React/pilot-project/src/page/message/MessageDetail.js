@@ -1,9 +1,11 @@
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+import axios from "axios";
 import React from "react";
-import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { WhiteButton } from "../../component/button/R2wButton";
 
 function MessageDetail() {
     const msgData = useLocation().state;
@@ -13,35 +15,36 @@ function MessageDetail() {
         navigate("/Message/MessageWrite", { state: msgData });
     };
 
+    const deleteMsg = () => {
+        if (!window.confirm("정말 삭제하시겠습니까?")) {
+            return;
+        }
+        axios
+            .delete(process.env.REACT_APP_DB_HOST + "/Messages/" + msgData.id)
+            .then(() => {
+                navigate("/Message/MessageReceive");
+            })
+            .catch((error) => {
+                console.log(error.response);
+            });
+    };
+
     return (
         <Container>
             <Form>
-                <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
-                    <Form.Label column sm={1}>
-                        받는 사람
+                <Col>
+                    <WhiteButton onClick={reply}>답장</WhiteButton>
+                    <WhiteButton onClick={deleteMsg}>삭제</WhiteButton>
+                </Col>
+                <Form.Group as={Row} className="msgInfo">
+                    <Form.Label sm={1}>
+                        받는 사람 : &nbsp;<Form.Label> {msgData.writer}</Form.Label>
                     </Form.Label>
-                    <Col sm={11}>
-                        <InputGroup className="mb-3">
-                            {msgData.important === 1 ? "중요" : ""}
-                            {msgData.writer}
-                        </InputGroup>
-                    </Col>
+                    <Form.Label sm={1}>
+                        메일 타입 : &nbsp;<Form.Label> {msgData.type === 1 ? "일반" : msgData.type === 2 ? "공지" : "서버"}</Form.Label>
+                    </Form.Label>
                 </Form.Group>
-
-                <fieldset>
-                    <Form.Group as={Row} className="mb-3">
-                        <Form.Label as="legend" column sm={1}>
-                            메일 타입
-                        </Form.Label>
-                        {msgData.type === 1 ? "일반" : msgData.type === 2 ? "공지" : "서버"}
-                    </Form.Group>
-                </fieldset>
                 <CKEditor editor={ClassicEditor} data={msgData.contents} disabled config={{ toolbar: [] }} />
-                <Form.Group className="mb-3 mt-3">
-                    <Col>
-                        <Button onClick={reply}>답장</Button>
-                    </Col>
-                </Form.Group>
             </Form>
         </Container>
     );
@@ -49,7 +52,40 @@ function MessageDetail() {
 
 const Container = styled.div`
     width: 80%;
-    padding: 30px;
+
+    & button {
+        height: 33px;
+        margin-right: 7px;
+    }
+
+    & .ck-editor__editable {
+        min-height: 580px;
+        max-height: 580px;
+        padding-left: 0px;
+        border: none;
+    }
+
+    & .ck.ck-reset_all {
+        display: none;
+    }
+
+    & .msgInfo {
+        border-top: 1px solid ${({ theme }) => theme.colors.gray_2};
+        border-bottom: 1px solid ${({ theme }) => theme.colors.gray_2};
+        padding: 10px 0 5px;
+        margin: 15px 0px 0px 0px;
+    }
+    & .form-label {
+        font-size: 0.875rem;
+        font-weight: bold;
+        padding-right: 0px;
+        &:first-child {
+            margin-bottom: 5px;
+        }
+        & .form-label {
+            font-weight: 400;
+        }
+    }
 `;
 
 export default MessageDetail;

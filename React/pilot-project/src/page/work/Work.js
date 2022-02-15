@@ -1,24 +1,50 @@
-import { AgGridReact } from "ag-grid-react/lib/agGridReact";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
-import styled from "styled-components";
-import WorkSchedule from "./WorkSchedule";
+import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
+import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
+import { Col, Form } from 'react-bootstrap';
+import styled from 'styled-components';
+import { WhiteButton } from '../../component/button/R2wButton';
+import WorkDueDate from './WorkDueDate';
+import { adminGridOption, commonGridOption, userGridOption } from './WorkGridOption';
+import WorkRegist from './WorkRegist';
 
 function Work() {
-    const [showSchedule, setShowSchedule] = useState();
-    const [isOpen, setIsOpen] = useState();
-    let userGridApi = null;
+    const [isOpen, setIsOpen] = useState(false);
+    const [workDate, setWorkDate] = useState('');
+    const [showDueDate, setShowDueDate] = useState(false);
+    const [servers, setServers] = useState([]);
+    const [showRegistWork, setShowRegistWork] = useState(false);
+    const [registWorks, setRegistWorks] = useState([]);
+    const gridRef = useRef();
 
     useEffect(() => {
         getWorkIsOpen();
+        getServers();
+        getWorks();
+        const interval = setInterval(() => {
+            getWorkIsOpen();
+        }, 5000);
+
+        return () => clearInterval(interval);
     }, []);
 
-    const getWorks = () => {
+    const getWorks = (search = '정보계') => {
         axios
-            .get(process.env.REACT_APP_DB_HOST + "/Works")
+            .get(process.env.REACT_APP_DB_HOST + '/Works?server_name=' + search)
             .then((res) => {
-                userGridApi.setRowData(res.data);
+                gridRef.current.api.setRowData(res.data);
+            })
+            .catch((Error) => {
+                console.log(Error);
+            });
+    };
+
+    const getServers = () => {
+        axios
+            .get(process.env.REACT_APP_DB_HOST + '/Servers')
+            .then((res) => {
+                setServers(res.data);
+                console.log(res.data);
             })
             .catch((Error) => {
                 console.log(Error);
@@ -27,242 +53,173 @@ function Work() {
 
     const getWorkIsOpen = () => {
         axios
-            .get(process.env.REACT_APP_DB_HOST + "/IsOpen")
+            .get(process.env.REACT_APP_DB_HOST + '/IsOpen')
             .then((res) => {
                 setIsOpen(res.data.open);
+                setWorkDate(`[${res.data.open ? '개시' : '마감'}] ${res.data.startDate} ~ ${res.data.endDate} (기준일 : ${res.data.refDate})`);
             })
             .catch((Error) => {
                 console.log(Error);
             });
     };
 
-    const onGridReady = (params) => {
-        userGridApi = params.api;
+    const onGridReady = () => {
         getWorks();
-        userGridApi.closeToolPanel();
+        gridRef.current.api.closeToolPanel();
     };
 
     const onFirstDataRendered = (props) => {
         let allColumnIds = [];
         props.columnApi.getAllColumns().forEach((column) => {
-            if (column.colId !== "extract_sql") {
+            if (column.colId !== 'extract_sql') {
                 allColumnIds.push(column.colId);
             }
         });
         props.columnApi.autoSizeColumns(allColumnIds, false);
     };
 
+    const collapseAll = () => {
+        gridRef.current.api.forEachNode((node) => {
+            node.expanded = false;
+        });
+        gridRef.current.api.deselectAll();
+        gridRef.current.api.onGroupExpandedOrCollapsed();
+    };
+
+    const registWork = () => {
+        const selectedRows = gridRef.current.api.getSelectedRows();
+
+        if (selectedRows.length === 0) {
+            alert('작업을 선택해 주세요.');
+            return;
+        }
+
+        let alertText = '';
+
+        selectedRows.forEach((selectedRow) => {
+            if (!selectedRow.extract_sql) {
+                alertText += `${selectedRow.table_name}\n`;
+            }
+        });
+
+        if (alertText) {
+            alertText += '위 테이블은 추출조건이 없습니다.';
+            alert(alertText);
+            return;
+        }
+
+        setRegistWorks(selectedRows);
+        setShowRegistWork(true);
+    };
+
     return (
         <>
+            <WorkHeader>
+                <Col sm={2}>
+                    <Form.Select onChange={(e) => getWorks(e.target.value)}>
+                        {servers.map((server) => {
+                            return (
+                                <option key={server.id} value={server.name}>
+                                    {server.name}
+                                </option>
+                            );
+                        })}
+                    </Form.Select>
+                </Col>
+                <Col sm={6}>{workDate}</Col>
+                <Col sm={4}>
+                    {sessionStorage.getItem('userAuth') === '0' &&
+                        (!isOpen ? (
+                            <>
+                                <WhiteButton onClick={() => registWork()}>작업 등록</WhiteButton>
+                                <WhiteButton
+                                    onClick={() => {
+                                        collapseAll();
+                                        setShowDueDate(true);
+                                    }}
+                                >
+                                    업무 개시
+                                </WhiteButton>
+                            </>
+                        ) : (
+                            <WhiteButton
+                                onClick={() => {
+                                    collapseAll();
+                                    setShowDueDate(true);
+                                }}
+                            >
+                                업무 마감
+                            </WhiteButton>
+                        ))}
+                </Col>
+            </WorkHeader>
             <WorkWrap className="ag-theme-alpine">
-                <div style={{ overflow: "hidden" }}>
-                    {isOpen ? <Button onClick={() => setIsOpen(0)}>업무 개시</Button> : <Button onClick={() => setIsOpen(1)}>업무 마감</Button>}
-                </div>
-                <AgGridReact
-                    rowSelection="multiple"
-                    stopEditingWhenCellsLoseFocus={true}
-                    animateRows={true}
-                    onGridReady={onGridReady}
-                    gridOptions={gridOptions}
-                    onFirstDataRendered={onFirstDataRendered}
-                ></AgGridReact>
-                <Button onClick={() => setShowSchedule(true)} style={{ float: "right" }}>
-                    스케줄 추가
-                </Button>
+                {sessionStorage.getItem('userAuth') === '0' ? (
+                    <AgGridReact
+                        ref={gridRef}
+                        rowSelection="multiple"
+                        stopEditingWhenCellsLoseFocus={true}
+                        animateRows={true}
+                        onGridReady={onGridReady}
+                        gridOptions={adminGridOption()}
+                        rowHeight="35"
+                        headerHeight="40"
+                        columnDefs={adminGridOption(isOpen).columnDefs}
+                        defaultColDef={commonGridOption.defaultColDef}
+                        detailCellRendererParams={adminGridOption(isOpen).detailCellRendererParams}
+                        sideBar={commonGridOption.sideBar}
+                        onFirstDataRendered={onFirstDataRendered}
+                    ></AgGridReact>
+                ) : (
+                    <AgGridReact
+                        ref={gridRef}
+                        rowSelection="multiple"
+                        stopEditingWhenCellsLoseFocus={true}
+                        animateRows={true}
+                        rowHeight="35"
+                        headerHeight="40"
+                        onGridReady={onGridReady}
+                        columnDefs={userGridOption(isOpen).columnDefs}
+                        defaultColDef={commonGridOption.defaultColDef}
+                        sideBar={commonGridOption.sideBar}
+                        onFirstDataRendered={onFirstDataRendered}
+                    ></AgGridReact>
+                )}
             </WorkWrap>
-            <WorkSchedule show={showSchedule} setShowSchedule={setShowSchedule} />
+            {showDueDate && <WorkDueDate show={showDueDate} setShowDueDate={setShowDueDate} open={isOpen} />}
+            {showRegistWork && <WorkRegist show={showRegistWork} setShowRegistWork={setShowRegistWork} registWorks={registWorks} parentGrid={gridRef} />}
         </>
     );
 }
 
-const WorkWrap = styled.div`
-    width: 100%;
-    height: 600px;
-    padding: 0px 15px;
+const WorkHeader = styled.div`
+    display: flex;
+    margin: 15px 15px 0;
+    font-size: 0.875rem;
+    align-items: center;
 
-    & div button {
-        float: right;
+    & .col-sm-6 {
+        padding-left: 15px;
+    }
+
+    & .col-sm-4 {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    & button {
+        height: 33px;
+        margin-left: 7px;
+    }
+    & select {
+        height: 33px;
+        font-size: 0.875rem;
     }
 `;
 
-const AffectSqlRenderer = (props) => {
-    const setExtSql = (e) => {
-        props.context.masterGrid.node.setDataValue("extract_sql", e.target.value);
-    };
-
-    return (
-        <Button onClick={setExtSql} value={props.data.user_extract_sql} size="sm">
-            쿼리 적용
-        </Button>
-    );
-};
-
-const cellEditorSelector = (params) => {
-    if (params.column.colId === "trans_yn") {
-        return {
-            component: "agSelectCellEditor",
-            params: {
-                values: ["YES", "NO"],
-            },
-        };
-    } else if (params.column.colId === "truncate_yn") {
-        return {
-            component: "agRichSelectCellEditor",
-            params: {
-                values: ["YES", "NO"],
-            },
-        };
-    } else return null;
-};
-
-const gridOptions = {
-    masterDetail: true,
-    detailRowAutoHeight: true,
-    isRowMaster: function (dataItem) {
-        return dataItem ? dataItem.users_query.length > 1 : false;
-    },
-    columnDefs: [
-        {
-            headerName: "시스템명",
-            field: "server_name",
-            checkboxSelection: true,
-            pinned: "left",
-            cellRenderer: "agGroupCellRenderer",
-        },
-        {
-            headerName: "DB Name",
-            field: "dbms_dbname",
-            pinned: "left",
-        },
-        {
-            headerName: "SID",
-            field: "dbms_dsn",
-            pinned: "left",
-        },
-        {
-            headerName: "OWNER",
-            field: "owner",
-        },
-        {
-            headerName: "Table 영문명",
-            field: "table_name",
-            suppressMenu: false,
-        },
-        {
-            headerName: "테이블 한글명",
-            field: "table_desc",
-        },
-        {
-            headerName: "변환컬럼 존재",
-            field: "trrule_yn",
-        },
-        {
-            headerName: "상태(신규,변경)",
-            field: "table_status",
-        },
-        {
-            headerName: "2021.08 이관 정보",
-            children: [
-                {
-                    headerName: "이관작업등록",
-                    field: "trans_yn",
-                    editable: true,
-                    cellStyle: { textAlign: "center" },
-                    cellEditorSelector: cellEditorSelector,
-                },
-                {
-                    headerName: "원장구분",
-                    field: "ledger",
-                },
-                {
-                    headerName: "Truncate 대상",
-                    field: "truncate_yn",
-                    editable: true,
-                    cellStyle: { textAlign: "center" },
-                    cellEditorSelector: cellEditorSelector,
-                },
-                {
-                    headerName: "등록사용자 수",
-                    field: "users",
-                    cellStyle: { textAlign: "right" },
-                },
-                {
-                    headerName: "추출조건",
-                    field: "extract_sql",
-                    cellEditor: "agLargeTextCellEditor",
-                    editable: true,
-                    width: 400,
-                    cellEditorParams: { maxLength: 1024 },
-                },
-                {
-                    headerName: "Real Size(M)",
-                    field: "table_real_size",
-                },
-                {
-                    headerName: "Dev Size(M)",
-                    field: "table_dev_size",
-                },
-            ],
-        },
-    ],
-    defaultColDef: {
-        suppressMenu: true,
-        headerClass: "ag-header-cell-label",
-        editable: false,
-        resizable: true,
-        sortable: true,
-        filter: true,
-        menuTabs: ["filterMenuTab"],
-    },
-    detailCellRendererParams: (props) => ({
-        detailGridOptions: {
-            columnDefs: [
-                { headerName: "사용자", field: "userid" },
-                { headerName: "등록쿼리", field: "user_extract_sql", width: 450 },
-                {
-                    headerName: "쿼리 적용",
-                    field: "affect_sql",
-                    width: 50,
-                    cellRenderer: "affectsqlRenderer",
-                },
-            ],
-            context: {
-                masterGrid: {
-                    node: props.node.parent,
-                    data: props.data,
-                },
-            },
-            defaultColDef: {
-                editable: false,
-                resizable: true,
-                sortable: true,
-                minWidth: 150,
-                suppressMenu: true,
-            },
-            frameworkComponents: {
-                affectsqlRenderer: AffectSqlRenderer,
-            },
-        },
-        getDetailRowData: function (params) {
-            params.successCallback(params.data.users_query);
-        },
-    }),
-    sideBar: {
-        toolPanels: [
-            {
-                id: "columns",
-                labelDefault: "Columns",
-                labelKey: "columns",
-                iconKey: "columns",
-                toolPanel: "agColumnsToolPanel",
-                toolPanelParams: {
-                    suppressRowGroups: true,
-                    suppressValues: true,
-                    suppressPivotMode: true,
-                },
-            },
-        ],
-    },
-};
-
+const WorkWrap = styled.div`
+    width: 100%;
+    height: 761px;
+    padding: 15px;
+`;
 export default Work;

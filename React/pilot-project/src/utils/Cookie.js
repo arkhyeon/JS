@@ -1,9 +1,9 @@
-import { Cookies } from "react-cookie";
+import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
-export const setCookie = (name, value, option) => {
-    return cookies.set(name, value, { ...option });
+export const setCookie = (name, value) => {
+    cookies.set(name, value);
 };
 
 export const getCookie = (name) => {
