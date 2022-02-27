@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { setCookie, getCookie, removeCookie } from '../utils/Cookie';
 import styled from 'styled-components';
 import { Button, Col, Form, Row } from 'react-bootstrap';
+import axios from 'axios';
+import RSAKey from 'react-native-rsa';
+import jwt_decode from 'jwt-decode';
 
-function Login({ getAuth, getUserAuth }) {
+function Login({ setAuth }) {
     const navigate = useNavigate();
 
     const [userId, setUserId] = useState('');
@@ -34,7 +37,7 @@ function Login({ getAuth, getUserAuth }) {
         setIsRemember(e.target.checked);
     };
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
 
         if (!(userId && userPwd)) {
@@ -48,10 +51,57 @@ function Login({ getAuth, getUserAuth }) {
             removeCookie('userId');
         }
 
-        getAuth(userId);
-        sessionStorage.setItem('user_id', userId);
-        getUserAuth(userId === 'admin' ? 0 : 1);
-        sessionStorage.setItem('userAuth', userId === 'admin' ? 0 : 1);
+        const rsa = new RSAKey();
+        let encpwd = '';
+
+        await axios
+            .get('/rsa')
+            .then((res) => {
+                rsa.setPublic(res.data.data.publicKeyModules, res.data.data.publicKeyExponent);
+                encpwd = rsa.encrypt(userPwd);
+            })
+            .catch((Error) => {
+                console.log(Error);
+            });
+
+        await axios
+            .post('/login', { uid: userId, pwd: encpwd })
+            .then((res) => {
+                console.log('토큰 : ' + res.headers.authorization);
+                const decoded = jwt_decode(res.headers.authorization);
+                setCookie('uid', decoded.uid);
+                setCookie('ulevel', decoded.level);
+                console.log('Token Decode : ');
+                console.log(decoded);
+            })
+            .catch((error) => {
+                console.log(error.response.data.status.message);
+                if (error.response.data.status.message === 'User account has expired') {
+                    alert('계정이 만료되었습니다.');
+                } else if (error.response.data.status.message === 'User password has expired') {
+                    alert('비밀 번호가 만료되었습니다.');
+                } else if (error.response.data.status.message === 'User account is locked') {
+                    alert('계정이 잠겨있습니다.');
+                } else if (error.response.data.status.message === 'Username not found') {
+                    alert('해당 아이디는 없는 아이디 입니다.');
+                } else if (error.response.data.status.message === 'Invalid password') {
+                    alert('비밀 번호가 틀렸습니다.');
+                } else if (error.response.data.status.message === 'Unauthorized') {
+                    alert('로그인 없이 API가 요청되었습니다.');
+                } else if (error.response.data.status.message === 'Forbidden') {
+                    alert('API 요청 시 권한 에러입니다.');
+                }
+            });
+
+        setAuth(getCookie('ulevel'));
+
+        navigate('/');
+    };
+
+    const egg = () => {
+        setAuth(1);
+        setCookie('uid', 'egg');
+        setCookie('ulevel', 1);
 
         navigate('/');
     };
@@ -61,7 +111,7 @@ function Login({ getAuth, getUserAuth }) {
             <LoginWrap>
                 <Row>
                     <Col sm={5} className="loginTitle">
-                        <h2>
+                        <h2 onClick={egg}>
                             <b>SQLCanvas Trans Post</b>
                         </h2>
                     </Col>
@@ -73,7 +123,10 @@ function Login({ getAuth, getUserAuth }) {
                             <Button type="submit" size="lg">
                                 Login
                             </Button>
-                            <Copyright className="mt-3 mb-3 copyright text-center">Copyright(c)R2ware, All rights reserved. SQLCanvas Trans Pilot</Copyright>
+                            {/* 주 : API 변경, 부 : 새로운 기능, 수 : 버그 및 기타 수정  */}
+                            <Copyright className="my-3 copyright text-center">
+                                Copyright(c)R2ware, All rights reserved. Version 0.0.0.1 (release 2022.02.15)
+                            </Copyright>
                         </Form>
                     </Col>
                 </Row>

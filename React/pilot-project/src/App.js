@@ -1,17 +1,20 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import Layout from "./template/Layout";
-import { SetRoute, setMsgRoute } from "./utils/CreateMenu";
-import { DepthList1 } from "./utils/DepthMenu";
-//TODO : themeprovider
-//TODO : universal cookie
+import React, { useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Layout from './template/Layout';
+import Login from './template/Login';
+import { getCookie } from './utils/Cookie';
+import { SetRoute, setMsgRoute } from './utils/CreateMenu';
+import { DepthList1 } from './utils/DepthMenu';
+
 function App() {
+    const [auth, setAuth] = useState(getCookie('ulevel'));
     return (
         <div className="App">
             <Routes>
-                <Route path="/" element={<Layout />}>
-                    {SetRoute(DepthList1)}
-                    {setMsgRoute()}
+                <Route path="/" element={auth ? <Layout setAuth={setAuth} /> : <Login setAuth={setAuth} />}>
+                    {SetRoute(DepthList1, auth)}
+                    {auth && setMsgRoute()}
+                    <Route path={'*'} element={<Navigate to="/" />} />
                 </Route>
             </Routes>
         </div>

@@ -1,11 +1,11 @@
-import React from "react";
-import Work from "../page/work/Work";
-import Macro from "../page/config/macro/Macro";
-import Sync from "../page/config/sync/Sync";
-import System from "../page/config/system/System";
-import Config from "../page/config/Config";
+import React from 'react';
+import Work from '../page/work/Work';
+import Macro from '../page/config/macro/Macro';
+import Sync from '../page/config/sync/Sync';
+import System from '../page/config/system/System';
+import Config from '../page/config/Config';
 
-//Fix 22.01.13
+//Fix 22.02.21
 
 /**
  * @param {String} title
@@ -20,6 +20,11 @@ import Config from "../page/config/Config";
  * @param {component} component(option)
  * 해당 URL에 보여줄 컴포넌트
  * Route element={component}
+ * @param {Integer} userRole(option)
+ * 권한 체크
+ * userRole(ulevel)이 menuRole보다 작다면 활성화
+ * ex ) userRole[1] > menuRole[3] >> 활성화
+ *      userRole[3] > menuRole[1] >> 비활성
  * @param {Array} subMenu(option)
  *  - 해당 메뉴 하위로 나올 메뉴
  *
@@ -29,46 +34,92 @@ import Config from "../page/config/Config";
  */
 export const DepthList1 = [
     {
-        title: "작업",
-        link: "/",
+        title: '작업',
+        link: '/',
         component: <Work />,
+        menuRole: 3,
     },
     {
-        title: "설정",
-        link: "config",
-        routePath: "config/*",
+        title: '설정',
+        link: 'config',
+        routePath: 'config/*',
         component: <Config />,
+        menuRole: 1,
+    },
+    {
+        title: 'DepthTest',
+        link: 'config1',
+        routePath: 'config/*',
+        component: <Config />,
+        menuRole: 1,
         subMenu: [
             {
                 id: 5_1,
-                title: "업무 등록",
-                link: "/work",
-                routePath: "work",
+                title: '업무 등록',
+                link: '/work',
+                routePath: 'work',
                 component: <System />,
             },
             {
                 id: 5_2,
-                title: "테이블 동기화",
-                link: "/sync",
-                routePath: "sync",
+                title: '테이블 동기화',
+                link: '/sync',
+                routePath: 'sync',
                 component: <Sync />,
             },
             {
                 id: 5_3,
-                title: "매크로 설정",
-                link: "/macro",
-                routePath: "macro",
+                title: '매크로 설정',
+                link: '/macro',
+                routePath: 'macro',
                 component: <Macro />,
+                subMenu: [
+                    {
+                        id: 5_1,
+                        title: '업무 등록',
+                        link: '/work',
+                        routePath: 'work',
+                        component: <System />,
+                    },
+                    {
+                        id: 5_2,
+                        title: '테이블 동기화',
+                        link: '/sync',
+                        routePath: 'sync',
+                        component: <Sync />,
+                        subMenu: [
+                            {
+                                id: 5_1,
+                                title: '-1도맑음',
+                                link: '/work',
+                                routePath: 'work',
+                                component: <System />,
+                            },
+                            {
+                                id: 5_2,
+                                title: '캡쳐도구',
+                                link: '/sync',
+                                routePath: 'sync',
+                                component: <Sync />,
+                            },
+                            {
+                                id: 5_3,
+                                title: '검색하려면 여기에 입력하십',
+                                link: '/macro',
+                                routePath: 'macro',
+                                component: <Macro />,
+                            },
+                        ],
+                    },
+                    {
+                        id: 5_3,
+                        title: '매크로 설정 글자가 길면 이만큼 길어집니다ㅁㅁㅁㅁㅁㅁㅁㅁ',
+                        link: '/macro',
+                        routePath: 'macro',
+                        component: <Macro />,
+                    },
+                ],
             },
         ],
-    },
-];
-
-export const Common_depth_list_1 = [
-    {
-        id: 1,
-        title: "작업",
-        link: "/",
-        component: <Work />,
     },
 ];

@@ -1,8 +1,8 @@
-import React from "react";
-import { Button, Nav } from "react-bootstrap";
-import { MdEmail, MdSend } from "react-icons/md";
-import { useNavigate, NavLink } from "react-router-dom";
-import styled from "styled-components";
+import React from 'react';
+import { Button, Nav } from 'react-bootstrap';
+import { MdEmail, MdSend } from 'react-icons/md';
+import { useNavigate, NavLink } from 'react-router-dom';
+import styled from 'styled-components';
 
 function MessageAside() {
     const navigate = useNavigate();
@@ -11,7 +11,7 @@ function MessageAside() {
             <StyledBtn
                 size="md"
                 onClick={() => {
-                    navigate("MessageWrite");
+                    navigate('MessageWrite');
                 }}
             >
                 <svg
@@ -27,19 +27,19 @@ function MessageAside() {
                     <title></title>
                     <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"></path>
                 </svg>
-                메세지 작성
+                메시지 작성
             </StyledBtn>
             <hr />
             <NavLink to="MessageReceive" className="nav-link" state="RECEIVE">
                 <Nav.Item>
                     <MdEmail />
-                    받은 메세지
+                    받은 메시지
                 </Nav.Item>
             </NavLink>
             <NavLink to="MessageDispatch" className="nav-link" state="DISPATCH">
                 <Nav.Item>
                     <MdSend />
-                    보낸 메세지
+                    보낸 메시지
                 </Nav.Item>
             </NavLink>
         </StyledNav>

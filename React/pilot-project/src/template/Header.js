@@ -1,17 +1,18 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { getCookie } from '../utils/Cookie';
 import CreateMenu from '../utils/CreateMenu';
-import { DepthList1, Common_depth_list_1 } from '../utils/DepthMenu';
+import { DepthList1 } from '../utils/DepthMenu';
 import MenuInfo from './headerComp/MenuInfo';
 
-function Header({ getAuth, userAuth }) {
+function Header({ setAuth }) {
     return (
         <HeaderWrap>
             <NavLink to="/">SQLCanvas Trans</NavLink>
-            <CreateMenu menus={userAuth === '0' ? DepthList1 : Common_depth_list_1} useDepth={false} color={''} fontColor={''} size={''} />
+            <CreateMenu menus={DepthList1} useDepth={true} color={''} fontColor={''} size={''} userRole={getCookie('ulevel')} />
             <div>
-                <MenuInfo getAuth={getAuth} />
+                <MenuInfo setAuth={setAuth} />
             </div>
         </HeaderWrap>
     );

@@ -1,22 +1,22 @@
-import React, { useState } from "react";
-import { Modal, Form, Row, Col } from "react-bootstrap";
-import DatePicker, { registerLocale } from "react-datepicker";
-import ko from "date-fns/locale/ko/index.js";
-import styled from "styled-components";
-import moment from "moment";
-import { NormalButton, WhiteButton } from "../../component/button/R2wButton";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import axios from "axios";
-import { useEffect } from "react";
+import React, { useState } from 'react';
+import { Modal, Form, Row, Col } from 'react-bootstrap';
+import DatePicker, { registerLocale } from 'react-datepicker';
+import ko from 'date-fns/locale/ko/index.js';
+import styled from 'styled-components';
+import moment from 'moment';
+import { NormalButton, WhiteButton } from '../../component/button/R2wButton';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import axios from 'axios';
+import { useEffect } from 'react';
 
-registerLocale("ko", ko);
+registerLocale('ko', ko);
 
 function WorkDueDate({ show, setShowDueDate, open }) {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [refDate, setRefDate] = useState(new Date());
-    const [ckeditorData, setCkeditorData] = useState("");
+    const [ckeditorData, setCkeditorData] = useState('');
 
     useEffect(() => {
         if (open) {
@@ -26,7 +26,7 @@ function WorkDueDate({ show, setShowDueDate, open }) {
 
     const getStartDate = () => {
         axios
-            .get(process.env.REACT_APP_DB_HOST + "/IsOpen")
+            .get(process.env.REACT_APP_DB_HOST + '/IsOpen')
             .then((res) => {
                 setStartDate(new Date(res.data.startDate));
                 setRefDate(new Date(res.data.refDate));
@@ -39,27 +39,27 @@ function WorkDueDate({ show, setShowDueDate, open }) {
     const sendNotice = () => {
         //TODO : 보낼대상 전체? 선택?
         const noiceText = open
-            ? `[마감 공지] ${moment(startDate).format("yyyy-MM-DD")}~${moment(endDate).format("yyyy-MM-DD")} (기준일 : ${moment(refDate).format(
-                  "yyyy-MM-DD"
+            ? `[마감 공지] ${moment(startDate).format('yyyy-MM-DD')}~${moment(endDate).format('yyyy-MM-DD')} (기준일 : ${moment(refDate).format(
+                  'yyyy-MM-DD'
               )}) 업무가 마감되었습니다.\n`
-            : `[개시 공지] ${moment(startDate).format("yyyy-MM-DD")}~${moment(endDate).format("yyyy-MM-DD")} (기준일 : ${moment(refDate).format(
-                  "yyyy-MM-DD"
+            : `[개시 공지] ${moment(startDate).format('yyyy-MM-DD')}~${moment(endDate).format('yyyy-MM-DD')} (기준일 : ${moment(refDate).format(
+                  'yyyy-MM-DD'
               )}) 업무가 개시되었습니다.\n`;
 
-        axios.patch(process.env.REACT_APP_DB_HOST + "/IsOpen", {
-            startDate: moment(startDate).format("yyyy-MM-DD"),
-            endDate: moment(endDate).format("yyyy-MM-DD"),
-            refDate: moment(refDate).format("yyyy-MM-DD"),
+        axios.patch(process.env.REACT_APP_DB_HOST + '/IsOpen', {
+            startDate: moment(startDate).format('yyyy-MM-DD'),
+            endDate: moment(endDate).format('yyyy-MM-DD'),
+            refDate: moment(refDate).format('yyyy-MM-DD'),
             open: !open,
         });
 
         axios
-            .post(process.env.REACT_APP_DB_HOST + "/Messages", {
+            .post(process.env.REACT_APP_DB_HOST + '/Messages', {
                 type: 2,
-                writer: "admin",
-                date: moment().format("yyyy-MM-DD HH:mm"),
+                writer: 'admin',
+                date: moment().format('yyyy-MM-DD HH:mm'),
                 contents: noiceText + ckeditorData,
-                receiver: "user",
+                receiver: 'user',
                 read: 1,
             })
             .then(() => {
@@ -74,9 +74,9 @@ function WorkDueDate({ show, setShowDueDate, open }) {
     return (
         <Modal show={show} onHide={setShowDueDate} centered>
             <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">{open ? "마감 공지" : "개시 공지"}</Modal.Title>
+                <Modal.Title id="contained-modal-title-vcenter">{open ? '마감 공지' : '개시 공지'}</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body spellcheck="false">
                 <GridContainer>
                     <Row>
                         <Form.Label column sm={2}>
@@ -132,12 +132,12 @@ function WorkDueDate({ show, setShowDueDate, open }) {
                         }}
                         config={{
                             toolbar: {
-                                items: ["heading", "|", "bold", "italic", "|", "link", "|", "undo", "redo"],
+                                items: ['heading', '|', 'bold', 'italic', '|', 'link', '|', 'undo', 'redo'],
                             },
                         }}
                     />
                     <Prefix>
-                        {open ? "*prefix(ex) : [마감 공지] 개시일~마감일 마감되었습니다." : "*prefix(ex) : [개시 공지] 개시일~마감일 개시되었습니다."}
+                        {open ? '*prefix(ex) : [마감 공지] 개시일~마감일 마감되었습니다.' : '*prefix(ex) : [개시 공지] 개시일~마감일 개시되었습니다.'}
                     </Prefix>
                 </GridContainer>
             </Modal.Body>
@@ -158,6 +158,9 @@ function WorkDueDate({ show, setShowDueDate, open }) {
 }
 
 const GridContainer = styled.div`
+    & * {
+        font-size: 14px;
+    }
     & .form-control {
         margin-bottom: 15px;
     }

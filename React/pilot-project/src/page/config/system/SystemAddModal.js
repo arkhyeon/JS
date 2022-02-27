@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Form, Row, Col, FormControl } from 'react-bootstrap';
+import { Modal, Form, Row, Col, FormControl } from 'react-bootstrap';
 import styled from 'styled-components';
+import { StyledAlert } from '../../../component/alert/R2wAlert';
 import { NormalButton, WhiteButton } from '../../../component/button/R2wButton';
 
 const serverList = [
@@ -131,10 +132,11 @@ const SystemAddModal = ({ show, setShow, add }) => {
                             />
                         </Col>
                         <Form.Label column sm={3}></Form.Label>
-                        <Col sm={9} className="mb-3">
-                            <FormControl className="notice" defaultValue="OWNER는 콤마(,)로 구분해주세요." disabled />
-                        </Col>
                     </Form.Group>
+                    <StyledAlert>
+                        {'OWNERS는 콤마(,)로 구분해주세요.'}
+                        {'EX) Post1,Post2,Post3'}
+                    </StyledAlert>
                 </GridContainer>
             </Modal.Body>
 
@@ -153,18 +155,12 @@ const SystemAddModal = ({ show, setShow, add }) => {
 };
 
 const GridContainer = styled.div`
-    & .notice {
-        color: red;
-        font-size: 0.875rem;
-    }
-
     & input:not(input[type='radio']),
     & select {
         line-height: 1.313;
     }
-    & .form-label {
+    & * {
         font-size: 14px;
-        white-space: pre-line;
     }
 `;
 

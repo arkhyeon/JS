@@ -8,18 +8,15 @@ const MacroAddModal = ({ show, setShowMacroModal, add }) => {
     const [macroValue, setMacroValue] = useState();
 
     const open = () => {
-        console.log('open');
         setMacroKey('');
         setMacroValue('');
     };
 
     const cancel = () => {
-        console.log('cancel');
         setShowMacroModal(false);
     };
 
     const ok = () => {
-        console.log('ok');
         if (macroKey === '' || macroValue === '') {
             alert('매크로 변수 또는 매크로 값이 없습니다.');
             return;
@@ -88,9 +85,8 @@ const GridContainer = styled.div`
     & select {
         line-height: 1.313;
     }
-    & .form-label {
+    & * {
         font-size: 14px;
-        white-space: pre-line;
     }
 `;
 

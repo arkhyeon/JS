@@ -5,24 +5,13 @@ import { Modal } from 'react-bootstrap';
 import styled from 'styled-components';
 import { NormalButton, WhiteButton } from '../../component/button/R2wButton';
 
-function MessageAddress({ show, setShowAddress, setCompWriter }) {
+function MessageAddress({ show, setShowAddress, setAddress, userList }) {
     const addressGrid = useRef(null);
     const [gridApi, setGridApi] = useState();
 
-    const getAddress = () => {
-        axios
-            .get(process.env.REACT_APP_DB_HOST + '/Users')
-            .then((res) => {
-                addressGrid.current.api.setRowData(res.data);
-            })
-            .catch((Error) => {
-                console.log(Error);
-            });
-    };
-
     const onGridReady = () => {
         setGridApi(addressGrid.current.api);
-        getAddress();
+        addressGrid.current.api.setRowData(userList);
     };
 
     const selectedWriters = () => {
@@ -33,7 +22,7 @@ function MessageAddress({ show, setShowAddress, setCompWriter }) {
             inputWriter.push(selectedNodes[i].data.name);
         }
 
-        setCompWriter((arr) => {
+        setAddress((arr) => {
             let concatWriter = arr.concat(inputWriter);
             return concatWriter.filter((item, pos) => concatWriter.indexOf(item) === pos);
         });
@@ -46,7 +35,14 @@ function MessageAddress({ show, setShowAddress, setCompWriter }) {
             </Modal.Header>
             <Modal.Body>
                 <GridContainer className="ag-theme-alpine">
-                    <AgGridReact ref={addressGrid} onGridReady={onGridReady} gridOptions={GridOption} rowHeight="35" headerHeight="40"></AgGridReact>
+                    <AgGridReact
+                        ref={addressGrid}
+                        onGridReady={onGridReady}
+                        gridOptions={GridOption}
+                        autoGroupColumnDef={autoGroupColumnDef}
+                        rowHeight="35"
+                        headerHeight="40"
+                    ></AgGridReact>
                 </GridContainer>
             </Modal.Body>
             <Modal.Footer>
@@ -83,29 +79,44 @@ const ButtonWrap = styled.div`
     }
 `;
 
+const autoGroupColumnDef = {
+    headerCheckboxSelection: true,
+    headerName: '그룹',
+    field: 'group',
+    cellRendererParams: {
+        checkbox: true,
+    },
+};
+
 const GridOption = {
+    groupSelectsChildren: true,
     columnDefs: [
         {
-            checkboxSelection: true,
-            headerCheckboxSelection: true,
-            flex: 0.1,
-            menuTabs: [],
+            headerName: '그룹',
+            field: 'group',
+            flex: 1,
+            rowGroup: true,
+            hide: true,
         },
         {
-            headerName: 'name',
+            headerName: '이름',
             field: 'name',
-            flex: 0.9,
-            menuTabs: [],
+            flex: 1,
+        },
+        {
+            headerName: 'id',
+            field: 'id',
+            hide: true,
         },
     ],
     defaultColDef: {
         editable: false,
         resizable: true,
         sortable: true,
+        menuTabs: [],
     },
     rowSelection: 'multiple',
     rowMultiSelectWithClick: true,
-    stopEditingWhenCellsLoseFocus: true,
 };
 
 export default MessageAddress;

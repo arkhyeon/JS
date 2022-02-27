@@ -27,12 +27,12 @@ function MessageHeader() {
                     <MdSearch />
                 </StyledBtn>
             </InputGroup>
-            <hr />
         </MessageBtnList>
     );
 }
 
 const MessageBtnList = styled.div`
+    margin-bottom: 15px;
     & div {
         width: 750px;
     }
@@ -53,10 +53,6 @@ const MessageBtnList = styled.div`
         height: 33px;
         display: flex;
         align-items: center;
-    }
-
-    & hr {
-        margin: 15px 0px;
     }
 `;
 

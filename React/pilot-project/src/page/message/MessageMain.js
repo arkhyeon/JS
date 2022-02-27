@@ -1,6 +1,6 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
-import styled from "styled-components";
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import styled from 'styled-components';
 
 function MessageMain() {
     return (
@@ -16,7 +16,7 @@ const MessageMainWrap = styled.div`
     height: 841px;
 
     & svg {
-        font-size: 24px;
+        font-size: 22px;
     }
 `;
 export default MessageMain;

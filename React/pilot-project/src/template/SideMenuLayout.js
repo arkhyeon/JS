@@ -60,7 +60,6 @@ function SideMenuLayout({ menus, children }) {
 
 const Container = styled.div`
     width: 100%;
-    height: 90vh;
     display: flex;
 `;
 
@@ -113,6 +112,7 @@ const SideTitle = styled.div`
     border-radius: 3px;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
     padding: 0px 20px;
 

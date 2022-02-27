@@ -34,9 +34,22 @@ select:focus {
     box-shadow: none !important;
 }
 
+.row {
+    --bs-gutter-x: 0;
+}
+
 /**
 * ag grid 
 */
+
+.ag-theme-alpine .ag-header {
+    background: #f1f4f5;
+    border-top: 2px solid #607d8b;
+}
+
+.ag-theme-alpine .ag-header .ag-header-cell {
+    // color: white;
+}
 
 .ag-cell .ag-react-container {
     display: flex;
@@ -46,7 +59,7 @@ select:focus {
 }
 
 .ag-root .ag-row-odd {
-    background-color: #eceff1;
+    background-color: #f1f4f5;
 }
 
 .ag-theme-alpine .ag-root .ag-row-odd.ag-row-selected {
@@ -60,6 +73,51 @@ select:focus {
 .ag-theme-alpine .ag-row.alreadyEnroll,
 .ag-theme-alpine .ag-row.alreadyEnroll.ag-row-hover {
     background-color: lightcoral !important;
+}
+
+.ag-row-hover .editWrap {
+    & .editIcon {
+        display: block;
+    }
+}
+
+.ag-theme-alpine .ag-root .ag-cell-data-changed {
+    background-color: #fddfdb !important;
+}
+
+.ag-theme-alpine .ag-root .ag-details-row {
+    padding: 15px;
+}
+
+.ag-theme-alpine .ag-ltr .ag-side-bar-right,
+.ag-theme-alpine .ag-root-wrapper .ag-menu {
+    border-top: 2px solid #90a4ad;
+}
+
+.editWrap {
+    width: 100%;
+    display: flex;
+
+    & .editTitle {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    & .editIcon {
+        display: none;
+        & svg {
+            font-size: 21px;
+            cursor: pointer;
+            fill: #929292;
+            &:first-child {
+                font-size: 24px;
+            }
+
+            &:hover {
+                fill: #e91e63;
+            }
+        }
+    }
 }
 
 /**
@@ -156,4 +214,24 @@ select:focus {
 
 .tooltip .tooltip-inner {
     max-width: 400px;
+}
+
+/**
+*   CKEDITOR5
+*/
+
+.ck.ck-editor__top.ck-reset_all {
+    border-top: 3px solid #607d8b;
+}
+
+/**
+*   Toast Container
+*/
+
+.offcanvas-body .toast-container {
+    width: 100%;
+}
+
+.offcanvas-body .toast-container .toast {
+    border: 1px solid rgba(0, 0, 0, 0.17);
 }

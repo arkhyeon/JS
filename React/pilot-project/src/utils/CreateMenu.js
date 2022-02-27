@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { Route, NavLink } from "react-router-dom";
-import styled from "styled-components";
-import Message from "../page/message/Message";
-import MessageDetail from "../page/message/MessageDetail";
-import MessageList from "../page/message/MessageList";
-import MessageWrite from "../page/message/MessageWrite";
+import React, { useState } from 'react';
+import { Route, NavLink } from 'react-router-dom';
+import styled from 'styled-components';
+import Message from '../page/message/Message';
+import MessageDetail from '../page/message/MessageDetail';
+import MessageList from '../page/message/MessageList';
+import MessageWrite from '../page/message/MessageWrite';
 
-//Fix 22.01.13
+//Fix 22.02.21
 
 /**
  * @param {Array} menus
- * EX) Auth : {userLevel === "0" ? [AdminArray] : [UserArray]}
+ * EX) Auth : {userLevel === "1" ? [AdminArray] : [UserArray]}
  *      OR
  *     Common : {[Array]}
  * @param {Boolean} useDepth
@@ -27,6 +27,11 @@ import MessageWrite from "../page/message/MessageWrite";
  *      theme provider 사용 시 테마 색을 먼저 이용합니다.
  * @param {String} size
  * EX) {"WidthPadding HeightPaaing"} => {"13px 40px"}
+ * @param {Integer} userRole(option)
+ * 권한 체크
+ * userRole(ulevel)이 menuRole보다 작다면 활성화
+ * ex ) userRole[1] > menuRole[3] >> 활성화
+ *      userRole[3] > menuRole[1] >> 비활성
  *
  * @returns {Component} Menu Component
  */
@@ -41,7 +46,7 @@ const CreateMenu = (props) => {
             //depth만큼 잘라준다
             newSelectedMenus.length = depth;
             //서브메뉴가 없을 때
-            if (label !== "") {
+            if (label !== '') {
                 newSelectedMenus[depth] = label;
             }
             return newSelectedMenus;
@@ -51,9 +56,10 @@ const CreateMenu = (props) => {
     return (
         <>
             <CreateMenu.List onMouseLeave={() => setSelectedMenus([])}>
+                {/* <CreateMenu.List> */}
                 {menus.map((menu) => {
                     return (
-                        <DepthItem
+                        <SubMenuItem
                             menu={menu}
                             handleMenuSelection={handleMenuSelection}
                             key={menu.title}
@@ -62,6 +68,7 @@ const CreateMenu = (props) => {
                             fontColor={props.fontColor}
                             size={props.size}
                             useDepth={props.useDepth}
+                            userRole={props.userRole}
                         />
                     );
                 })}
@@ -82,7 +89,7 @@ const CreateMenu = (props) => {
  * 상태 관리
  * @param {Boolean} useDepth
  * 사이드 메뉴 사용할 때 Depth를 사용할 것인지 아닌지
- * true : Depth 이용 메뉴
+ * true : Depth 이용 메뉴 [default]
  * false : Depth없이 메뉴
  * @param {String} color
  * @param {String} fontColor
@@ -90,31 +97,40 @@ const CreateMenu = (props) => {
  * CreateMenu 선언부 props에서 할당된 색
  * @param {String} size
  * EX) {"WidthPadding HeightPaaing"} => {"13px 40px"}
+ * @param {Integer} userRole(option)
+ * 권한 체크
+ * userRole(ulevel)이 menuRole보다 작다면 활성화
+ * ex ) userRole[1] > menuRole[3] >> 활성화
+ *      userRole[3] > menuRole[1] >> 비활성
  * @param {int} depth
  * depth Level
  * @returns {Component} Menu Unit Component
  */
-const DepthItem = ({ menu, handleMenuSelection, selectedMenus, color, fontColor, size, useDepth = true, depth = 0 }) => {
-    const { title, link = "", subMenu = [] } = menu;
+const SubMenuItem = ({ menu, handleMenuSelection, selectedMenus, color, fontColor, size, userRole, useDepth = true, depth = 0 }) => {
+    const { title, link = '', subMenu = [], menuRole = 99 } = menu;
+
+    if (userRole > menuRole) {
+        return '';
+    }
 
     return (
         <>
             {subMenu.length > 0 && useDepth ? (
-                <DepthItem.Item color={color} fontColor={fontColor} size={size}>
+                <SubMenuItem.Item color={color} fontColor={fontColor} size={size}>
                     <NavLink
                         to={link}
                         onMouseEnter={() => handleMenuSelection(title, depth)}
                         onClick={(event) => event.preventDefault()}
-                        style={{ cursor: "default" }}
+                        style={{ cursor: 'default' }}
                     >
                         {title}
                     </NavLink>
                     {selectedMenus[depth] === title && (
-                        <DepthItem.List depth={depth} className="subMenuItem" color={color}>
+                        <SubMenuItem.List depth={depth} className="subMenuItem" color={color}>
                             {subMenu.map((child, i) => {
                                 const childDepth = depth + 1;
                                 return (
-                                    <DepthItem
+                                    <SubMenuItem
                                         menu={child}
                                         handleMenuSelection={handleMenuSelection}
                                         key={`sub-${title}-${i}`}
@@ -126,20 +142,20 @@ const DepthItem = ({ menu, handleMenuSelection, selectedMenus, color, fontColor,
                                     />
                                 );
                             })}
-                        </DepthItem.List>
+                        </SubMenuItem.List>
                     )}
-                </DepthItem.Item>
+                </SubMenuItem.Item>
             ) : (
-                <DepthItem.Item
+                <SubMenuItem.Item
                     color={color}
                     fontColor={fontColor}
                     size={size}
-                    onMouseEnter={() => handleMenuSelection("", depth)}
-                    onClick={() => handleMenuSelection("", 0)}
-                    className={"mainActive"}
+                    onMouseEnter={() => handleMenuSelection('', depth)}
+                    onClick={() => handleMenuSelection('', 0)}
+                    className={'mainActive'}
                 >
                     <NavLink to={link}>{title}</NavLink>
-                </DepthItem.Item>
+                </SubMenuItem.Item>
             )}
         </>
     );
@@ -147,15 +163,32 @@ const DepthItem = ({ menu, handleMenuSelection, selectedMenus, color, fontColor,
 
 CreateMenu.List = styled.ul`
     display: flex;
+    flex: 1;
+    justify-content: center;
+
+    & > li {
+        width: 115px;
+        text-align: center;
+        & > a {
+            margin: 9px 0px;
+            height: 32px;
+            border-radius: 5px;
+            line-height: 32px;
+            padding: 0px;
+        }
+    }
 `;
 
-DepthItem.List = styled.ul`
+SubMenuItem.List = styled.ul`
     & li {
-        border-bottom: 1px solid ${({ theme }) => theme.colors.normal_1};
+        border-bottom: 1px solid ${({ theme }) => theme.colors.normal_2};
+        /* width: max-content;
+        max-width: max-content;
+        min-width: 100%; */
     }
 
     & li:nth-child(1) {
-        border-top: 1px solid ${({ theme }) => theme.colors.normal_1};
+        border-top: 1px solid ${({ theme }) => theme.colors.normal_2};
     }
     & > li > a {
         float: left;
@@ -173,18 +206,18 @@ DepthItem.List = styled.ul`
     }
 `;
 
-DepthItem.Item = styled.li`
+SubMenuItem.Item = styled.li`
     &:hover > a,
     & .active,
     .subMenuItem &:active > a,
     &.mainActive:active > a {
-        color: ${(props) => props.fontColor || "#ffffff"};
+        color: ${(props) => props.fontColor || '#ffffff'};
         background: ${(props) => props.fontColor || props.theme.colors.normal_3};
     }
 
     & a {
         width: 100%;
-        padding: ${(props) => props.size || "13px 40px"};
+        padding: ${(props) => props.size || '13px 40px'};
         display: block;
         margin: 0px;
         color: ${(props) => props.fontColor || props.theme.colors.light_1};
@@ -192,7 +225,10 @@ DepthItem.Item = styled.li`
     }
 
     & ul li a {
-        padding: ${(props) => props.size || "10px 40px"};
+        /* width: max-content;
+        max-width: max-content; */
+        min-width: 100%;
+        padding: ${(props) => props.size || '10px 40px'};
         font-size: 0.9rem;
     }
 `;
@@ -200,15 +236,23 @@ DepthItem.Item = styled.li`
 /**
  * Route Component를 props에 맞게 자동 생성(재귀 SubRoute())
  * @param {Array{Object}} props
+ * @param {Integer} auth(option)
+ * 권한 체크
+ * auth(ulevel)이 menuRole보다 작다면 활성화
+ * ex ) auth[1] > menuRole[3] >> 활성화
+ *      auth[3] > menuRole[1] >> 비활성
  * @returns
  * Route Component
  */
-export const SetRoute = (props) => {
+export const SetRoute = (props, auth) => {
     const routes = props;
 
     return (
         <>
             {routes.map((route) => {
+                if (auth > route.menuRole) {
+                    return '';
+                }
                 return SubRoute(route);
             })}
         </>
@@ -224,7 +268,7 @@ export const SetRoute = (props) => {
  * Route Component
  */
 const SubRoute = (route, depth = 0) => {
-    const { component, link = "", title, subMenu = [], routePath } = route;
+    const { component, link = '', title, subMenu = [], routePath } = route;
     return (
         <>
             {subMenu.length > 0 ? (

@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { BsFillChatDotsFill } from "react-icons/bs";
-import Badge from "react-bootstrap/Badge";
-import MessageTab from "./MessageTab";
-import axios from "axios";
-import { MdLogout } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { BsFillChatDotsFill } from 'react-icons/bs';
+import Badge from 'react-bootstrap/Badge';
+import MessageTab from './MessageTab';
+import axios from 'axios';
+import { MdLogout } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
+import { removeCookie } from '../../utils/Cookie';
 
-function MenuInfo({ getAuth }) {
+function MenuInfo({ setAuth }) {
     const navigate = useNavigate();
     const [notify, setNotify] = useState();
     const [unReadMsg, setUnReadMsg] = useState([]);
@@ -15,7 +16,7 @@ function MenuInfo({ getAuth }) {
 
     const getMessages = () => {
         axios
-            .get(process.env.REACT_APP_DB_HOST + "/Messages")
+            .get(process.env.REACT_APP_DB_HOST + '/Messages')
             .then((res) => {
                 setUnReadMsg(res.data.filter((item) => item.read === 1));
             })
@@ -25,14 +26,14 @@ function MenuInfo({ getAuth }) {
     };
 
     const onHandleLogout = () => {
-        if (!window.confirm("로그아웃하시겠습니까?")) {
+        if (!window.confirm('로그아웃하시겠습니까?')) {
             return;
         }
 
-        getAuth(null);
-        sessionStorage.removeItem("user_id");
-        sessionStorage.removeItem("userAuth");
-        navigate("/");
+        setAuth(null);
+        removeCookie('uid');
+        removeCookie('ulevel');
+        navigate('/');
     };
 
     useEffect(() => {
@@ -84,14 +85,14 @@ const ItemWrap = styled.div`
     .badge {
         width: 16px;
         height: 16px;
-        background-color: #ff5353 !important;
+        background-color: red !important;
         color: black;
         border-radius: 100%;
         font-size: 0.75rem;
         position: absolute;
         left: 1.5rem;
         top: 0.2rem;
-        padding: 1px;
+        padding: 1px 1px 1px 0px;
     }
 `;
 

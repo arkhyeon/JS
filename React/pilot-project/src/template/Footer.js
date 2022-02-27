@@ -1,10 +1,9 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const FooterWrap = styled.div`
     background-color: ${({ theme }) => theme.defaultColor};
     width: 100%;
-    min-width: 1900px;
     height: 46px;
     color: ${({ theme }) => theme.colors.gray_3};
     background-color: white;
@@ -13,8 +12,6 @@ const FooterWrap = styled.div`
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray_1};
     line-height: 46px;
     padding: 0px 15px;
-    position: fixed;
-    bottom: 0px;
 `;
 
 function Footer() {

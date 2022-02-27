@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Accordion, Alert, Col, Form, Modal, Row } from 'react-bootstrap';
-import { MdReport } from 'react-icons/md';
+import { Accordion, Col, Form, Modal, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 import { NormalButton, WhiteButton } from '../../component/button/R2wButton';
 import { useForm } from 'react-hook-form';
@@ -34,6 +33,7 @@ import {
 } from './dataAdapter/Sql';
 import Jtr from './dataAdapter/Jtr';
 import { ALTIBASE, ASA, ASE, DB2, DB2_MF, GREENPLUM, HANA, INFORMIX, IQ, MSSQL, MYSQL, ORACLE, POSTGRES, RAINSTOR, TIBERO } from './dataAdapter/DbInfo';
+import { StyledAlert } from '../../component/alert/R2wAlert';
 
 function WorkDbOption({ show, setShowDbOption, option, setOption, dbmsType, jconnectFlag, r2wtrans }) {
     const [accordionControl, setAccordionControl] = useState(0);
@@ -73,8 +73,6 @@ function WorkDbOption({ show, setShowDbOption, option, setOption, dbmsType, jcon
     };
 
     const onSubmit = (data) => {
-        console.log(srcTransType, dstTransType);
-        console.log(data);
         setOption(data);
         setShowDbOption(false);
         alert('옵션이 저장되었습니다.');
@@ -205,14 +203,13 @@ function WorkDbOption({ show, setShowDbOption, option, setOption, dbmsType, jcon
                         </Accordion>
                     </GridContainer>
                 </Modal.Body>
-                <StyledAlert>
-                    <Alert.Heading>
-                        <MdReport />
+                <ModalAddOn>
+                    <StyledAlert>
                         {desc[0]}
-                    </Alert.Heading>
-                    <p>{desc[1]}</p>
-                </StyledAlert>
-                {accordionControl ? <Expand /> : <Collapse />}
+                        {desc[1]}
+                    </StyledAlert>
+                    {accordionControl ? <Expand /> : <Collapse />}
+                </ModalAddOn>
                 <Modal.Footer>
                     <ButtonWrap>
                         <WhiteButton onClick={() => setShowDbOption(false)}>닫기</WhiteButton>
@@ -243,7 +240,7 @@ const GridContainer = styled.div`
                     width: 90px;
                 }
             }
-            & .form-label {
+            & * {
                 font-size: 14px;
                 white-space: pre-line;
             }
@@ -251,32 +248,13 @@ const GridContainer = styled.div`
     }
 `;
 
-const StyledAlert = styled(Alert)`
-    margin: 15px 20px;
-    background-color: ${({ theme }) => theme.colors.normal_4};
-    border-color: ${({ theme }) => theme.colors.dark_1};
-    color: white;
-    padding: 10px;
-    font-size: 0.9rem;
+const ModalAddOn = styled.div`
+    padding: 20px;
 
-    & .alert-heading {
-        display: flex;
-        font-size: 1rem;
-
-        & svg {
-            margin-right: 3px;
-            font-size: 1.3rem;
-        }
-    }
-
-    & p {
-        white-space: pre-line;
-    }
-
-    & + button {
-        width: 92%;
+    & button {
+        width: 100%;
         height: 33px;
-        margin: 0px 20px 20px;
+        margin-top: 15px;
     }
 `;
 

@@ -3,24 +3,6 @@
     {
       "type": 2,
       "writer": "admin",
-      "date": "2022-01-25 09:00",
-      "contents": "[마감 공지] 2022-01-25~2022-01-26 업무가 마감되었습니다.\n<p>uhhh</p>",
-      "receiver": "user",
-      "read": 0,
-      "id": 1
-    },
-    {
-      "type": 2,
-      "writer": "admin",
-      "date": "2022-01-27 11:10",
-      "contents": "[개시 공지] 2022-01-27~2022-01-27(기준일 : 2022-01-28) 업무가 개시되었습니다.\n<p>업무개시 기준일 28일</p>",
-      "receiver": "user",
-      "read": 0,
-      "id": 2
-    },
-    {
-      "type": 2,
-      "writer": "admin",
       "date": "2022-01-27 09:00",
       "contents": "[마감 공지] 2022-01-27~2022-01-27 (기준일 : 2022-01-27) 업무가 마감되었습니다.\n<p>마감쳤따</p>",
       "receiver": "user",
@@ -28,127 +10,315 @@
       "id": 3
     },
     {
-      "type": 2,
+      "type": 1,
       "writer": "admin",
-      "date": "2022-01-27 11:18",
-      "contents": "[개시 공지] 2022-01-27~2022-01-27 (기준일 : 2022-01-28) 업무가 개시되었습니다.\n<p>기준 28일</p>",
-      "receiver": "user",
+      "date": "2022-02-23 16:22",
+      "contents": "<p>test</p>",
+      "receiver": "flex",
       "read": 0,
       "id": 4
     },
     {
-      "type": 2,
+      "type": 1,
       "writer": "admin",
-      "date": "2022-01-27 11:18",
-      "contents": "[마감 공지] 2022-01-27~2022-01-27 (기준일 : 2022-01-28) 업무가 마감되었습니다.\n<p>마감</p>",
-      "receiver": "user",
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "admin",
       "read": 0,
       "id": 5
     },
     {
-      "type": 2,
+      "type": 1,
       "writer": "admin",
-      "date": "2022-01-27 11:19",
-      "contents": "[개시 공지] 2022-01-27~2022-01-29 (기준일 : 2022-01-30) 업무가 개시되었습니다.\n<p>27 29 30</p>",
-      "receiver": "user",
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "ehdtnn",
       "read": 0,
       "id": 6
     },
     {
-      "type": 2,
+      "type": 1,
       "writer": "admin",
-      "date": "2022-01-27 11:19",
-      "contents": "[마감 공지] 2022-01-27~2022-01-27 (기준일 : 2022-01-30) 업무가 마감되었습니다.\n<p>마아감</p>",
-      "receiver": "user",
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "kuller",
       "read": 0,
       "id": 7
     },
     {
       "type": 1,
       "writer": "admin",
-      "date": "2022-02-14 17:28",
+      "date": "2022-02-23 17:53",
       "contents": "",
-      "receiver": "aa",
+      "receiver": "sojang",
       "read": 0,
       "id": 8
     },
     {
       "type": 1,
       "writer": "admin",
-      "date": "2022-02-14 17:28",
+      "date": "2022-02-23 17:53",
       "contents": "",
-      "receiver": "ss",
+      "receiver": "suseok",
       "read": 0,
       "id": 9
     },
     {
-      "type": 2,
+      "type": 1,
       "writer": "admin",
-      "date": "2022-02-15 09:45",
-      "contents": "[개시 공지] 2022-02-15~2022-02-15 (기준일 : 2022-02-17) 업무가 개시되었습니다.\n<p>업무 개시</p>",
-      "receiver": "user",
-      "read": 1,
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "flex",
+      "read": 0,
       "id": 10
     },
     {
-      "type": 2,
+      "type": 1,
       "writer": "admin",
-      "date": "2022-02-15 09:46",
-      "contents": "[마감 공지] 2022-02-15~2022-02-15 (기준일 : 2022-02-17) 업무가 마감되었습니다.\n<p>마감</p>",
-      "receiver": "user",
-      "read": 1,
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "bangjoo",
+      "read": 0,
       "id": 11
     },
     {
-      "type": 2,
+      "type": 1,
       "writer": "admin",
-      "date": "2022-02-15 09:46",
-      "contents": "[개시 공지] 2022-02-15~2022-02-15 (기준일 : 2022-03-04) 업무가 개시되었습니다.\n<p>개시햇</p>",
-      "receiver": "user",
-      "read": 1,
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "styled",
+      "read": 0,
       "id": 12
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "admin",
+      "read": 0,
+      "id": 13
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "kuller",
+      "read": 0,
+      "id": 14
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "ehdtnn",
+      "read": 0,
+      "id": 15
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "sojang",
+      "read": 0,
+      "id": 16
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "bangjoo",
+      "read": 0,
+      "id": 17
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "suseok",
+      "read": 0,
+      "id": 18
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "flex",
+      "read": 0,
+      "id": 19
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 17:53",
+      "contents": "",
+      "receiver": "styled",
+      "read": 0,
+      "id": 20
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 18:15",
+      "contents": "",
+      "receiver": "admin",
+      "read": 0,
+      "id": 21
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 18:15",
+      "contents": "",
+      "receiver": "admin",
+      "read": 0,
+      "id": 22
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 18:15",
+      "contents": "<p>2222</p>",
+      "receiver": "admin",
+      "read": 0,
+      "id": 23
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 18:16",
+      "contents": "",
+      "receiver": "admin",
+      "read": 0,
+      "id": 24
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 18:16",
+      "contents": "<p>ㅁㅁ</p>",
+      "receiver": "admin",
+      "read": 0,
+      "id": 25
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 18:17",
+      "contents": "",
+      "receiver": "admin",
+      "read": 0,
+      "id": 26
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 18:17",
+      "contents": "<p>ㅁㅁ</p>",
+      "receiver": "admin",
+      "read": 0,
+      "id": 27
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 18:18",
+      "contents": "<p>ㅁㅁ</p>",
+      "receiver": "admin",
+      "read": 0,
+      "id": 28
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 18:24",
+      "contents": "<p>22</p>",
+      "receiver": "admin",
+      "read": 0,
+      "id": 29
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 18:24",
+      "contents": "<p>22</p>",
+      "receiver": "admin",
+      "read": 0,
+      "id": 30
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-23 18:25",
+      "contents": "<p>aa</p>",
+      "receiver": "admin",
+      "read": 0,
+      "id": 31
+    },
+    {
+      "type": 1,
+      "writer": "admin",
+      "date": "2022-02-24 10:35",
+      "contents": "<p>새가 웅대한 밝은 오아이스도 싶이 품고 위하여서 물방아 위하여 것이다.&nbsp;</p><p>목숨이 살 얼마나 가진 위하여 얼마나 우리 그와 얼음 철환하였는가? 얼마나 열락의 이성은 어디 열매를 풀밭에 운다. 품었기 너의 곧 청춘의 따뜻한 미묘한 싶이 그들의 내는 아름다우냐? 싶이 바이며, 우리의 내는 역사를 인간이 피어나는 꽃 피가 뿐이다. 풍부하게 못하다 원질이 대중을 거선의 생생하며, 그들의 이것이다. 보는 그들의 뜨고, 생생하며, 부패를 스며들어 것이다. 때에, 낙원을 얼마나 착목한는 남는 장식하는 부패뿐이다. 가치를 하여도 있으며, 봄바람을 것이다.</p>",
+      "receiver": "admin",
+      "read": 1,
+      "id": 32
     },
     {
       "type": 2,
       "writer": "admin",
-      "date": "2022-02-15 10:06",
-      "contents": "[마감 공지] 2022-02-15~2022-02-15 (기준일 : 2022-03-04) 업무가 마감되었습니다.\n<p>akrka</p><p>&nbsp;</p>",
+      "date": "2022-02-25 10:58",
+      "contents": "[마감 공지] 2022-02-23~2022-02-25 (기준일 : 2022-02-23) 업무가 마감되었습니다.\n<p>22</p>",
       "receiver": "user",
       "read": 1,
-      "id": 13
+      "id": 33
     }
   ],
   "Users": [
     {
       "id": 1,
+      "group": "관리부",
       "name": "admin"
     },
     {
       "id": 2,
+      "group": "관리부",
       "name": "kuller"
     },
     {
       "id": 3,
+      "group": "관리부",
       "name": "ehdtnn"
     },
     {
       "id": 4,
+      "group": "기술연구소",
       "name": "sojang"
     },
     {
       "id": 5,
+      "group": "기술지원팀",
       "name": "bangjoo"
     },
     {
       "id": 6,
+      "group": "관리부",
       "name": "suseok"
     },
     {
       "id": 7,
+      "group": "기술지원팀",
       "name": "flex"
     },
     {
       "id": 8,
+      "group": "기술연구소",
       "name": "styled"
     }
   ],
@@ -172,7 +342,7 @@
       "table_name": "BEDTX1",
       "table_desc": "한글하나",
       "trrule_yn": "YES",
-      "table_status": "신규",
+      "table_status": "변경",
       "trans_yn": "YES",
       "ledger": "내역1",
       "truncate_yn": "YES",
@@ -238,7 +408,7 @@
       "extract_sql": "",
       "table_real_size": "1028",
       "table_dev_size": "1029",
-      "enroll": 0,
+      "enroll": 1,
       "users_query": [
         {
           "userid": "kuller1",
@@ -322,7 +492,7 @@
       "table_desc": "한글둘",
       "trrule_yn": "NO",
       "table_status": "신규",
-      "trans_yn": "NO",
+      "trans_yn": "YES",
       "ledger": "내역2",
       "truncate_yn": "YES",
       "users": 3,
@@ -428,7 +598,7 @@
       "extract_sql": "select * from BEDTX1 where col_1 == 22 and col_2 < 20 order by col_3 desc",
       "table_real_size": "1024",
       "table_dev_size": "1025",
-      "enroll": 0,
+      "enroll": 1,
       "users_query": [
         {
           "userid": "kuller1",
@@ -493,89 +663,6 @@
   ],
   "SyncMain": [
     {
-      "schName": "스케줄22",
-      "schDesc": "스케줄2 설명",
-      "schPattern": "1",
-      "directRun": true,
-      "noneEndDt": true,
-      "startDate": "2022-01-01",
-      "startTime": "21:00",
-      "endDate": "2022-02-02",
-      "systemList": [
-        {
-          "id": 1,
-          "system_name": "정보계",
-          "serverid_src": 1,
-          "serverid_dst": 4,
-          "owners": "TRANS1, TRANS2, TRANS3",
-          "selected": true
-        },
-        {
-          "id": 3,
-          "system_name": "대외계",
-          "serverid_src": 3,
-          "serverid_dst": 6,
-          "owners": "EMP1, EMP2",
-          "selected": true
-        }
-      ],
-      "id": 2
-    },
-    {
-      "schName": "1111",
-      "schDesc": "",
-      "schPattern": "7",
-      "directRun": false,
-      "noneEndDt": false,
-      "startDate": "2022-01-25",
-      "startTime": "19:49",
-      "endDate": "2022-01-25",
-      "systemList": [
-        {
-          "id": 1,
-          "system_name": "정보계",
-          "serverid_src": 1,
-          "serverid_dst": 4,
-          "owners": "TRANS1, TRANS2, TRANS3",
-          "selected": true
-        },
-        {
-          "id": 2,
-          "system_name": "계정계",
-          "serverid_src": 2,
-          "serverid_dst": 5,
-          "owners": "SCOTT1, SCOTT2",
-          "selected": true
-        },
-        {
-          "id": 3,
-          "system_name": "대외계",
-          "serverid_src": 3,
-          "serverid_dst": 6,
-          "owners": "EMP1, EMP2",
-          "selected": true
-        }
-      ],
-      "id": 3,
-      "cycle": {
-        "month": [
-          1,
-          2
-        ],
-        "day": [],
-        "week": [
-          1,
-          2,
-          5
-        ],
-        "weekDay": [
-          1,
-          2,
-          6
-        ]
-      }
-    },
-    {
       "schName": "스케줄6",
       "schDesc": "666",
       "schPattern": "7",
@@ -618,6 +705,45 @@
         "weekDay": []
       },
       "id": 4
+    },
+    {
+      "schName": "3",
+      "schDesc": "4",
+      "schPattern": "7",
+      "directRun": false,
+      "noneEndDt": true,
+      "startDate": "2022-06-09",
+      "startTime": "15:25",
+      "endDate": "2022-02-23",
+      "cycle": {
+        "month": [
+          6
+        ],
+        "day": [
+          9
+        ],
+        "week": [],
+        "weekDay": []
+      },
+      "systemList": [
+        {
+          "id": 1,
+          "system_name": "정보계",
+          "serverid_src": 1,
+          "serverid_dst": 4,
+          "owners": "TRANS1, TRANS2, TRANS3",
+          "selected": true
+        },
+        {
+          "id": 3,
+          "system_name": "대외계",
+          "serverid_src": 3,
+          "serverid_dst": 6,
+          "owners": "EMP1, EMP2",
+          "selected": true
+        }
+      ],
+      "id": 6
     }
   ],
   "SyncSub": [
@@ -630,7 +756,7 @@
       "real_size": 117300,
       "dev_size": 234,
       "etc": "비고1",
-      "main_id": 1
+      "main_id": 4
     },
     {
       "id": 2,
@@ -700,10 +826,10 @@
     }
   ],
   "IsOpen": {
-    "startDate": "2022-02-15",
-    "endDate": "2022-02-15",
+    "startDate": "2022-02-23",
+    "endDate": "2022-02-25",
     "open": false,
-    "refDate": "2022-03-04"
+    "refDate": "2022-02-23"
   },
   "SystemList": [
     {

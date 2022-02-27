@@ -4,8 +4,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Col, Form } from 'react-bootstrap';
 import styled from 'styled-components';
 import { WhiteButton } from '../../component/button/R2wButton';
+import { getCookie } from '../../utils/Cookie';
 import WorkDueDate from './WorkDueDate';
 import { adminGridOption, commonGridOption, userGridOption } from './WorkGridOption';
+import WorkMacroTab from './WorkMacroTab';
 import WorkRegist from './WorkRegist';
 
 function Work() {
@@ -15,6 +17,7 @@ function Work() {
     const [servers, setServers] = useState([]);
     const [showRegistWork, setShowRegistWork] = useState(false);
     const [registWorks, setRegistWorks] = useState([]);
+    const [showMacroTab, setShowMacroTab] = useState(false);
     const gridRef = useRef();
 
     useEffect(() => {
@@ -29,14 +32,25 @@ function Work() {
     }, []);
 
     const getWorks = (search = '정보계') => {
-        axios
-            .get(process.env.REACT_APP_DB_HOST + '/Works?server_name=' + search)
-            .then((res) => {
-                gridRef.current.api.setRowData(res.data);
-            })
-            .catch((Error) => {
-                console.log(Error);
-            });
+        if (getCookie('ulevel') === '1') {
+            axios
+                .get(process.env.REACT_APP_DB_HOST + '/Works?server_name=' + search + '&trans_yn=YES')
+                .then((res) => {
+                    gridRef.current.api.setRowData(res.data);
+                })
+                .catch((Error) => {
+                    console.log(Error);
+                });
+        } else {
+            axios
+                .get(process.env.REACT_APP_DB_HOST + '/Works?server_name=' + search)
+                .then((res) => {
+                    gridRef.current.api.setRowData(res.data);
+                })
+                .catch((Error) => {
+                    console.log(Error);
+                });
+        }
     };
 
     const getServers = () => {
@@ -44,7 +58,6 @@ function Work() {
             .get(process.env.REACT_APP_DB_HOST + '/Servers')
             .then((res) => {
                 setServers(res.data);
-                console.log(res.data);
             })
             .catch((Error) => {
                 console.log(Error);
@@ -56,7 +69,7 @@ function Work() {
             .get(process.env.REACT_APP_DB_HOST + '/IsOpen')
             .then((res) => {
                 setIsOpen(res.data.open);
-                setWorkDate(`[${res.data.open ? '개시' : '마감'}] ${res.data.startDate} ~ ${res.data.endDate} (기준일 : ${res.data.refDate})`);
+                setWorkDate(`[${res.data.open ? '개시' : '마감'}] ${res.data.startDate} ~ ${res.data.endDate} (기준일 : ${res.data.refDate || '미지정'})`);
             })
             .catch((Error) => {
                 console.log(Error);
@@ -97,13 +110,14 @@ function Work() {
         let alertText = '';
 
         selectedRows.forEach((selectedRow) => {
-            if (!selectedRow.extract_sql) {
+            console.log(selectedRow.trans_yn);
+            if (!selectedRow.extract_sql || selectedRow.trans_yn === 'NO') {
                 alertText += `${selectedRow.table_name}\n`;
             }
         });
 
         if (alertText) {
-            alertText += '위 테이블은 추출조건이 없습니다.';
+            alertText += '위 테이블은 이관 작업 대상이 아니거나 추출조건이 없습니다.';
             alert(alertText);
             return;
         }
@@ -128,8 +142,8 @@ function Work() {
                 </Col>
                 <Col sm={6}>{workDate}</Col>
                 <Col sm={4}>
-                    {sessionStorage.getItem('userAuth') === '0' &&
-                        (!isOpen ? (
+                    {getCookie('ulevel') === '1' ? (
+                        !isOpen ? (
                             <>
                                 <WhiteButton onClick={() => registWork()}>작업 등록</WhiteButton>
                                 <WhiteButton
@@ -150,11 +164,20 @@ function Work() {
                             >
                                 업무 마감
                             </WhiteButton>
-                        ))}
+                        )
+                    ) : (
+                        <WhiteButton
+                            onClick={() => {
+                                setShowMacroTab(true);
+                            }}
+                        >
+                            매크로 정보
+                        </WhiteButton>
+                    )}
                 </Col>
             </WorkHeader>
             <WorkWrap className="ag-theme-alpine">
-                {sessionStorage.getItem('userAuth') === '0' ? (
+                {getCookie('ulevel') === '1' ? (
                     <AgGridReact
                         ref={gridRef}
                         rowSelection="multiple"
@@ -179,6 +202,8 @@ function Work() {
                         rowHeight="35"
                         headerHeight="40"
                         onGridReady={onGridReady}
+                        singleClickEdit={true}
+                        gridOptions={userGridOption()}
                         columnDefs={userGridOption(isOpen).columnDefs}
                         defaultColDef={commonGridOption.defaultColDef}
                         sideBar={commonGridOption.sideBar}
@@ -188,6 +213,7 @@ function Work() {
             </WorkWrap>
             {showDueDate && <WorkDueDate show={showDueDate} setShowDueDate={setShowDueDate} open={isOpen} />}
             {showRegistWork && <WorkRegist show={showRegistWork} setShowRegistWork={setShowRegistWork} registWorks={registWorks} parentGrid={gridRef} />}
+            {showMacroTab && <WorkMacroTab show={showMacroTab} setShowMacroTab={setShowMacroTab} />}
         </>
     );
 }
@@ -200,6 +226,7 @@ const WorkHeader = styled.div`
 
     & .col-sm-6 {
         padding-left: 15px;
+        color: #4caf50;
     }
 
     & .col-sm-4 {
@@ -219,7 +246,8 @@ const WorkHeader = styled.div`
 
 const WorkWrap = styled.div`
     width: 100%;
-    height: 761px;
+    min-height: 793px;
+    height: 84vh;
     padding: 15px;
 `;
 export default Work;

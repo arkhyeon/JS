@@ -8,6 +8,7 @@ import SystemAddModal from './SystemAddModal';
 import axios from 'axios';
 import { Col, Row } from 'react-bootstrap';
 import { WhiteButton } from '../../../component/button/R2wButton';
+import { MdDeleteOutline } from 'react-icons/md';
 
 let rowData = [
     {
@@ -62,24 +63,22 @@ const System = () => {
 
     const onGridReady = (params) => {
         setGridApi(params.api);
-        console.log('onGridReady', params);
-
         //serverMappings();
         //getSystemList();
     };
 
-    const getSystemList = async () => {
-        console.log('getSystemList');
-        axios
-            .get(process.env.REACT_APP_DB_HOST + '/System')
-            .then((res) => {
-                console.log('2222222');
-                gridRef.current.api.setRowData(res.data);
-            })
-            .catch((Error) => {
-                console.log(Error);
-            });
-    };
+    // const getSystemList = async () => {
+    //     console.log('getSystemList');
+    //     axios
+    //         .get(process.env.REACT_APP_DB_HOST + '/System')
+    //         .then((res) => {
+    //             console.log('2222222');
+    //             gridRef.current.api.setRowData(res.data);
+    //         })
+    //         .catch((Error) => {
+    //             console.log(Error);
+    //         });
+    // };
 
     const serverNames = Object.keys(serverMappings);
 
@@ -87,17 +86,11 @@ const System = () => {
         return mappings[key];
     }
 
-    const onCellValueChanged = (event) => {
-        console.log('before: ', event.oldValue, 'after: ', event.newValue);
-    };
-
     function cellEditorParams(params) {
-        console.log('params', params);
         return { values: serverNames };
     }
 
     const onRowAdd = (systemName, serverSrc, serverDst, owners) => {
-        console.log('onRowAdd');
         var newRow = {
             system_name: systemName,
             serverid_src: serverSrc,
@@ -106,26 +99,29 @@ const System = () => {
         };
         gridApi.applyTransaction({ add: [newRow] });
         rowData = [...rowData, newRow];
-        console.log(rowData);
     };
 
-    const onRowDel = () => {
-        let selectedRows = gridApi.getSelectedRows();
-        console.log(selectedRows);
-        for (let i = 0; i < selectedRows.length; i++) {
-            rowData = rowData.filter((item) => item.index !== selectedRows[i].index);
-        }
-        gridApi.applyTransaction({ remove: selectedRows });
-        console.log(rowData);
+    const onRowDel = (node) => {
+        gridRef.current.api.updateRowData({ remove: [node.data] });
     };
 
     const open = () => {
         setShowAddModal(true);
     };
 
-    const defaultColDef = {
-        suppressMenu: true,
-        sortable: false,
+    const rowAddOn = (props) => {
+        return (
+            <div className="editWrap">
+                <div className="editTitle">{props.value}</div>
+                <div className="editIcon">
+                    <MdDeleteOutline
+                        onClick={() => {
+                            onRowDel(props.node);
+                        }}
+                    />
+                </div>
+            </div>
+        );
     };
 
     return (
@@ -135,23 +131,21 @@ const System = () => {
                     <h3>업무 등록</h3>
                 </Col>
                 <Col sm={8}>
-                    <WhiteButton onClick={onRowDel}>삭제</WhiteButton>
                     <WhiteButton onClick={open}>등록</WhiteButton>
                 </Col>
             </Row>
-            <hr />
             <SystemGridWrap className="ag-theme-alpine">
                 <AgGridReact
                     rowData={rowData}
                     ref={gridRef}
                     rowSelection="multiple"
-                    // editType={'fullRow'}
                     onGridReady={onGridReady}
                     defaultColDef={defaultColDef}
+                    frameworkComponents={{ rowAddOn }}
                     rowHeight="35"
                     headerHeight="40"
                 >
-                    <AgGridColumn field="system_name" headerName="업무명" editable={true} onCellValueChanged={onCellValueChanged} checkboxSelection={true} />
+                    <AgGridColumn field="system_name" headerName="업무명" editable={true} cellRenderer="rowAddOn" />
                     <AgGridColumn
                         field="serverid_src"
                         headerName="원본서버"
@@ -162,7 +156,6 @@ const System = () => {
                             // formatter로 데이터 변경해서 보여준다
                             return lookupValue(serverMappings, params.value);
                         }}
-                        onCellValueChanged={onCellValueChanged}
                     />
                     <AgGridColumn
                         field="serverid_dst"
@@ -173,9 +166,8 @@ const System = () => {
                         valueFormatter={(params) => {
                             return lookupValue(serverMappings, params.value);
                         }}
-                        onCellValueChanged={onCellValueChanged}
                     />
-                    <AgGridColumn field="owners" headerName="OWNERS" editable={true} onCellValueChanged={onCellValueChanged} flex={1} />
+                    <AgGridColumn field="owners" headerName="OWNERS" editable={true} flex={1} />
                     <AgGridColumn field="index" headerName="index" hide={true} />
                 </AgGridReact>
             </SystemGridWrap>
@@ -186,16 +178,11 @@ const System = () => {
 
 const SystemWrap = styled.div`
     width: 100%;
-    & hr {
-        margin: 15px 0px;
-    }
     & .row {
         align-items: center;
-        & .col-sm-2 {
-            padding-left: 0px;
-        }
-        & .col-sm-10 {
-            padding-right: 0px;
+        margin-bottom: 15px;
+        & .col-sm-4 {
+            margin-top: 4px;
         }
         & button {
             height: 33px;
@@ -204,14 +191,20 @@ const SystemWrap = styled.div`
         }
 
         & h3 {
-            font-size: 1.375rem;
+            font-size: 1.2rem;
+            line-height: 2px;
         }
     }
 `;
 
 const SystemGridWrap = styled.div`
     width: 100%;
-    height: 723px;
+    height: 747px;
 `;
+
+const defaultColDef = {
+    suppressMenu: true,
+    sortable: false,
+};
 
 export default System;

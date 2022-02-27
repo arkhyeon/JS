@@ -1,28 +1,28 @@
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import axios from "axios";
-import React from "react";
-import { Col, Form, Row } from "react-bootstrap";
-import { useNavigate, useLocation } from "react-router-dom";
-import styled from "styled-components";
-import { WhiteButton } from "../../component/button/R2wButton";
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import axios from 'axios';
+import React from 'react';
+import { Col, Form, Row } from 'react-bootstrap';
+import { useNavigate, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
+import { WhiteButton } from '../../component/button/R2wButton';
 
 function MessageDetail() {
     const msgData = useLocation().state;
     const navigate = useNavigate();
 
     const reply = () => {
-        navigate("/Message/MessageWrite", { state: msgData });
+        navigate('/Message/MessageWrite', { state: msgData });
     };
 
     const deleteMsg = () => {
-        if (!window.confirm("정말 삭제하시겠습니까?")) {
+        if (!window.confirm('정말 삭제하시겠습니까?')) {
             return;
         }
         axios
-            .delete(process.env.REACT_APP_DB_HOST + "/Messages/" + msgData.id)
+            .delete(process.env.REACT_APP_DB_HOST + '/Messages/' + msgData.id)
             .then(() => {
-                navigate("/Message/MessageReceive");
+                navigate('/Message/MessageReceive');
             })
             .catch((error) => {
                 console.log(error.response);
@@ -41,7 +41,7 @@ function MessageDetail() {
                         받는 사람 : &nbsp;<Form.Label> {msgData.writer}</Form.Label>
                     </Form.Label>
                     <Form.Label sm={1}>
-                        메일 타입 : &nbsp;<Form.Label> {msgData.type === 1 ? "일반" : msgData.type === 2 ? "공지" : "서버"}</Form.Label>
+                        메일 타입 : &nbsp;<Form.Label> {msgData.type === 1 ? '일반' : msgData.type === 2 ? '공지' : '서버'}</Form.Label>
                     </Form.Label>
                 </Form.Group>
                 <CKEditor editor={ClassicEditor} data={msgData.contents} disabled config={{ toolbar: [] }} />

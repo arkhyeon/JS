@@ -40,7 +40,6 @@ function MessageTab({ toggleMessage, setToggleMessage, unReadMsg, setUnReadMsg }
             axios
                 .patch(process.env.REACT_APP_DB_HOST + '/Messages/' + unReadMsg[i].id, { read: 0 })
                 .then((res) => {
-                    console.log(res);
                     setUnReadMsg(unReadMsg.filter((msg) => msg.id !== res.data.id));
                 })
                 .catch((error) => {
@@ -120,7 +119,7 @@ function MessageTab({ toggleMessage, setToggleMessage, unReadMsg, setUnReadMsg }
                         setToggleMessage();
                     }}
                 >
-                    메세지함 이동
+                    메시지함 이동
                 </NormalButton>
             </StyledOffFooter>
         </StyledOffcanvas>

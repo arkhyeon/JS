@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { Button, Card, Form, Modal } from 'react-bootstrap';
 import styled from 'styled-components';
+import { NormalButton, WhiteButton } from '../../../component/button/R2wButton';
 
 function WorkSchCycle({ show, setShowCycle, parentHeight, cycle, setCycle }) {
     const [changePatternDetail, setChangePatternDetail] = useState();
@@ -40,7 +41,7 @@ function WorkSchCycle({ show, setShowCycle, parentHeight, cycle, setCycle }) {
         const result = [];
         for (let i = 1; i <= 5; i++) {
             result.push(
-                <PatternBtn key={i + '째주'} className={week.includes(i) && 'on'} onClick={(e) => toggleBtn(e, i)} value={'week'}>{`${i}째주`}</PatternBtn>
+                <PatternBtn key={i + '주'} className={week.includes(i) && 'on'} onClick={(e) => toggleBtn(e, i)} value={'week'}>{`${i}째주`}</PatternBtn>
             );
         }
         return result;
@@ -123,9 +124,9 @@ function WorkSchCycle({ show, setShowCycle, parentHeight, cycle, setCycle }) {
                                 <Card.Body className="monthBtn">{renderDay()}</Card.Body>
                             ) : (
                                 <>
-                                    <Card.Text>주간</Card.Text>
+                                    {/* <Card.Text>주간</Card.Text> */}
                                     <Card.Body className="weekBtn">{renderWeek()}</Card.Body>
-                                    <Card.Text>요일</Card.Text>
+                                    {/* <Card.Text>요일</Card.Text> */}
                                     <Card.Body className="weekDayBtn">{renderWeekDay()}</Card.Body>
                                 </>
                             )}
@@ -134,17 +135,16 @@ function WorkSchCycle({ show, setShowCycle, parentHeight, cycle, setCycle }) {
                 </CycleContainer>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="outline-secondary" onClick={() => setShowCycle(false)}>
-                    닫기
-                </Button>
-                <Button
-                    variant="secondary"
-                    onClick={() => {
-                        savePattern();
-                    }}
-                >
-                    확인
-                </Button>
+                <ButtonWrap>
+                    <WhiteButton onClick={() => setShowCycle(false)}>닫기</WhiteButton>
+                    <NormalButton
+                        onClick={() => {
+                            savePattern();
+                        }}
+                    >
+                        등록
+                    </NormalButton>
+                </ButtonWrap>
             </Modal.Footer>
         </Modal>
     );
@@ -170,20 +170,29 @@ const CycleContainer = styled.div`
         font-size: 14px;
         white-space: pre-line;
     }
+
+    & .weekBtn button {
+        width: 76px;
+    }
+
+    & .weekDayBtn button {
+        width: 51px;
+    }
 `;
 
 const PatternBtn = styled.button`
-    width: 50px;
+    width: 62px;
     box-shadow: none;
-    color: #212529;
     text-align: center;
-    cursor: pointer;
-    background-color: white;
-    border: 1px solid #6c757d;
-    padding: 0.2rem 0.25rem;
-    font-size: 0.9rem;
-    border-radius: 0.25rem;
+    height: 33px;
     transition: 0.15s;
+    font-size: 0.875rem;
+    padding: 0px 15px;
+    color: #383838;
+    background-color: #ffffff;
+    border: 1px solid;
+    border-color: #c4c4c4;
+    border-radius: 3px;
 
     &:hover {
         background-color: #6c757d;
@@ -198,6 +207,13 @@ const PatternBtn = styled.button`
     &.off {
         background-color: white;
         color: #6c757d;
+    }
+`;
+
+const ButtonWrap = styled.div`
+    & button {
+        height: 33px;
+        margin-left: 15px;
     }
 `;
 

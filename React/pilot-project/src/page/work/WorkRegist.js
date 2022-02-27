@@ -1,16 +1,16 @@
-import { AgGridReact } from "ag-grid-react/lib/agGridReact";
-import axios from "axios";
-import React, { useRef, useState, useEffect, useMemo, useCallback } from "react";
-import { Col, Form, Modal, OverlayTrigger, Row, Tooltip } from "react-bootstrap";
-import styled from "styled-components";
-import { NormalButton, WhiteButton } from "../../component/button/R2wButton";
-import WorkDbOption from "./WorkDbOption";
+import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
+import axios from 'axios';
+import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
+import { Col, Form, Modal, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
+import styled from 'styled-components';
+import { NormalButton, WhiteButton } from '../../component/button/R2wButton';
+import WorkDbOption from './WorkDbOption';
 
 function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
     const gridRef = useRef(null);
     const target = useRef(null);
     const [showDbOption, setShowDbOption] = useState(false);
-    const [prefix, setPrefix] = useState("");
+    const [prefix, setPrefix] = useState('');
     const [option, setOption] = useState(defaultOption);
     const [dbmsType, setDbmsType] = useState([]);
     const [jconnectFlag, setJconnectFlag] = useState([]);
@@ -22,7 +22,7 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
 
     const getDbInfo = () => {
         axios
-            .get(process.env.REACT_APP_DB_HOST + "/server_master?server_id=" + 1 + "&server_id=" + 2)
+            .get(process.env.REACT_APP_DB_HOST + '/server_master?server_id=' + 1 + '&server_id=' + 2)
             .then((res) => {
                 setDbmsType([res.data[0].dbms_type, res.data[1].dbms_type]);
                 setJconnectFlag([res.data[0].jconnect_flag, res.data[1].jconnect_flag]);
@@ -32,7 +32,7 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
             });
 
         axios
-            .get(process.env.REACT_APP_DB_HOST + "/app_global")
+            .get(process.env.REACT_APP_DB_HOST + '/app_global')
             .then((res) => {
                 setR2wtrans(res.data);
             })
@@ -55,17 +55,17 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
 
     const saveWork = () => {
         if (!prefix) {
-            alert("직업명을 입력해 주세요");
+            alert('직업명을 입력해 주세요');
             return;
         }
         registWorks.forEach((registWork) => {
             axios
-                .patch(process.env.REACT_APP_DB_HOST + "/Works/" + registWork.id, {
+                .patch(process.env.REACT_APP_DB_HOST + '/Works/' + registWork.id, {
                     enroll: 1,
                 })
                 .then(() => {
                     setShowRegistWork(false);
-                    parentGrid.current.api.getRowNode(registWork.id).setDataValue("enroll", 1);
+                    parentGrid.current.api.getRowNode(registWork.id).setDataValue('enroll', 1);
                 })
                 .catch((Error) => {
                     console.log(Error);
@@ -73,7 +73,7 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
                 });
         });
         parentGrid.current.api.deselectAll();
-        alert("작업이 등록되었습니다.");
+        alert('작업이 등록되었습니다.');
     };
 
     return (
@@ -85,7 +85,7 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
                 <Modal.Body>
                     <StyledRow>
                         <Col sm={3}>
-                            <OverlayTrigger placement={"right"} overlay={<Tooltip>작업명 : Prefix.DB.owner.table</Tooltip>}>
+                            <OverlayTrigger placement={'right'} overlay={<Tooltip>작업명 : Prefix.DB.owner.table</Tooltip>}>
                                 <Form.Control ref={target} type="text" placeholder="Prefix" onChange={(e) => setPrefix(e.target.value)} />
                             </OverlayTrigger>
                         </Col>
@@ -122,7 +122,6 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
                         </NormalButton>
                     </ButtonWrap>
                 </Modal.Footer>
-                {dbmsType}
             </Modal>
             <WorkDbOption
                 show={showDbOption}
@@ -138,9 +137,13 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
 }
 
 const StyledRow = styled(Row)`
+    & input {
+        height: 33px;
+        font-size: 14px;
+    }
     & button {
         float: right;
-        height: 38px;
+        height: 33px;
     }
 `;
 
@@ -166,41 +169,41 @@ const ButtonWrap = styled.div`
 const GridOption = {
     columnDefs: [
         {
-            headerName: "시스템명",
-            field: "server_name",
+            headerName: '시스템명',
+            field: 'server_name',
             width: 110,
         },
         {
-            headerName: "DB Name",
-            field: "dbms_dbname",
+            headerName: 'DB Name',
+            field: 'dbms_dbname',
             width: 110,
         },
         {
-            headerName: "SID",
-            field: "dbms_dsn",
+            headerName: 'SID',
+            field: 'dbms_dsn',
             width: 110,
         },
         {
-            headerName: "OWNER",
-            field: "owner",
+            headerName: 'OWNER',
+            field: 'owner',
             width: 110,
         },
         {
-            headerName: "Table 영문명",
-            field: "table_name",
+            headerName: 'Table 영문명',
+            field: 'table_name',
             width: 110,
         },
         {
-            headerName: "추출조건",
-            field: "extract_sql",
+            headerName: '추출조건',
+            field: 'extract_sql',
             width: 400,
         },
         {
-            field: "id",
+            field: 'id',
             hide: true,
         },
         {
-            field: "enroll",
+            field: 'enroll',
             hide: true,
         },
     ],
@@ -214,38 +217,38 @@ const GridOption = {
 export default React.memo(WorkRegist);
 
 const defaultOption = {
-    array_count: "5000",
-    buffer_size: "",
-    coldeli: ",",
-    convert_char_yn: "off",
-    dq_yn: "y",
-    enc_yn: "y",
-    escape_char: "",
-    extract_num: "1",
-    fastload_yn: "off",
-    hint_degree: "0",
-    incount: "",
-    last_col_yn: "n",
-    load_message: "",
-    load_mode: "insert",
-    load_num: "1",
-    load_opt: "ignore",
-    max_extract_cnt: "0",
-    multi_thread: "on",
-    no_log: "n",
-    null_char: "",
-    parallel: "n",
-    parallel_hint: "0",
-    partition_dst: "",
-    partition_src: "",
-    print_row: "1000000",
-    remote_mode_yn: "on",
-    rowdeli: "0x0a",
-    session_option: "",
-    size_mode_yn: "off",
-    skip_yn: "n",
-    temp_space: "",
-    trans_method: "bind",
-    trrule_yn: "y",
-    warning_count: "",
+    array_count: '5000',
+    buffer_size: '',
+    coldeli: ',',
+    convert_char_yn: 'off',
+    dq_yn: 'y',
+    enc_yn: 'y',
+    escape_char: '',
+    extract_num: '1',
+    fastload_yn: 'off',
+    hint_degree: '0',
+    incount: '',
+    last_col_yn: 'n',
+    load_message: '',
+    load_mode: 'insert',
+    load_num: '1',
+    load_opt: 'ignore',
+    max_extract_cnt: '0',
+    multi_thread: 'on',
+    no_log: 'n',
+    null_char: '',
+    parallel: 'n',
+    parallel_hint: '0',
+    partition_dst: '',
+    partition_src: '',
+    print_row: '1000000',
+    remote_mode_yn: 'on',
+    rowdeli: '0x0a',
+    session_option: '',
+    size_mode_yn: 'off',
+    skip_yn: 'n',
+    temp_space: '',
+    trans_method: 'bind',
+    trrule_yn: 'y',
+    warning_count: '',
 };

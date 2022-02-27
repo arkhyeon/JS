@@ -1,7 +1,8 @@
 import { AgGridReact } from 'ag-grid-react';
-import React from 'react';
+import React, { useRef } from 'react';
 import { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
+import { MdDeleteOutline } from 'react-icons/md';
 import styled from 'styled-components';
 import { WhiteButton } from '../../../component/button/R2wButton';
 import MacroAddModal from './MacroAddModal';
@@ -27,90 +28,54 @@ let initRowData = [
     },
 ];
 
+let initRowData2 = [
+    {
+        macroKey: ':V_ACTBT_국코드',
+        code: '"010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017"',
+    },
+];
+
 function Main() {
     const [showMacroModal, setShowMacroModal] = useState(false);
+    const codeRef = useRef();
+    const macroRef = useRef();
 
-    const ColumnInfo = {
-        HeaderInfo: [
-            {
-                checkboxSelection: true,
-                headerCheckboxSelection: true,
-                rowDrag: true,
-                headerName: '매크로 변수',
-                field: 'macroKey',
-                cellEditor: 'agLargeTextCellEditor',
-                editable: true,
-                flex: 1,
-                cellEditorParams: { maxLength: 1024 },
-            },
-            {
-                headerName: '매크로 값',
-                field: 'macroValue',
-                cellEditor: 'agLargeTextCellEditor',
-                editable: true,
-                flex: 1,
-                cellEditorParams: { maxLength: 1024 },
-            },
-            {
-                headerName: '예시',
-                field: 'ex',
-                flex: 2,
-            },
-            {
-                headerName: 'index',
-                field: 'index',
-                hide: true,
-            },
-        ],
-        DefaultInfo: {
-            suppressMenu: true,
-            headerClass: 'ag-header-cell-label',
-            editable: false,
-            resizable: true,
-            sortable: false,
-        },
-        sideBar: {
-            hiddenByDefault: true,
-        },
-    };
-
-    const [gridApi, setGridApi] = useState(null);
-
-    const onGridReady = (params) => {
-        setGridApi(params.api);
-        params.api.setRowData(initRowData); //? 의미없을것 같음.
-        params.api.closeToolPanel();
+    const onGridReady = () => {
+        macroRef.current.api.setRowData(initRowData);
+        codeRef.current.api.setRowData(initRowData2);
     };
 
     // 추가
-    const [itemId, setItemId] = useState(3);
+    const itemId = useRef(3);
 
-    const onRowAdd = (key, v) => {
-        setItemId(itemId + 1);
+    const onRowAdd = (key) => {
+        itemId.current++;
         var newRow = {
             macroKey: key,
-            macroValue: v,
             ex: '2022',
-            index: itemId,
+            index: itemId.current,
         };
-        gridApi.applyTransaction({ add: [newRow] });
+        macroRef.current.api.applyTransaction({ add: [newRow] });
         initRowData = [...initRowData, newRow];
-        console.log(initRowData);
     };
 
-    // 삭제
-    const onRowDel = () => {
-        let selectedRows = gridApi.getSelectedRows();
-        if (selectedRows.length === 0) {
-            alert('삭제할 항목을 선택해주세요.');
-            return;
-        }
-        console.log(selectedRows);
-        for (let i = 0; i < selectedRows.length; i++) {
-            initRowData = initRowData.filter((item) => item.index !== selectedRows[i].index);
-        }
-        gridApi.applyTransaction({ remove: selectedRows });
-        console.log(initRowData);
+    const rowAddOn = (props) => {
+        return (
+            <div className="editWrap">
+                <div className="editTitle">{props.value}</div>
+                <div className="editIcon">
+                    <MdDeleteOutline
+                        onClick={() => {
+                            deleteRow(props);
+                        }}
+                    />
+                </div>
+            </div>
+        );
+    };
+
+    const deleteRow = (node) => {
+        macroRef.current.api.updateRowData({ remove: [node.data] });
     };
 
     return (
@@ -121,7 +86,6 @@ function Main() {
                         <h3>매크로 설정</h3>
                     </Col>
                     <Col Column sm={8}>
-                        <WhiteButton onClick={onRowDel}>삭제</WhiteButton>
                         <WhiteButton
                             onClick={() => {
                                 setShowMacroModal(true);
@@ -131,21 +95,33 @@ function Main() {
                         </WhiteButton>
                     </Col>
                 </Row>
-
-                <hr />
+                <CodeGridWrap>
+                    <AgGridReact
+                        columnDefs={codeGrid.HeaderInfo}
+                        defaultColDef={defaultGrid.DefaultInfo}
+                        stopEditingWhenCellsLoseFocus={true}
+                        onGridReady={onGridReady}
+                        rowHeight="150"
+                        headerHeight="40"
+                        ref={codeRef}
+                        domLayout={'autoHeight'}
+                    ></AgGridReact>
+                </CodeGridWrap>
 
                 <MacroGridWrap>
                     <AgGridReact
                         rowSelection="multiple"
-                        columnDefs={ColumnInfo.HeaderInfo}
-                        defaultColDef={ColumnInfo.DefaultInfo}
-                        sideBar={ColumnInfo.sideBar}
+                        columnDefs={macroGrid.HeaderInfo}
+                        defaultColDef={defaultGrid.DefaultInfo}
+                        sideBar={defaultGrid.sideBar}
                         stopEditingWhenCellsLoseFocus={true}
                         rowDragManaged={true}
+                        frameworkComponents={{ rowAddOn }}
                         animateRows={true}
                         onGridReady={onGridReady}
                         rowHeight="35"
                         headerHeight="40"
+                        ref={macroRef}
                     ></AgGridReact>
                 </MacroGridWrap>
             </MacroWrap>
@@ -155,17 +131,11 @@ function Main() {
 }
 
 const MacroWrap = styled.div`
-    & hr {
-        margin: 15px 0px;
-    }
-
     & .row {
         align-items: center;
-        & .col-sm-2 {
-            padding-left: 0px;
-        }
-        & .col-sm-10 {
-            padding-right: 0px;
+        margin-bottom: 15px;
+        & .col-sm-4 {
+            margin-top: 4px;
         }
         & button {
             height: 33px;
@@ -174,14 +144,91 @@ const MacroWrap = styled.div`
         }
 
         & h3 {
-            font-size: 1.375rem;
+            font-size: 1.2rem;
+            line-height: 2px;
         }
     }
 `;
 
 const MacroGridWrap = styled.div`
     width: 100%;
-    height: 747px;
+    height: 539px;
 `;
+
+const CodeGridWrap = styled.div`
+    width: 100%;
+    /* height: 300px; */
+    margin-bottom: 15px;
+`;
+
+const codeGrid = {
+    HeaderInfo: [
+        {
+            headerName: '매크로 변수',
+            field: 'macroKey',
+            cellEditor: 'agLargeTextCellEditor',
+            cellStyle: { 'line-height': '25px', display: 'flex', 'align-items': 'center' },
+            editable: true,
+            flex: 0.35,
+            cellEditorParams: { maxLength: 1024 },
+        },
+        {
+            headerName: '데이터',
+            field: 'code',
+            flex: 2,
+            cellEditor: 'agLargeTextCellEditor',
+            editable: true,
+            cellClass: 'cell-wrap-text',
+            cellStyle: { 'line-height': '25px', display: 'flex', 'align-items': 'center' },
+            wrapText: true,
+        },
+        {
+            headerName: 'index',
+            field: 'index',
+            hide: true,
+        },
+    ],
+};
+
+const macroGrid = {
+    HeaderInfo: [
+        {
+            rowDrag: true,
+            flex: 0.1,
+        },
+        {
+            headerName: '매크로 변수',
+            field: 'macroKey',
+            cellEditor: 'agLargeTextCellEditor',
+            editable: true,
+            flex: 1,
+            cellEditorParams: { maxLength: 1024 },
+            cellRenderer: 'rowAddOn',
+        },
+        {
+            headerName: '예시',
+            field: 'ex',
+            flex: 2,
+        },
+        {
+            headerName: 'index',
+            field: 'index',
+            hide: true,
+        },
+    ],
+};
+
+const defaultGrid = {
+    DefaultInfo: {
+        suppressMenu: true,
+        headerClass: 'ag-header-cell-label',
+        editable: false,
+        resizable: true,
+        sortable: false,
+    },
+    sideBar: {
+        hiddenByDefault: true,
+    },
+};
 
 export default Main;
