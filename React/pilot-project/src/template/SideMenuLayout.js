@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Nav } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
@@ -38,14 +38,18 @@ function SideMenuLayout({ menus, children }) {
             <AsideWrap>
                 {menus.map((menu, i) => {
                     return i === 0 ? (
-                        <>
+                        <Fragment key={menu.title}>
                             <SideTitle>
                                 {menu.icon} {menu.title}
                             </SideTitle>
                             <hr />
-                        </>
+                        </Fragment>
                     ) : (
-                        <NavLink to={menu.to} className="nav-link">
+                        <NavLink
+                            key={menu.title}
+                            to={menu.to}
+                            className="nav-link"
+                        >
                             <Nav.Item>
                                 {menu.icon} {menu.title}
                             </Nav.Item>

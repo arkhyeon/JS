@@ -6,7 +6,11 @@ import styled from 'styled-components';
 import { WhiteButton } from '../../component/button/R2wButton';
 import { getCookie } from '../../utils/Cookie';
 import WorkDueDate from './WorkDueDate';
-import { adminGridOption, commonGridOption, userGridOption } from './WorkGridOption';
+import {
+    adminGridOption,
+    commonGridOption,
+    userGridOption,
+} from './WorkGridOption';
 import WorkMacroTab from './WorkMacroTab';
 import WorkRegist from './WorkRegist';
 
@@ -34,7 +38,12 @@ function Work() {
     const getWorks = (search = '정보계') => {
         if (getCookie('ulevel') === '1') {
             axios
-                .get(process.env.REACT_APP_DB_HOST + '/Works?server_name=' + search + '&trans_yn=YES')
+                .get(
+                    process.env.REACT_APP_DB_HOST +
+                        '/Works?server_name=' +
+                        search +
+                        '&trans_yn=YES',
+                )
                 .then((res) => {
                     gridRef.current.api.setRowData(res.data);
                 })
@@ -43,7 +52,11 @@ function Work() {
                 });
         } else {
             axios
-                .get(process.env.REACT_APP_DB_HOST + '/Works?server_name=' + search)
+                .get(
+                    process.env.REACT_APP_DB_HOST +
+                        '/Works?server_name=' +
+                        search,
+                )
                 .then((res) => {
                     gridRef.current.api.setRowData(res.data);
                 })
@@ -69,7 +82,13 @@ function Work() {
             .get(process.env.REACT_APP_DB_HOST + '/IsOpen')
             .then((res) => {
                 setIsOpen(res.data.open);
-                setWorkDate(`[${res.data.open ? '개시' : '마감'}] ${res.data.startDate} ~ ${res.data.endDate} (기준일 : ${res.data.refDate || '미지정'})`);
+                setWorkDate(
+                    `[${res.data.open ? '개시' : '마감'}] ${
+                        res.data.startDate
+                    } ~ ${res.data.endDate} (기준일 : ${
+                        res.data.refDate || '미지정'
+                    })`,
+                );
             })
             .catch((Error) => {
                 console.log(Error);
@@ -117,7 +136,8 @@ function Work() {
         });
 
         if (alertText) {
-            alertText += '위 테이블은 이관 작업 대상이 아니거나 추출조건이 없습니다.';
+            alertText +=
+                '위 테이블은 이관 작업 대상이 아니거나 추출조건이 없습니다.';
             alert(alertText);
             return;
         }
@@ -145,7 +165,9 @@ function Work() {
                     {getCookie('ulevel') === '1' ? (
                         !isOpen ? (
                             <>
-                                <WhiteButton onClick={() => registWork()}>작업 등록</WhiteButton>
+                                <WhiteButton onClick={() => registWork()}>
+                                    작업 등록
+                                </WhiteButton>
                                 <WhiteButton
                                     onClick={() => {
                                         collapseAll();
@@ -189,10 +211,12 @@ function Work() {
                         headerHeight="40"
                         columnDefs={adminGridOption(isOpen).columnDefs}
                         defaultColDef={commonGridOption.defaultColDef}
-                        detailCellRendererParams={adminGridOption(isOpen).detailCellRendererParams}
+                        detailCellRendererParams={
+                            adminGridOption(isOpen).detailCellRendererParams
+                        }
                         sideBar={commonGridOption.sideBar}
                         onFirstDataRendered={onFirstDataRendered}
-                    ></AgGridReact>
+                    />
                 ) : (
                     <AgGridReact
                         ref={gridRef}
@@ -208,12 +232,30 @@ function Work() {
                         defaultColDef={commonGridOption.defaultColDef}
                         sideBar={commonGridOption.sideBar}
                         onFirstDataRendered={onFirstDataRendered}
-                    ></AgGridReact>
+                    />
                 )}
             </WorkWrap>
-            {showDueDate && <WorkDueDate show={showDueDate} setShowDueDate={setShowDueDate} open={isOpen} />}
-            {showRegistWork && <WorkRegist show={showRegistWork} setShowRegistWork={setShowRegistWork} registWorks={registWorks} parentGrid={gridRef} />}
-            {showMacroTab && <WorkMacroTab show={showMacroTab} setShowMacroTab={setShowMacroTab} />}
+            {showDueDate && (
+                <WorkDueDate
+                    show={showDueDate}
+                    setShowDueDate={setShowDueDate}
+                    open={isOpen}
+                />
+            )}
+            {showRegistWork && (
+                <WorkRegist
+                    show={showRegistWork}
+                    setShowRegistWork={setShowRegistWork}
+                    registWorks={registWorks}
+                    parentGrid={gridRef}
+                />
+            )}
+            {showMacroTab && (
+                <WorkMacroTab
+                    show={showMacroTab}
+                    setShowMacroTab={setShowMacroTab}
+                />
+            )}
         </>
     );
 }

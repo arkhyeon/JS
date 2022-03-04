@@ -38,13 +38,27 @@ function MessageDetail() {
                 </Col>
                 <Form.Group as={Row} className="msgInfo">
                     <Form.Label sm={1}>
-                        받는 사람 : &nbsp;<Form.Label> {msgData.writer}</Form.Label>
+                        받는 사람 : &nbsp;
+                        <Form.Label> {msgData.writer}</Form.Label>
                     </Form.Label>
                     <Form.Label sm={1}>
-                        메일 타입 : &nbsp;<Form.Label> {msgData.type === 1 ? '일반' : msgData.type === 2 ? '공지' : '서버'}</Form.Label>
+                        메일 타입 : &nbsp;
+                        <Form.Label>
+                            {' '}
+                            {msgData.type === 1
+                                ? '일반'
+                                : msgData.type === 2
+                                ? '공지'
+                                : '서버'}
+                        </Form.Label>
                     </Form.Label>
                 </Form.Group>
-                <CKEditor editor={ClassicEditor} data={msgData.contents} disabled config={{ toolbar: [] }} />
+                <CKEditor
+                    editor={ClassicEditor}
+                    data={msgData.contents}
+                    disabled
+                    config={{ toolbar: [] }}
+                />
             </Form>
         </Container>
     );
@@ -72,7 +86,7 @@ const Container = styled.div`
     & .msgInfo {
         border-top: 1px solid ${({ theme }) => theme.colors.gray_2};
         border-bottom: 1px solid ${({ theme }) => theme.colors.gray_2};
-        padding: 10px 0 5px;
+        padding: 10px 0 0;
         margin: 15px 0px 0px 0px;
     }
     & .form-label {

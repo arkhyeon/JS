@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Route, NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import Message from '../page/message/Message';
@@ -106,7 +106,17 @@ const CreateMenu = (props) => {
  * depth Level
  * @returns {Component} Menu Unit Component
  */
-const SubMenuItem = ({ menu, handleMenuSelection, selectedMenus, color, fontColor, size, userRole, useDepth = true, depth = 0 }) => {
+const SubMenuItem = ({
+    menu,
+    handleMenuSelection,
+    selectedMenus,
+    color,
+    fontColor,
+    size,
+    userRole,
+    useDepth = true,
+    depth = 0,
+}) => {
     const { title, link = '', subMenu = [], menuRole = 99 } = menu;
 
     if (userRole > menuRole) {
@@ -116,7 +126,11 @@ const SubMenuItem = ({ menu, handleMenuSelection, selectedMenus, color, fontColo
     return (
         <>
             {subMenu.length > 0 && useDepth ? (
-                <SubMenuItem.Item color={color} fontColor={fontColor} size={size}>
+                <SubMenuItem.Item
+                    color={color}
+                    fontColor={fontColor}
+                    size={size}
+                >
                     <NavLink
                         to={link}
                         onMouseEnter={() => handleMenuSelection(title, depth)}
@@ -126,13 +140,19 @@ const SubMenuItem = ({ menu, handleMenuSelection, selectedMenus, color, fontColo
                         {title}
                     </NavLink>
                     {selectedMenus[depth] === title && (
-                        <SubMenuItem.List depth={depth} className="subMenuItem" color={color}>
+                        <SubMenuItem.List
+                            depth={depth}
+                            className="subMenuItem"
+                            color={color}
+                        >
                             {subMenu.map((child, i) => {
                                 const childDepth = depth + 1;
                                 return (
                                     <SubMenuItem
                                         menu={child}
-                                        handleMenuSelection={handleMenuSelection}
+                                        handleMenuSelection={
+                                            handleMenuSelection
+                                        }
                                         key={`sub-${title}-${i}`}
                                         depth={childDepth}
                                         selectedMenus={selectedMenus}
@@ -212,7 +232,8 @@ SubMenuItem.Item = styled.li`
     .subMenuItem &:active > a,
     &.mainActive:active > a {
         color: ${(props) => props.fontColor || '#ffffff'};
-        background: ${(props) => props.fontColor || props.theme.colors.normal_3};
+        background: ${(props) =>
+            props.fontColor || props.theme.colors.normal_3};
     }
 
     & a {
@@ -221,7 +242,8 @@ SubMenuItem.Item = styled.li`
         display: block;
         margin: 0px;
         color: ${(props) => props.fontColor || props.theme.colors.light_1};
-        background-color: ${(props) => props.color || props.theme.colors.dark_2};
+        background-color: ${(props) =>
+            props.color || props.theme.colors.dark_2};
     }
 
     & ul li a {
@@ -270,18 +292,21 @@ export const SetRoute = (props, auth) => {
 const SubRoute = (route, depth = 0) => {
     const { component, link = '', title, subMenu = [], routePath } = route;
     return (
-        <>
+        <Fragment key={title}>
             {subMenu.length > 0 ? (
-                <Route key={title} path={routePath ? routePath : link} element={component}>
+                <Route path={routePath ? routePath : link} element={component}>
                     {subMenu.map((child) => {
                         const childDepth = depth + 1;
                         return SubRoute(child, childDepth);
                     })}
                 </Route>
             ) : (
-                <Route key={title} path={routePath ? routePath : link} element={component} />
+                <Route
+                    path={routePath ? routePath : link}
+                    element={component}
+                />
             )}
-        </>
+        </Fragment>
     );
 };
 
@@ -290,9 +315,15 @@ export const setMsgRoute = () => {
     return (
         <Route path="Message" element={<Message />}>
             <Route path="MessageReceive" element={<MessageList />} />
-            <Route path="MessageReceive/MessageDetail" element={<MessageDetail />} />
+            <Route
+                path="MessageReceive/MessageDetail"
+                element={<MessageDetail />}
+            />
             <Route path="MessageDispatch" element={<MessageList />} />
-            <Route path="MessageDispatch/MessageDetail" element={<MessageDetail />} />
+            <Route
+                path="MessageDispatch/MessageDetail"
+                element={<MessageDetail />}
+            />
             <Route path="MessageWrite" element={<MessageWrite />} />
         </Route>
     );
