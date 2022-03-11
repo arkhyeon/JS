@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import { Col, Form, Modal, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 import { NormalButton, WhiteButton } from '../../../component/button/R2wButton';
+import DraggableModal from '../../../utils/DraggableModal';
 
 const MacroAddModal = ({ show, setShowMacroModal, add }) => {
     const [macroKey, setMacroKey] = useState();
@@ -26,7 +27,12 @@ const MacroAddModal = ({ show, setShowMacroModal, add }) => {
     };
 
     return (
-        <Modal show={show} onHide={setShowMacroModal} onShow={open} centered>
+        <Modal
+            dialogAs={DraggableModal}
+            show={show}
+            onHide={setShowMacroModal}
+            onShow={open}
+        >
             <Modal.Header closeButton>
                 <Modal.Title>매크로 등록</Modal.Title>
             </Modal.Header>

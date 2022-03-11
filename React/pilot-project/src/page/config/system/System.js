@@ -1,11 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import 'ag-grid-enterprise';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import SystemAddModal from './SystemAddModal';
-import axios from 'axios';
 import { Col, Row } from 'react-bootstrap';
 import { WhiteButton } from '../../../component/button/R2wButton';
 import { MdDeleteOutline } from 'react-icons/md';
@@ -52,7 +51,6 @@ const System = () => {
     //     axios
     //         .get(process.env.REACT_APP_DB_HOST + '/serverMappings')
     //         .then((res) => {
-    //             console.log('111111111');
     //             console.log('res', res);
     //             return res;
     //         })
@@ -72,7 +70,6 @@ const System = () => {
     //     axios
     //         .get(process.env.REACT_APP_DB_HOST + '/System')
     //         .then((res) => {
-    //             console.log('2222222');
     //             gridRef.current.api.setRowData(res.data);
     //         })
     //         .catch((Error) => {
@@ -145,7 +142,12 @@ const System = () => {
                     rowHeight="35"
                     headerHeight="40"
                 >
-                    <AgGridColumn field="system_name" headerName="업무명" editable={true} cellRenderer="rowAddOn" />
+                    <AgGridColumn
+                        field="system_name"
+                        headerName="업무명"
+                        editable={true}
+                        cellRenderer="rowAddOn"
+                    />
                     <AgGridColumn
                         field="serverid_src"
                         headerName="원본서버"
@@ -167,11 +169,24 @@ const System = () => {
                             return lookupValue(serverMappings, params.value);
                         }}
                     />
-                    <AgGridColumn field="owners" headerName="OWNERS" editable={true} flex={1} />
-                    <AgGridColumn field="index" headerName="index" hide={true} />
+                    <AgGridColumn
+                        field="owners"
+                        headerName="OWNERS"
+                        editable={true}
+                        flex={1}
+                    />
+                    <AgGridColumn
+                        field="index"
+                        headerName="index"
+                        hide={true}
+                    />
                 </AgGridReact>
             </SystemGridWrap>
-            <SystemAddModal show={showAddModal} setShow={setShowAddModal} add={onRowAdd}></SystemAddModal>
+            <SystemAddModal
+                show={showAddModal}
+                setShow={setShowAddModal}
+                add={onRowAdd}
+            ></SystemAddModal>
         </SystemWrap>
     );
 };

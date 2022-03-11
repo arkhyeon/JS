@@ -54,7 +54,14 @@ function MenuInfo({ setAuth }) {
             <ItemWrap onClick={() => onHandleLogout()}>
                 <MdLogout />
             </ItemWrap>
-            {toggleMessage && <MessageTab toggleMessage setToggleMessage={setToggleMessage} unReadMsg={unReadMsg} setUnReadMsg={setUnReadMsg} />}
+            {toggleMessage && (
+                <MessageTab
+                    toggleMessage
+                    setToggleMessage={setToggleMessage}
+                    unReadMsg={unReadMsg}
+                    setUnReadMsg={setUnReadMsg}
+                />
+            )}
         </Container>
     );
 }

@@ -1,10 +1,18 @@
 import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
 import axios from 'axios';
-import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
-import { Col, Form, Modal, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+    Col,
+    Form,
+    Modal,
+    OverlayTrigger,
+    Row,
+    Tooltip,
+} from 'react-bootstrap';
 import styled from 'styled-components';
 import { NormalButton, WhiteButton } from '../../component/button/R2wButton';
 import WorkDbOption from './WorkDbOption';
+import DraggableModal from '../../utils/DraggableModal';
 
 function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
     const gridRef = useRef(null);
@@ -14,7 +22,12 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
     const [option, setOption] = useState(defaultOption);
     const [dbmsType, setDbmsType] = useState([]);
     const [jconnectFlag, setJconnectFlag] = useState([]);
-    const [r2wtrans, setR2wtrans] = useState({ use_r2wotr: null, use_r2watr: null, use_r2wetr: null, use_r2wjtr: null });
+    const [r2wtrans, setR2wtrans] = useState({
+        use_r2wotr: null,
+        use_r2watr: null,
+        use_r2wetr: null,
+        use_r2wjtr: null,
+    });
 
     useEffect(() => {
         getDbInfo();
@@ -22,10 +35,19 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
 
     const getDbInfo = () => {
         axios
-            .get(process.env.REACT_APP_DB_HOST + '/server_master?server_id=' + 1 + '&server_id=' + 2)
+            .get(
+                process.env.REACT_APP_DB_HOST +
+                    '/server_master?server_id=' +
+                    1 +
+                    '&server_id=' +
+                    2,
+            )
             .then((res) => {
                 setDbmsType([res.data[0].dbms_type, res.data[1].dbms_type]);
-                setJconnectFlag([res.data[0].jconnect_flag, res.data[1].jconnect_flag]);
+                setJconnectFlag([
+                    res.data[0].jconnect_flag,
+                    res.data[1].jconnect_flag,
+                ]);
             })
             .catch((Error) => {
                 console.log(Error);
@@ -60,12 +82,17 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
         }
         registWorks.forEach((registWork) => {
             axios
-                .patch(process.env.REACT_APP_DB_HOST + '/Works/' + registWork.id, {
-                    enroll: 1,
-                })
+                .patch(
+                    process.env.REACT_APP_DB_HOST + '/Works/' + registWork.id,
+                    {
+                        enroll: 1,
+                    },
+                )
                 .then(() => {
                     setShowRegistWork(false);
-                    parentGrid.current.api.getRowNode(registWork.id).setDataValue('enroll', 1);
+                    parentGrid.current.api
+                        .getRowNode(registWork.id)
+                        .setDataValue('enroll', 1);
                 })
                 .catch((Error) => {
                     console.log(Error);
@@ -78,15 +105,35 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
 
     return (
         <>
-            <Modal show={show} onHide={setShowRegistWork} centered size="xl">
+            <Modal
+                size={'xl'}
+                dialogAs={DraggableModal}
+                show={show}
+                onHide={setShowRegistWork}
+            >
                 <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">작업 등록</Modal.Title>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        작업 등록
+                    </Modal.Title>
                 </Modal.Header>
+
                 <Modal.Body>
                     <StyledRow>
                         <Col sm={3}>
-                            <OverlayTrigger placement={'right'} overlay={<Tooltip>작업명 : Prefix.DB.owner.table</Tooltip>}>
-                                <Form.Control ref={target} type="text" placeholder="Prefix" onChange={(e) => setPrefix(e.target.value)} />
+                            <OverlayTrigger
+                                placement={'right'}
+                                overlay={
+                                    <Tooltip>
+                                        작업명 : Prefix.DB.owner.table
+                                    </Tooltip>
+                                }
+                            >
+                                <Form.Control
+                                    ref={target}
+                                    type="text"
+                                    placeholder="Prefix"
+                                    onChange={(e) => setPrefix(e.target.value)}
+                                />
                             </OverlayTrigger>
                         </Col>
                         <Col sm={9}>
@@ -112,7 +159,9 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
                 </Modal.Body>
                 <Modal.Footer>
                     <ButtonWrap>
-                        <WhiteButton onClick={() => setShowRegistWork(false)}>닫기</WhiteButton>
+                        <WhiteButton onClick={() => setShowRegistWork(false)}>
+                            닫기
+                        </WhiteButton>
                         <NormalButton
                             onClick={() => {
                                 saveWork();
@@ -148,7 +197,6 @@ const StyledRow = styled(Row)`
 `;
 
 const GridContainer = styled.div`
-    width: 1098px;
     height: 387px;
     margin-top: 15px;
     &.ag-theme-alpine .ag-ltr .ag-cell,

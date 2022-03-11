@@ -1,4 +1,4 @@
-import { AgGridColumn, AgGridReact } from 'ag-grid-react';
+import { AgGridReact } from 'ag-grid-react';
 import Axios from 'axios';
 import React, { useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
@@ -12,6 +12,7 @@ function Main() {
     const [showSchedule, setShowSchedule] = useState(false);
     const [showFailLog, setShowFailLog] = useState(false);
     const [editSyncData, setEditSyncData] = useState();
+    const [clickedWid, setClickedWid] = useState(0);
     const mainGridRef = useRef();
     const subGridRef = useRef();
 
@@ -78,7 +79,7 @@ function Main() {
 
     const resultClick = (e) => {
         if (e.value === '실패') {
-            console.log('실패 클릭');
+            setClickedWid(e.node.data.id);
             setShowFailLog(true);
         }
     };
@@ -145,6 +146,7 @@ function Main() {
                 <SyncFailLog
                     show={showFailLog}
                     setShowFailLog={setShowFailLog}
+                    wid={clickedWid}
                 />
             )}
         </SyncWrap>

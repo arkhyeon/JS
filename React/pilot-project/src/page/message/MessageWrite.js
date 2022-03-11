@@ -23,7 +23,9 @@ function MessageWrite() {
 
     useEffect(() => {
         getAddress();
-        setCompWriter((arr) => (location.state ? [...arr, location.state.writer] : []));
+        setCompWriter((arr) =>
+            location.state ? [...arr, location.state.writer] : [],
+        );
     }, [location.state]);
 
     const getAddress = () => {
@@ -31,7 +33,13 @@ function MessageWrite() {
             .get(process.env.REACT_APP_DB_HOST + '/Users')
             .then((res) => {
                 setUserList(res.data);
-                setGroupList(res.data.filter((arr, index, callback) => index === callback.findIndex((t) => t.group === arr.group)));
+                setGroupList(
+                    res.data.filter(
+                        (arr, index, callback) =>
+                            index ===
+                            callback.findIndex((t) => t.group === arr.group),
+                    ),
+                );
             })
             .catch((Error) => {
                 console.log(Error);
@@ -46,13 +54,23 @@ function MessageWrite() {
             return;
         }
 
-        let today = new Date(); // today 객체에 Date()의 결과를 넣어줬다
+        let today = new Date();
         let time = {
-            year: today.getFullYear(), //현재 년도
-            month: today.getMonth() + 1 < 10 ? '0' + (today.getMonth() + 1) : today.getMonth() + 1, // 현재 월
-            date: today.getDate() < 10 ? '0' + today.getDate() : today.getDate(), // 현제 날짜
-            hours: today.getHours() < 10 ? '0' + today.getHours() : today.getHours(), //현재 시간
-            minutes: today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes(), //현재 분
+            year: today.getFullYear(),
+            month:
+                today.getMonth() + 1 < 10
+                    ? '0' + (today.getMonth() + 1)
+                    : today.getMonth() + 1,
+            date:
+                today.getDate() < 10 ? '0' + today.getDate() : today.getDate(),
+            hours:
+                today.getHours() < 10
+                    ? '0' + today.getHours()
+                    : today.getHours(),
+            minutes:
+                today.getMinutes() < 10
+                    ? '0' + today.getMinutes()
+                    : today.getMinutes(),
         };
         let timestring = `${time.year}-${time.month}-${time.date} ${time.hours}:${time.minutes}`;
         //TODO : 참조구분 N개로 돌리면 메일이 여러개 생기는 문제
@@ -93,7 +111,9 @@ function MessageWrite() {
         return (
             <>
                 {userList.map((ul) => {
-                    return <option className="ad" key={ul.name} value={ul.name} />;
+                    return (
+                        <option className="ad" key={ul.name} value={ul.name} />
+                    );
                 })}
                 {groupList.map((gl) => {
                     return <option key={gl.group} value={gl.group} />;
@@ -104,17 +124,35 @@ function MessageWrite() {
 
     return (
         <Container>
-            <Form onSubmit={sendMessage} spellcheck="false">
+            <Form onSubmit={sendMessage} spellCheck="false">
                 <Form.Group as={Row} controlId="formHorizontalEmail">
                     <Form.Label column sm={1}>
                         받는 사람
                     </Form.Label>
                     <Col sm={11}>
                         <InputGroup>
-                            <WriterWrap style={{ border: compWriter.length !== 0 ? '1px solid #ced4da' : '' }}>
+                            <WriterWrap
+                                style={{
+                                    border:
+                                        compWriter.length !== 0
+                                            ? '1px solid #ced4da'
+                                            : '',
+                                }}
+                            >
                                 {compWriter.map((cw) => {
                                     return (
-                                        <WriterSpan key={cw} onClick={(e) => setCompWriter(compWriter.filter((cw) => cw !== e.target.innerText))}>
+                                        <WriterSpan
+                                            key={cw}
+                                            onClick={(e) =>
+                                                setCompWriter(
+                                                    compWriter.filter(
+                                                        (cw) =>
+                                                            cw !==
+                                                            e.target.innerText,
+                                                    ),
+                                                )
+                                            }
+                                        >
                                             {cw}
                                         </WriterSpan>
                                     );
@@ -122,16 +160,28 @@ function MessageWrite() {
                             </WriterWrap>
                             <FormControl
                                 list="writerGroup"
-                                autocomplete="off"
+                                autoComplete="off"
                                 onKeyPress={(e) => {
-                                    createReceiverBox(e, setCompWriter, compWriter);
+                                    createReceiverBox(
+                                        e,
+                                        setCompWriter,
+                                        compWriter,
+                                    );
                                 }}
                                 style={{
-                                    borderLeft: compWriter.length !== 0 ? 'none' : '1px solid #ced4da',
-                                    borderRadius: compWriter.length !== 0 ? '0' : '5px 0px 0px 5px',
+                                    borderLeft:
+                                        compWriter.length !== 0
+                                            ? 'none'
+                                            : '1px solid #ced4da',
+                                    borderRadius:
+                                        compWriter.length !== 0
+                                            ? '0'
+                                            : '5px 0px 0px 5px',
                                 }}
                             />
-                            <datalist id="writerGroup">{createDataList()}</datalist>
+                            <datalist id="writerGroup">
+                                {createDataList()}
+                            </datalist>
                             <NormalButton
                                 id="button-addon1"
                                 type="button"
@@ -150,10 +200,28 @@ function MessageWrite() {
                     </Form.Label>
                     <Col sm={11}>
                         <InputGroup>
-                            <WriterWrap style={{ border: carbonCopy.length !== 0 ? '1px solid #ced4da' : '' }}>
+                            <WriterWrap
+                                style={{
+                                    border:
+                                        carbonCopy.length !== 0
+                                            ? '1px solid #ced4da'
+                                            : '',
+                                }}
+                            >
                                 {carbonCopy.map((cc) => {
                                     return (
-                                        <WriterSpan key={cc} onClick={(e) => setCarbonCopy(carbonCopy.filter((cc) => cc !== e.target.innerText))}>
+                                        <WriterSpan
+                                            key={cc}
+                                            onClick={(e) =>
+                                                setCarbonCopy(
+                                                    carbonCopy.filter(
+                                                        (cc) =>
+                                                            cc !==
+                                                            e.target.innerText,
+                                                    ),
+                                                )
+                                            }
+                                        >
                                             {cc}
                                         </WriterSpan>
                                     );
@@ -161,13 +229,23 @@ function MessageWrite() {
                             </WriterWrap>
                             <FormControl
                                 list="ccGroup"
-                                autocomplete="off"
+                                autoComplete="off"
                                 onKeyPress={(e) => {
-                                    createReceiverBox(e, setCarbonCopy, carbonCopy);
+                                    createReceiverBox(
+                                        e,
+                                        setCarbonCopy,
+                                        carbonCopy,
+                                    );
                                 }}
                                 style={{
-                                    borderLeft: carbonCopy.length !== 0 ? 'none' : '1px solid #ced4da',
-                                    borderRadius: carbonCopy.length !== 0 ? '0' : '5px 0px 0px 5px',
+                                    borderLeft:
+                                        carbonCopy.length !== 0
+                                            ? 'none'
+                                            : '1px solid #ced4da',
+                                    borderRadius:
+                                        carbonCopy.length !== 0
+                                            ? '0'
+                                            : '5px 0px 0px 5px',
                                 }}
                             />
                             <datalist id="ccGroup">{createDataList()}</datalist>
@@ -189,8 +267,17 @@ function MessageWrite() {
                             메일 타입
                         </Form.Label>
                         <Col sm={9}>
-                            <GrayRadioButton id={'normal'} label={'일반'} name={'msgType'} checked={true} />
-                            <GrayRadioButton id={'notice'} label={'공지'} name={'msgType'} />
+                            <GrayRadioButton
+                                id={'normal'}
+                                label={'일반'}
+                                name={'msgType'}
+                                checked={true}
+                            />
+                            <GrayRadioButton
+                                id={'notice'}
+                                label={'공지'}
+                                name={'msgType'}
+                            />
                         </Col>
                         <Col sm={2}>
                             <WhiteButton type="submit">보내기</WhiteButton>
@@ -205,12 +292,32 @@ function MessageWrite() {
                     }}
                     config={{
                         toolbar: {
-                            items: ['heading', '|', 'bold', 'italic', '|', 'link', '|', 'undo', 'redo'],
+                            items: [
+                                'heading',
+                                '|',
+                                'bold',
+                                'italic',
+                                '|',
+                                'link',
+                                '|',
+                                'undo',
+                                'redo',
+                            ],
                         },
                     }}
                 />
-                <MessageAddress show={showAddress} setShowAddress={setShowAddress} setAddress={setCompWriter} userList={userList} />
-                <MessageAddress show={showCCAddress} setShowAddress={setShowCCAddress} setAddress={setCarbonCopy} userList={userList} />
+                <MessageAddress
+                    show={showAddress}
+                    setShowAddress={setShowAddress}
+                    setAddress={setCompWriter}
+                    userList={userList}
+                />
+                <MessageAddress
+                    show={showCCAddress}
+                    setShowAddress={setShowCCAddress}
+                    setAddress={setCarbonCopy}
+                    userList={userList}
+                />
             </Form>
         </Container>
     );
@@ -222,8 +329,8 @@ const Container = styled.div`
     }
 
     & .ck-editor__editable {
-        min-height: 617px;
-        max-height: 617px;
+        min-height: 576px;
+        max-height: 576px;
     }
 
     & .col-form-label {

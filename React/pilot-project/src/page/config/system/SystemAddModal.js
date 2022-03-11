@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Row, Col, FormControl } from 'react-bootstrap';
+import { Col, Form, Modal, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 import { StyledAlert } from '../../../component/alert/R2wAlert';
 import { NormalButton, WhiteButton } from '../../../component/button/R2wButton';
+import DraggableModal from '../../../utils/DraggableModal';
 
 const serverList = [
     { 'serverid:': '1', server_name: 'ORA1' },
@@ -24,19 +25,16 @@ const SystemAddModal = ({ show, setShow, add }) => {
     });
 
     const open = () => {
-        console.log('open');
         // getServerList.then() 가장 첫번째 서버id 셋팅
         setServerSrc('1');
         setServerDst('4');
     };
 
     const cancel = () => {
-        console.log('cancel');
         setShow(false);
     };
 
     const ok = () => {
-        console.log('ok');
         if (!validate()) {
             return;
         }
@@ -65,7 +63,12 @@ const SystemAddModal = ({ show, setShow, add }) => {
     };
 
     return (
-        <Modal show={show} onHide={setShow} onShow={open} centered>
+        <Modal
+            dialogAs={DraggableModal}
+            show={show}
+            onHide={setShow}
+            onShow={open}
+        >
             <Modal.Header closeButton>
                 <Modal.Title>업무 등록</Modal.Title>
             </Modal.Header>
@@ -95,7 +98,12 @@ const SystemAddModal = ({ show, setShow, add }) => {
                                 }}
                             >
                                 {serverList.map((server) => (
-                                    <option key={server.serverid + server.server_name} value={server.serverid}>
+                                    <option
+                                        key={
+                                            server.serverid + server.server_name
+                                        }
+                                        value={server.serverid}
+                                    >
                                         {server.server_name}
                                     </option>
                                 ))}
@@ -113,7 +121,12 @@ const SystemAddModal = ({ show, setShow, add }) => {
                                 }}
                             >
                                 {serverList.map((server) => (
-                                    <option key={server.serverid + server.server_name} value={server.serverid}>
+                                    <option
+                                        key={
+                                            server.serverid + server.server_name
+                                        }
+                                        value={server.serverid}
+                                    >
                                         {server.server_name}
                                     </option>
                                 ))}

@@ -1,6 +1,5 @@
 import { AgGridReact } from 'ag-grid-react';
-import React, { useRef } from 'react';
-import { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { MdDeleteOutline } from 'react-icons/md';
 import styled from 'styled-components';
@@ -45,7 +44,6 @@ function Main() {
         codeRef.current.api.setRowData(initRowData2);
     };
 
-    // 추가
     const itemId = useRef(3);
 
     const onRowAdd = (key) => {
@@ -125,7 +123,11 @@ function Main() {
                     ></AgGridReact>
                 </MacroGridWrap>
             </MacroWrap>
-            <MacroAddModal show={showMacroModal} setShowMacroModal={setShowMacroModal} add={onRowAdd}></MacroAddModal>
+            <MacroAddModal
+                show={showMacroModal}
+                setShowMacroModal={setShowMacroModal}
+                add={onRowAdd}
+            ></MacroAddModal>
         </>
     );
 }
@@ -167,7 +169,11 @@ const codeGrid = {
             headerName: '매크로 변수',
             field: 'macroKey',
             cellEditor: 'agLargeTextCellEditor',
-            cellStyle: { 'line-height': '25px', display: 'flex', 'align-items': 'center' },
+            cellStyle: {
+                'line-height': '25px',
+                display: 'flex',
+                'align-items': 'center',
+            },
             editable: true,
             flex: 0.35,
             cellEditorParams: { maxLength: 1024 },
@@ -179,7 +185,11 @@ const codeGrid = {
             cellEditor: 'agLargeTextCellEditor',
             editable: true,
             cellClass: 'cell-wrap-text',
-            cellStyle: { 'line-height': '25px', display: 'flex', 'align-items': 'center' },
+            cellStyle: {
+                'line-height': '25px',
+                display: 'flex',
+                'align-items': 'center',
+            },
             wrapText: true,
         },
         {

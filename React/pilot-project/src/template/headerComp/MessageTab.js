@@ -6,7 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { NormalButton, WhiteButton } from '../../component/button/R2wButton';
 
-function MessageTab({ toggleMessage, setToggleMessage, unReadMsg, setUnReadMsg }) {
+function MessageTab({
+    toggleMessage,
+    setToggleMessage,
+    unReadMsg,
+    setUnReadMsg,
+}) {
     /**---------------------------------------------------------------------------------
      *
      *  useState
@@ -26,7 +31,9 @@ function MessageTab({ toggleMessage, setToggleMessage, unReadMsg, setUnReadMsg }
 
     const readMessage = (id) => {
         axios
-            .patch(process.env.REACT_APP_DB_HOST + '/Messages/' + id, { read: 0 })
+            .patch(process.env.REACT_APP_DB_HOST + '/Messages/' + id, {
+                read: 0,
+            })
             .then(() => {
                 setUnReadMsg(unReadMsg.filter((msg) => msg.id !== id));
             })
@@ -38,9 +45,16 @@ function MessageTab({ toggleMessage, setToggleMessage, unReadMsg, setUnReadMsg }
     const allReadMessage = () => {
         for (let i = 0; i < unReadMsg.length; i++) {
             axios
-                .patch(process.env.REACT_APP_DB_HOST + '/Messages/' + unReadMsg[i].id, { read: 0 })
+                .patch(
+                    process.env.REACT_APP_DB_HOST +
+                        '/Messages/' +
+                        unReadMsg[i].id,
+                    { read: 0 },
+                )
                 .then((res) => {
-                    setUnReadMsg(unReadMsg.filter((msg) => msg.id !== res.data.id));
+                    setUnReadMsg(
+                        unReadMsg.filter((msg) => msg.id !== res.data.id),
+                    );
                 })
                 .catch((error) => {
                     console.log(error.response);
@@ -60,7 +74,11 @@ function MessageTab({ toggleMessage, setToggleMessage, unReadMsg, setUnReadMsg }
      *
      *---------------------------------------------------------------------------------*/
     return (
-        <StyledOffcanvas show={toggleMessage} onHide={setToggleMessage} placement="end">
+        <StyledOffcanvas
+            show={toggleMessage}
+            onHide={setToggleMessage}
+            placement="end"
+        >
             <StyledOffHeader closeButton>
                 <Offcanvas.Title>
                     <MdNotificationsNone />
@@ -79,7 +97,11 @@ function MessageTab({ toggleMessage, setToggleMessage, unReadMsg, setUnReadMsg }
                                 msgIcon = <MdNotificationsNone />;
                                 break;
                             case 3:
-                                msgIcon = <MdNotificationImportant style={{ color: '#F8520B' }} />;
+                                msgIcon = (
+                                    <MdNotificationImportant
+                                        style={{ color: '#F8520B' }}
+                                    />
+                                );
                                 break;
                             default:
                                 msgIcon = '';
@@ -94,10 +116,15 @@ function MessageTab({ toggleMessage, setToggleMessage, unReadMsg, setUnReadMsg }
                             >
                                 <Toast.Header>
                                     {msgIcon}
-                                    <strong className="me-auto">{msg.writer}</strong>
+                                    <strong className="me-auto">
+                                        {msg.writer}
+                                    </strong>
                                     <small className="">{msg.date}</small>
                                 </Toast.Header>
-                                <Toast.Body style={{ cursor: 'pointer' }} onClick={() => navigateDetail(msg)}>
+                                <Toast.Body
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => navigateDetail(msg)}
+                                >
                                     <p>{htmlToText(msg.contents)}</p>
                                 </Toast.Body>
                             </Toast>
@@ -115,7 +142,9 @@ function MessageTab({ toggleMessage, setToggleMessage, unReadMsg, setUnReadMsg }
                 </WhiteButton>
                 <NormalButton
                     onClick={() => {
-                        navigate('Message/MessageReceive', { state: 'RECEIVE' });
+                        navigate('Message/MessageReceive', {
+                            state: 'RECEIVE',
+                        });
                         setToggleMessage();
                     }}
                 >

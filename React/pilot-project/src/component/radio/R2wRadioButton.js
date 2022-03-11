@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import styled from 'styled-components';
+
 /**
  *
  * @param {String} id 선택자 (필수)
@@ -28,10 +29,25 @@ import styled from 'styled-components';
         align-items: center; >> 세로 중앙 정렬
     }
  */
-export const GrayRadioButton = ({ id, name, label, checked = false, reg, defaultValue = '' }) => {
+export const GrayRadioButton = ({
+    id,
+    name,
+    label,
+    checked = false,
+    reg,
+    defaultValue = '',
+}) => {
     return (
         <RadioItem>
-            <Form.Check type="radio" label={label} name={name} id={id} {...reg} defaultChecked={checked} defaultValue={defaultValue} />
+            <Form.Check
+                type="radio"
+                label={label}
+                name={name}
+                id={id}
+                {...reg}
+                defaultChecked={checked}
+                defaultValue={defaultValue}
+            />
         </RadioItem>
     );
 };

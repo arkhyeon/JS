@@ -1,12 +1,10 @@
 import React, { Fragment, useState } from 'react';
-import { Route, NavLink } from 'react-router-dom';
+import { NavLink, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import Message from '../page/message/Message';
 import MessageDetail from '../page/message/MessageDetail';
 import MessageList from '../page/message/MessageList';
 import MessageWrite from '../page/message/MessageWrite';
-
-//Fix 22.02.21
 
 /**
  * @param {Array} menus
@@ -43,9 +41,7 @@ const CreateMenu = (props) => {
     const handleMenuSelection = (label, depth) => {
         setSelectedMenus((selectedMenus) => {
             const newSelectedMenus = [...selectedMenus];
-            //depth만큼 잘라준다
             newSelectedMenus.length = depth;
-            //서브메뉴가 없을 때
             if (label !== '') {
                 newSelectedMenus[depth] = label;
             }
@@ -185,6 +181,7 @@ CreateMenu.List = styled.ul`
     display: flex;
     flex: 1;
     justify-content: center;
+    gap: 2px;
 
     & > li {
         width: 115px;
@@ -310,7 +307,6 @@ const SubRoute = (route, depth = 0) => {
     );
 };
 
-//Message Route Component 생성 함수
 export const setMsgRoute = () => {
     return (
         <Route path="Message" element={<Message />}>

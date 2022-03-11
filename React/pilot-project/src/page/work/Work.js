@@ -129,7 +129,6 @@ function Work() {
         let alertText = '';
 
         selectedRows.forEach((selectedRow) => {
-            console.log(selectedRow.trans_yn);
             if (!selectedRow.extract_sql || selectedRow.trans_yn === 'NO') {
                 alertText += `${selectedRow.table_name}\n`;
             }

@@ -1,25 +1,6 @@
 @charset "UTF-8";
 @import '~bootstrap/scss/bootstrap';
 
-// @font-face {
-//     font-family: "LotteMartDream";
-//     src: url("../resources/fonts/LotteMartDreamMedium.woff") format("woff");
-//     font-style: normal;
-//     font-weight: 400;
-// }
-// @font-face {
-//     font-family: "LotteMartDream";
-//     font-style: normal;
-//     font-weight: 700;
-//     src: url("../resources/fonts/LotteMartDreamBold.woff") format("woff");
-// }
-// @font-face {
-//     font-family: "LotteMartDream";
-//     font-style: normal;
-//     font-weight: 300;
-//     src: url("../resources/fonts/LotteMartDreamLight.woff") format("woff");
-// }
-
 body,
 body * {
     margin: 0;
@@ -132,6 +113,7 @@ select:focus {
         font-size: 1rem;
         font-weight: 400;
     }
+    border-color: #cfcfcf;
 }
 
 .modal-dialog .modal-content .modal-body {
@@ -143,6 +125,18 @@ select:focus {
 
     & > * {
         margin: 0px;
+    }
+    border-color: #cfcfcf;
+}
+.modal-dialog {
+    transition: none !important;
+}
+
+.react-draggable .modal-header {
+    cursor: grab;
+
+    &:active {
+        cursor: grabbing;
     }
 }
 

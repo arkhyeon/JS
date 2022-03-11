@@ -5,8 +5,6 @@ import Sync from '../page/config/sync/Sync';
 import System from '../page/config/system/System';
 import Config from '../page/config/Config';
 
-//Fix 22.02.21
-
 /**
  * @param {String} title
  * 메뉴에 들어갈 텍스트, map key 역할[unique]

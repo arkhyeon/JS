@@ -8,7 +8,6 @@ import styled from 'styled-components';
 import { MdNotificationImportant, MdNotifications } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MessageHeader from './MessageHeader';
-import { WhiteButton } from '../../component/button/R2wButton';
 
 const MessageList = () => {
     const msgRef = useRef();
@@ -36,7 +35,10 @@ const MessageList = () => {
                 navigate('/Message/MessageWrite', { state: e.data });
                 break;
             case 'contents':
-                axios.patch(process.env.REACT_APP_DB_HOST + '/Messages/' + e.data.id, { read: 0 });
+                axios.patch(
+                    process.env.REACT_APP_DB_HOST + '/Messages/' + e.data.id,
+                    { read: 0 },
+                );
                 navigate('MessageDetail', { state: e.data });
                 break;
 
@@ -45,95 +47,26 @@ const MessageList = () => {
         }
     };
 
-    const onClearData = () => {
-        msgRef.current.api.setRowData(null);
-    };
-
-    const onReloadData = () => {
-        getMessages();
-    };
-
-    const onRowDel = () => {
-        const selectedRows = msgRef.current.api.getSelectedRows();
-
-        if (selectedRows.length === 0) {
-            alert('삭제할 메시지를 선택해 주세요.');
-            return;
-        }
-
-        if (!window.confirm('정말 삭제하시겠습니까?')) {
-            return;
-        }
-
-        for (let i = 0; i < selectedRows.length; i++) {
-            axios
-                .delete(process.env.REACT_APP_DB_HOST + '/Messages/' + selectedRows[i].id)
-                .then(() => {
-                    msgRef.current.api.applyTransaction({ remove: selectedRows[i] });
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
-        }
-    };
-
-    const onRowRead = () => {
-        const selectedNodes = msgRef.current.api.getSelectedNodes();
-
-        if (selectedNodes.length === 0) {
-            alert('읽음 처리할 메시지를 선택해 주세요.');
-            return;
-        }
-
-        for (let i = 0; i < selectedNodes.length; i++) {
-            axios
-                .patch(process.env.REACT_APP_DB_HOST + '/Messages/' + selectedNodes[i].data.id, { read: 0 })
-                .then(() => {
-                    selectedNodes[i].setDataValue('read', 0);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                });
-        }
-    };
-
-    const onRowAllRead = () => {
-        axios
-            .patch(process.env.REACT_APP_DB_HOST + '/Messages', { read: 0 })
-            .then(() => {
-                msgRef.current.api.forEachNode(function (rowNode) {
-                    rowNode.setDataValue('read', 0);
-                });
-            })
-            .catch((error) => {
-                console.log(error.response);
-            });
-    };
-
     return (
         <>
-            <MessageHeader />
+            <MessageHeader msgRef={msgRef} />
             <GridContainer className="ag-theme-alpine">
-                <WhiteButton onClick={onRowDel}>삭제</WhiteButton>
-                <WhiteButton onClick={onClearData}>전체삭제</WhiteButton>
-                <WhiteButton onClick={onReloadData}>새로고침</WhiteButton>
                 {location.state === 'RECEIVE' ? (
-                    <>
-                        <WhiteButton onClick={onRowRead}>읽음</WhiteButton>
-                        <WhiteButton onClick={onRowAllRead}>전체읽음</WhiteButton>
-                        <AgGridReact
-                            ref={msgRef}
-                            onGridReady={onGridReady}
-                            rowSelection="multiple"
-                            gridOptions={ReceiveGridOption}
-                            onCellClicked={onCellClicked}
-                            stopEditingWhenCellsLoseFocus={true}
-                            frameworkComponents={{ notificationIcon, htmlToText }}
-                            animateRows={true}
-                            rowClassRules={rowClassRules}
-                            rowHeight="40"
-                        ></AgGridReact>
-                    </>
+                    <AgGridReact
+                        ref={msgRef}
+                        onGridReady={onGridReady}
+                        rowSelection="multiple"
+                        gridOptions={ReceiveGridOption}
+                        onCellClicked={onCellClicked}
+                        stopEditingWhenCellsLoseFocus={true}
+                        frameworkComponents={{
+                            notificationIcon,
+                            htmlToText,
+                        }}
+                        animateRows={true}
+                        rowClassRules={rowClassRules}
+                        rowHeight="40"
+                    ></AgGridReact>
                 ) : (
                     <AgGridReact
                         ref={msgRef}
@@ -143,7 +76,11 @@ const MessageList = () => {
                         defaultColDef={DispatchInfo.DefaultInfo}
                         onCellClicked={onCellClicked}
                         stopEditingWhenCellsLoseFocus={true}
-                        frameworkComponents={{ notificationIcon, htmlToText, isRead }}
+                        frameworkComponents={{
+                            notificationIcon,
+                            htmlToText,
+                            isRead,
+                        }}
                         animateRows={true}
                         rowHeight="40"
                     ></AgGridReact>
@@ -154,12 +91,8 @@ const MessageList = () => {
 };
 
 const GridContainer = styled.div`
-    width: 100%;
-    height: 651px;
-    & button {
-        height: 33px;
-        margin: 0 7px 15px 0px;
-    }
+    height: 715px;
+
     & a {
         color: black;
         text-decoration: underline;

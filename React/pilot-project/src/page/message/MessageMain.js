@@ -11,7 +11,6 @@ function MessageMain() {
 }
 const MessageMainWrap = styled.div`
     width: 100%;
-    border-bottom: 1px solid #a9a9a9;
     padding: 15px;
     height: 841px;
 

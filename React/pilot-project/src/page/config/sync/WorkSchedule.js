@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Col, Form, InputGroup, Modal, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 import WorkSchCycle from './WorkSchCycle';
@@ -11,6 +11,7 @@ import moment from 'moment';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
 import Axios from 'axios';
 import { NormalButton, WhiteButton } from '../../../component/button/R2wButton';
+import DraggableModal from '../../../utils/DraggableModal';
 
 registerLocale('ko', ko);
 
@@ -63,7 +64,9 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
         systemGridRef.current.api.forEachNode(function (node) {
             for (let i = 0; i < editSyncData.systemList.length; i++) {
                 if (editSyncData.systemList[i].id === node.data.id) {
-                    node.setSelected(editSyncData.systemList[i].id === node.data.id);
+                    node.setSelected(
+                        editSyncData.systemList[i].id === node.data.id,
+                    );
                 }
             }
         });
@@ -85,7 +88,17 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
         });
     };
 
-    const { schName, schDesc, schPattern, directRun, noneEndDt, startDate, startTime, endDate, cycle } = formData;
+    const {
+        schName,
+        schDesc,
+        schPattern,
+        directRun,
+        noneEndDt,
+        startDate,
+        startTime,
+        endDate,
+        cycle,
+    } = formData;
 
     const manageFormData = (e) => {
         const { value, name, checked, type } = e.target;
@@ -116,7 +129,8 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                 str = cycle[type].join(', ') + (cycle[type].join(', ') && '일');
                 break;
             case 'week':
-                str = cycle[type].join(', ') + (cycle[type].join(', ') && '째주');
+                str =
+                    cycle[type].join(', ') + (cycle[type].join(', ') && '째주');
                 break;
             case 'weekDay':
                 const week = ['일', '월', '화', '수', '목', '금', '토'];
@@ -133,12 +147,19 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
     };
 
     const setSaveData = () => {
-        const systemList = systemGridRef.current.api.getSelectedRows().map((node) => {
-            node.selected = true;
-            return node;
-        });
+        const systemList = systemGridRef.current.api
+            .getSelectedRows()
+            .map((node) => {
+                node.selected = true;
+                return node;
+            });
 
-        return { ...formData, systemList: systemList, startDate: moment(startDate).format('yyyy-MM-DD'), endDate: moment(endDate).format('yyyy-MM-DD') };
+        return {
+            ...formData,
+            systemList: systemList,
+            startDate: moment(startDate).format('yyyy-MM-DD'),
+            endDate: moment(endDate).format('yyyy-MM-DD'),
+        };
     };
 
     const saveSchedule = () => {
@@ -162,7 +183,10 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
             return;
         }
 
-        Axios.patch(process.env.REACT_APP_DB_HOST + '/SyncMain/' + editSyncData.id, setSaveData())
+        Axios.patch(
+            process.env.REACT_APP_DB_HOST + '/SyncMain/' + editSyncData.id,
+            setSaveData(),
+        )
             .then(() => {
                 getSyncMain();
             })
@@ -173,7 +197,11 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
 
     return (
         <>
-            <Modal show={show} onHide={setShowSchedule} centered>
+            <Modal
+                dialogAs={DraggableModal}
+                show={show}
+                onHide={setShowSchedule}
+            >
                 <Modal.Header closeButton>
                     <Modal.Title>작업 스케줄 추가</Modal.Title>
                 </Modal.Header>
@@ -184,13 +212,23 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                                 스케줄명
                             </Form.Label>
                             <Col sm={9} className="mb-3">
-                                <Form.Control name="schName" onChange={manageFormData} value={schName} type="text" />
+                                <Form.Control
+                                    name="schName"
+                                    onChange={manageFormData}
+                                    value={schName}
+                                    type="text"
+                                />
                             </Col>
                             <Form.Label column sm={3}>
                                 스케줄설명
                             </Form.Label>
                             <Col sm={9} className="mb-3">
-                                <Form.Control name="schDesc" onChange={manageFormData} value={schDesc} type="text" />
+                                <Form.Control
+                                    name="schDesc"
+                                    onChange={manageFormData}
+                                    value={schDesc}
+                                    type="text"
+                                />
                             </Col>
                             <Form.Label column sm={3}>
                                 작업주기
@@ -219,7 +257,10 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                                     </Form.Label>
                                     <Col sm={9} className="mb-3">
                                         <InputGroup>
-                                            <Form.Control value={convertCycle('month')} readOnly />
+                                            <Form.Control
+                                                value={convertCycle('month')}
+                                                readOnly
+                                            />
                                             <Button
                                                 onClick={() => {
                                                     setShowCycle(true);
@@ -235,7 +276,12 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                                     </Form.Label>
                                     <Col sm={9} className="mb-3">
                                         <Form.Control
-                                            value={cycle['day'].length === 0 ? convertCycle('week') + convertCycle('weekDay') : convertCycle('day')}
+                                            value={
+                                                cycle['day'].length === 0
+                                                    ? convertCycle('week') +
+                                                      convertCycle('weekDay')
+                                                    : convertCycle('day')
+                                            }
                                             readOnly
                                             type="text"
                                         />
@@ -268,15 +314,28 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                                 />
                                 <TimePicker
                                     readOnly
-                                    //defaultValue={moment()}
-                                    // ehdtnn
-                                    value={moment().hours(formData.startTime.substr(0, 2)).minute(formData.startTime.substr(3, 2))}
-                                    //onChange={(time) => setStartTime(time.format('HH:mm'))}
-                                    onChange={(time) => setFormData({ ...formData, startTime: moment(time).format('HH:mm') })}
+                                    value={moment()
+                                        .hours(formData.startTime.substr(0, 2))
+                                        .minute(
+                                            formData.startTime.substr(3, 2),
+                                        )}
+                                    onChange={(time) =>
+                                        setFormData({
+                                            ...formData,
+                                            startTime:
+                                                moment(time).format('HH:mm'),
+                                        })
+                                    }
                                     showSecond={false}
                                     disabled={directRun}
                                 />
-                                <Form.Check name="directRun" onChange={manageFormData} checked={directRun} id="directRun" disabled={schPattern !== '1'} />
+                                <Form.Check
+                                    name="directRun"
+                                    onChange={manageFormData}
+                                    checked={directRun}
+                                    id="directRun"
+                                    disabled={schPattern !== '1'}
+                                />
                                 <Form.Label column sm={3} htmlFor="directRun">
                                     즉시실행
                                 </Form.Label>
@@ -306,25 +365,45 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                                     minDate={startDate}
                                     disabled={schPattern === '1' || noneEndDt}
                                 />
-                                <Form.Check name="noneEndDt" onChange={manageFormData} checked={noneEndDt} id="noneEndDt" disabled={schPattern === '1'} />
+                                <Form.Check
+                                    name="noneEndDt"
+                                    onChange={manageFormData}
+                                    checked={noneEndDt}
+                                    id="noneEndDt"
+                                    disabled={schPattern === '1'}
+                                />
                                 <Form.Label column sm={3} htmlFor="noneEndDt">
                                     종료일 없음
                                 </Form.Label>
                             </Col>
 
                             {/* 업무명 목록 */}
-                            <div className="ag-theme-alpine" style={{ height: 200, width: 1500 }}>
+                            <div
+                                className="ag-theme-alpine"
+                                style={{ height: 200, width: 1500 }}
+                            >
                                 <AgGridReact
                                     ref={systemGridRef}
-                                    //rowData={mainRowData}
                                     rowMultiSelectWithClick={true}
                                     rowSelection="multiple"
                                     onGridReady={onSystemGridReady}
-                                    //onCellClicked={onMainCellClicked}
                                 >
-                                    <AgGridColumn field="id" headerName="id" hide={true} />
-                                    <AgGridColumn field="system_name" headerName="업무명" width={450} checkboxSelection={true} />
-                                    <AgGridColumn field="index" headerName="index" hide={true} />
+                                    <AgGridColumn
+                                        field="id"
+                                        headerName="id"
+                                        hide={true}
+                                    />
+                                    <AgGridColumn
+                                        field="system_name"
+                                        headerName="업무명"
+                                        width={450}
+                                        checkboxSelection={true}
+                                    />
+                                    <AgGridColumn
+                                        field="index"
+                                        headerName="index"
+                                        hide={true}
+                                    />
                                 </AgGridReact>
                             </div>
                         </Form.Group>
@@ -332,7 +411,10 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                 </Modal.Body>
                 <Modal.Footer>
                     <ButtonWrap>
-                        <WhiteButton variant="secondary" onClick={() => setShowSchedule(false)}>
+                        <WhiteButton
+                            variant="secondary"
+                            onClick={() => setShowSchedule(false)}
+                        >
                             닫기
                         </WhiteButton>
                         <NormalButton
@@ -351,7 +433,13 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
             </Modal>
 
             {showCycle && (
-                <WorkSchCycle show={showCycle} setShowCycle={setShowCycle} cycle={cycle} setCycle={setCycle} parentHeight={ref.current.clientHeight} />
+                <WorkSchCycle
+                    show={showCycle}
+                    setShowCycle={setShowCycle}
+                    cycle={cycle}
+                    setCycle={setCycle}
+                    parentHeight={ref.current.clientHeight}
+                />
             )}
         </>
     );

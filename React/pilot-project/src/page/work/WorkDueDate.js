@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Modal, Form, Row, Col } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Col, Form, Modal, Row } from 'react-bootstrap';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import ko from 'date-fns/locale/ko/index.js';
 import styled from 'styled-components';
@@ -8,7 +8,7 @@ import { NormalButton, WhiteButton } from '../../component/button/R2wButton';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import axios from 'axios';
-import { useEffect } from 'react';
+import DraggableModal from '../../utils/DraggableModal';
 
 registerLocale('ko', ko);
 
@@ -39,11 +39,15 @@ function WorkDueDate({ show, setShowDueDate, open }) {
     const sendNotice = () => {
         //TODO : 보낼대상 전체? 선택?
         const noiceText = open
-            ? `[마감 공지] ${moment(startDate).format('yyyy-MM-DD')}~${moment(endDate).format('yyyy-MM-DD')} (기준일 : ${moment(refDate).format(
-                  'yyyy-MM-DD'
+            ? `[마감 공지] ${moment(startDate).format('yyyy-MM-DD')}~${moment(
+                  endDate,
+              ).format('yyyy-MM-DD')} (기준일 : ${moment(refDate).format(
+                  'yyyy-MM-DD',
               )}) 업무가 마감되었습니다.\n`
-            : `[개시 공지] ${moment(startDate).format('yyyy-MM-DD')}~${moment(endDate).format('yyyy-MM-DD')} (기준일 : ${moment(refDate).format(
-                  'yyyy-MM-DD'
+            : `[개시 공지] ${moment(startDate).format('yyyy-MM-DD')}~${moment(
+                  endDate,
+              ).format('yyyy-MM-DD')} (기준일 : ${moment(refDate).format(
+                  'yyyy-MM-DD',
               )}) 업무가 개시되었습니다.\n`;
 
         axios.patch(process.env.REACT_APP_DB_HOST + '/IsOpen', {
@@ -72,18 +76,25 @@ function WorkDueDate({ show, setShowDueDate, open }) {
     };
 
     return (
-        <Modal show={show} onHide={setShowDueDate} centered>
+        <Modal dialogAs={DraggableModal} show={show} onHide={setShowDueDate}>
             <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">{open ? '마감 공지' : '개시 공지'}</Modal.Title>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    {open ? '마감 공지' : '개시 공지'}
+                </Modal.Title>
             </Modal.Header>
-            <Modal.Body spellcheck="false">
+            <Modal.Body spellCheck="false">
                 <GridContainer>
                     <Row>
                         <Form.Label column sm={2}>
                             개시일
                         </Form.Label>
                         <Col sm={10}>
-                            <DatePicker className="form-control" selected={startDate} dateFormat="yyyy-MM-dd" disabled={true} />
+                            <DatePicker
+                                className="form-control"
+                                selected={startDate}
+                                dateFormat="yyyy-MM-dd"
+                                disabled={true}
+                            />
                         </Col>
 
                         <Form.Label column sm={2}>
@@ -132,18 +143,32 @@ function WorkDueDate({ show, setShowDueDate, open }) {
                         }}
                         config={{
                             toolbar: {
-                                items: ['heading', '|', 'bold', 'italic', '|', 'link', '|', 'undo', 'redo'],
+                                items: [
+                                    'heading',
+                                    '|',
+                                    'bold',
+                                    'italic',
+                                    '|',
+                                    'link',
+                                    '|',
+                                    'undo',
+                                    'redo',
+                                ],
                             },
                         }}
                     />
                     <Prefix>
-                        {open ? '*prefix(ex) : [마감 공지] 개시일~마감일 마감되었습니다.' : '*prefix(ex) : [개시 공지] 개시일~마감일 개시되었습니다.'}
+                        {open
+                            ? '*prefix(ex) : [마감 공지] 개시일~마감일 마감되었습니다.'
+                            : '*prefix(ex) : [개시 공지] 개시일~마감일 개시되었습니다.'}
                     </Prefix>
                 </GridContainer>
             </Modal.Body>
             <Modal.Footer>
                 <ButtonWrap>
-                    <WhiteButton onClick={() => setShowDueDate(false)}>닫기</WhiteButton>
+                    <WhiteButton onClick={() => setShowDueDate(false)}>
+                        닫기
+                    </WhiteButton>
                     <NormalButton
                         onClick={() => {
                             sendNotice();
@@ -158,6 +183,7 @@ function WorkDueDate({ show, setShowDueDate, open }) {
 }
 
 const GridContainer = styled.div`
+    height: 600px;
     & * {
         font-size: 14px;
     }

@@ -10,7 +10,14 @@ function Header({ setAuth }) {
     return (
         <HeaderWrap>
             <NavLink to="/">SQLCanvas Trans</NavLink>
-            <CreateMenu menus={DepthList1} useDepth={true} color={''} fontColor={''} size={''} userRole={getCookie('ulevel')} />
+            <CreateMenu
+                menus={DepthList1}
+                useDepth={true}
+                color={''}
+                fontColor={''}
+                size={''}
+                userRole={getCookie('ulevel')}
+            />
             <div>
                 <MenuInfo setAuth={setAuth} />
             </div>

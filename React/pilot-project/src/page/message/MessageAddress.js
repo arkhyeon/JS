@@ -1,9 +1,9 @@
 import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
 import React, { useRef, useState } from 'react';
-import axios from 'axios';
 import { Modal } from 'react-bootstrap';
 import styled from 'styled-components';
 import { NormalButton, WhiteButton } from '../../component/button/R2wButton';
+import DraggableModal from '../../utils/DraggableModal';
 
 function MessageAddress({ show, setShowAddress, setAddress, userList }) {
     const addressGrid = useRef(null);
@@ -24,14 +24,18 @@ function MessageAddress({ show, setShowAddress, setAddress, userList }) {
 
         setAddress((arr) => {
             let concatWriter = arr.concat(inputWriter);
-            return concatWriter.filter((item, pos) => concatWriter.indexOf(item) === pos);
+            return concatWriter.filter(
+                (item, pos) => concatWriter.indexOf(item) === pos,
+            );
         });
     };
 
     return (
-        <Modal show={show} onHide={setShowAddress} centered>
+        <Modal dialogAs={DraggableModal} show={show} onHide={setShowAddress}>
             <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">유저 리스트</Modal.Title>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    유저 리스트
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <GridContainer className="ag-theme-alpine">
@@ -47,7 +51,9 @@ function MessageAddress({ show, setShowAddress, setAddress, userList }) {
             </Modal.Body>
             <Modal.Footer>
                 <ButtonWrap>
-                    <WhiteButton onClick={() => setShowAddress(false)}>닫기</WhiteButton>
+                    <WhiteButton onClick={() => setShowAddress(false)}>
+                        닫기
+                    </WhiteButton>
                     <NormalButton
                         onClick={() => {
                             setShowAddress(false);

@@ -4,13 +4,21 @@ import { NormalButton } from '../../component/button/R2wButton';
 
 const AffectSqlRenderer = (props) => {
     const setExtSql = (e) => {
-        props.context.masterGrid.node.setDataValue('extract_sql', e.target.value);
-        props.context.masterGrid.props.api.flashCells({ rowNodes: [props.context.masterGrid.node] });
+        props.context.masterGrid.node.setDataValue(
+            'extract_sql',
+            e.target.value,
+        );
+        props.context.masterGrid.props.api.flashCells({
+            rowNodes: [props.context.masterGrid.node],
+        });
     };
 
     return (
         <GridButtonWrap>
-            <NormalButton onClick={setExtSql} value={props.data.user_extract_sql}>
+            <NormalButton
+                onClick={setExtSql}
+                value={props.data.user_extract_sql}
+            >
                 쿼리 적용
             </NormalButton>
         </GridButtonWrap>
@@ -33,14 +41,20 @@ const cellEditorSelector = () => {
 
 const onCellEditingStopped = (props) => {
     //이관 변경
+    //TODO : if문 너무 복잡함.
     if (props.newValue !== props.oldValue) {
         if (props.colDef.field === 'trans_yn') {
-            //YES
             if (props.newValue === 'YES' && props.data.extract_sql === '') {
-                props.node.setDataValue('extract_sql', `select * from ${props.data.table_name}`);
+                props.node.setDataValue(
+                    'extract_sql',
+                    `select * from ${props.data.table_name}`,
+                );
             } else if (props.newValue === 'NO') {
-                //NO
-                if (window.confirm('이관 작업 등록을 해제하시면 추출 조건이 삭제됩니다.\n그래도 해제하시겠습니까?')) {
+                if (
+                    window.confirm(
+                        '이관 작업 등록을 해제하시면 추출 조건이 삭제됩니다.\n그래도 해제하시겠습니까?',
+                    )
+                ) {
                     props.node.setDataValue('extract_sql', '');
                 } else {
                     props.node.setDataValue('trans_yn', 'YES');
@@ -55,9 +69,15 @@ const onCellEditingStopped = (props) => {
 
 const enrollCheck = (props) => {
     if (props.data.enroll === 1) {
-        return <MdOutlineOpenInNew style={{ 'font-size': '24px', fill: '#19972c' }} />;
+        return (
+            <MdOutlineOpenInNew style={{ fontSize: '24px', fill: '#19972c' }} />
+        );
     } else {
-        return <MdOutlineOpenInNewOff style={{ 'font-size': '24px', fill: '#929292' }} />;
+        return (
+            <MdOutlineOpenInNewOff
+                style={{ fontSize: '24px', fill: '#929292' }}
+            />
+        );
     }
 };
 
@@ -223,7 +243,11 @@ export const adminGridOption = (isOpen) => {
             detailGridOptions: {
                 columnDefs: [
                     { headerName: '사용자', field: 'userid' },
-                    { headerName: '등록 쿼리', field: 'user_extract_sql', width: 450 },
+                    {
+                        headerName: '등록 쿼리',
+                        field: 'user_extract_sql',
+                        width: 450,
+                    },
                     {
                         headerName: '쿼리 적용',
                         field: 'affect_sql',
