@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import AsideMenuLayout from '../../template/AsideMenuLayout';
-import { ConfigMenus } from '../../utils/AsideMenu';
+import React, { useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import AsideMenuLayout from "../../template/AsideMenuLayout";
+import { ConfigMenus } from "../../utils/AsideMenu";
 
 function Config() {
     const sampleLocation = useLocation();

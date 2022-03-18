@@ -1,44 +1,54 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Col, Form, Modal, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 import { StyledAlert } from '../../../component/alert/R2wAlert';
 import { NormalButton, WhiteButton } from '../../../component/button/R2wButton';
 import DraggableModal from '../../../utils/DraggableModal';
+import axios from 'axios';
 
-const serverList = [
-    { 'serverid:': '1', server_name: 'ORA1' },
-    { 'serverid:': '2', server_name: 'ORA2' },
-    { 'serverid:': '3', server_name: 'ORA3' },
-    { 'serverid:': '4', server_name: 'ORA1_DST' },
-    { 'serverid:': '5', server_name: 'ORA2_DST' },
-    { 'serverid:': '6', server_name: 'ORA3_DST' },
-];
-
-const SystemAddModal = ({ show, setShow, add }) => {
+const SystemAddModal = ({ show, setShow, addSystem }) => {
     const [systemName, setSystemName] = useState();
     const [serverSrc, setServerSrc] = useState();
     const [serverDst, setServerDst] = useState();
     const [owners, setOwners] = useState();
+    const [serverList, setServerList] = useState([]);
 
-    useEffect(() => {
-        //console.log('useeffect');
-    });
+    const serverMappings = () => {
+        axios
+            .get('find/servers')
+            .then((res) => {
+                setServerList(res);
+            })
+            .catch((Error) => {
+                console.log('Error: ', Error);
+            });
+    };
 
     const open = () => {
-        // getServerList.then() 가장 첫번째 서버id 셋팅
-        setServerSrc('1');
-        setServerDst('4');
+        serverMappings();
     };
 
-    const cancel = () => {
-        setShow(false);
-    };
-
-    const ok = () => {
+    const saveSystem = () => {
         if (!validate()) {
             return;
         }
-        add(systemName, serverSrc, serverDst, owners);
+
+        const newSystem = {
+            system_name: systemName,
+            serverid_src: serverSrc,
+            serverid_dst: serverDst,
+            owner_list: owners,
+        };
+
+        axios
+            .post('save/systems', newSystem)
+            .then(() => {
+                addSystem(systemName, serverSrc, serverDst, owners);
+            })
+            .catch((Error) => {
+                console.log(Error);
+            });
+
         setShow(false);
     };
 
@@ -63,12 +73,7 @@ const SystemAddModal = ({ show, setShow, add }) => {
     };
 
     return (
-        <Modal
-            dialogAs={DraggableModal}
-            show={show}
-            onHide={setShow}
-            onShow={open}
-        >
+        <Modal dialogAs={DraggableModal} show={show} onHide={setShow} onShow={open}>
             <Modal.Header closeButton>
                 <Modal.Title>업무 등록</Modal.Title>
             </Modal.Header>
@@ -81,7 +86,6 @@ const SystemAddModal = ({ show, setShow, add }) => {
                         </Form.Label>
                         <Col sm={9} className="mb-3">
                             <Form.Control
-                                type="text"
                                 onChange={(e) => {
                                     setSystemName(e.target.value);
                                 }}
@@ -92,19 +96,14 @@ const SystemAddModal = ({ show, setShow, add }) => {
                         </Form.Label>
                         <Col sm={9} className="mb-3">
                             <Form.Select
-                                aria-label="Default select example"
                                 onChange={(e) => {
                                     setServerSrc(e.target.value);
                                 }}
                             >
-                                {serverList.map((server) => (
-                                    <option
-                                        key={
-                                            server.serverid + server.server_name
-                                        }
-                                        value={server.serverid}
-                                    >
-                                        {server.server_name}
+                                <option value="">서버를 선택해 주세요.</option>
+                                {serverList.map((sl) => (
+                                    <option key={sl.serverid} value={sl.serverid}>
+                                        {sl.server_name}
                                     </option>
                                 ))}
                                 ;
@@ -115,19 +114,14 @@ const SystemAddModal = ({ show, setShow, add }) => {
                         </Form.Label>
                         <Col sm={9} className="mb-3">
                             <Form.Select
-                                aria-label="Default select example"
                                 onChange={(e) => {
                                     setServerDst(e.target.value);
                                 }}
                             >
-                                {serverList.map((server) => (
-                                    <option
-                                        key={
-                                            server.serverid + server.server_name
-                                        }
-                                        value={server.serverid}
-                                    >
-                                        {server.server_name}
+                                <option value="">서버를 선택해 주세요.</option>
+                                {serverList.map((sl) => (
+                                    <option key={sl.serverid} value={sl.serverid}>
+                                        {sl.server_name}
                                     </option>
                                 ))}
                                 ;
@@ -138,7 +132,6 @@ const SystemAddModal = ({ show, setShow, add }) => {
                         </Form.Label>
                         <Col sm={9} className="mb-3">
                             <Form.Control
-                                type="text"
                                 onChange={(e) => {
                                     setOwners(e.target.value);
                                 }}
@@ -155,12 +148,14 @@ const SystemAddModal = ({ show, setShow, add }) => {
 
             <Modal.Footer>
                 <ButtonWrap>
-                    <WhiteButton variant="secondary" onClick={cancel}>
+                    <WhiteButton
+                        onClick={() => {
+                            setShow(false);
+                        }}
+                    >
                         닫기
                     </WhiteButton>
-                    <NormalButton variant="primary" onClick={ok}>
-                        확인
-                    </NormalButton>
+                    <NormalButton onClick={saveSystem}>확인</NormalButton>
                 </ButtonWrap>
             </Modal.Footer>
         </Modal>

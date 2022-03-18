@@ -3,21 +3,27 @@ import { Card, Form, Modal } from 'react-bootstrap';
 import styled from 'styled-components';
 import { NormalButton, WhiteButton } from '../../../component/button/R2wButton';
 import DraggableModal from '../../../utils/DraggableModal';
+import _ from 'lodash';
 
-function WorkSchCycle({ show, setShowCycle, parentHeight, cycle, setCycle }) {
+function WorkSchCycle({
+    show,
+    setShowCycle,
+    parentHeight,
+    eday,
+    emonth,
+    ewday,
+    ewday_no,
+    setCycle,
+}) {
     const [changePatternDetail, setChangePatternDetail] = useState();
-    const [month, setMonth] = useState([]);
-    const [day, setDay] = useState([]);
-    const [week, setWeek] = useState([]);
-    const [weekDay, setWeekDay] = useState([]);
+    const [month, setMonth] = useState(emonth);
+    const [day, setDay] = useState(eday);
+    const [week, setWeek] = useState(ewday);
+    const [weekDay, setWeekDay] = useState(ewday_no);
 
     useEffect(() => {
-        setMonth(cycle['month']);
-        setDay(cycle['day']);
-        setWeek(cycle['week']);
-        setWeekDay(cycle['weekDay']);
-        setChangePatternDetail(cycle['week'].length === 0 ? '0' : '1');
-    }, [cycle]);
+        setChangePatternDetail(ewday.length === 0 ? '0' : '1');
+    }, [ewday]);
 
     const renderMonth = () => {
         const result = [];
@@ -25,8 +31,8 @@ function WorkSchCycle({ show, setShowCycle, parentHeight, cycle, setCycle }) {
             result.push(
                 <PatternBtn
                     key={i + '월'}
-                    className={month.includes(i) && 'on'}
-                    onClick={(e) => toggleBtn(e, i)}
+                    className={month.includes(i < 10 ? '0' + i : String(i)) && 'on'}
+                    onClick={(e) => toggleBtn(e, i < 10 ? '0' + i : i)}
                     value="month"
                 >{`${i}월`}</PatternBtn>,
             );
@@ -40,12 +46,22 @@ function WorkSchCycle({ show, setShowCycle, parentHeight, cycle, setCycle }) {
             result.push(
                 <PatternBtn
                     key={i + '일'}
-                    className={day.includes(i) && 'on'}
-                    onClick={(e) => toggleBtn(e, i)}
+                    className={day.includes(i < 10 ? '0' + i : String(i)) && 'on'}
+                    onClick={(e) => toggleBtn(e, i < 10 ? '0' + i : i)}
                     value={'day'}
                 >{`${i}일`}</PatternBtn>,
             );
         }
+
+        result.push(
+            <PatternBtn
+                key={'말일'}
+                className={day.includes('말일') && 'on'}
+                onClick={(e) => toggleBtn(e, '말일')}
+                value={'day'}
+            >{`말일`}</PatternBtn>,
+        );
+
         return result;
     };
 
@@ -87,33 +103,24 @@ function WorkSchCycle({ show, setShowCycle, parentHeight, cycle, setCycle }) {
         const target = e.target;
         target.classList.toggle('on');
         if (target.classList.contains('on')) {
-            target.value === 'month' &&
-                setMonth([...month.filter((m) => m !== num), num]);
-            target.value === 'day' &&
-                setDay([...day.filter((d) => d !== num), num]);
-            target.value === 'week' &&
-                setWeek([...week.filter((w) => w !== num), num]);
-            target.value === 'weekDay' &&
-                setWeekDay([...weekDay.filter((wd) => wd !== num), num]);
+            target.value === 'month' && setMonth([...month.filter((m) => m !== num), num]);
+            target.value === 'day' && setDay([...day.filter((d) => d !== num), num]);
+            target.value === 'week' && setWeek([...week.filter((w) => w !== num), num]);
+            target.value === 'weekDay' && setWeekDay([...weekDay.filter((wd) => wd !== num), num]);
         } else {
-            target.value === 'month' &&
-                setMonth(month.filter((m) => m !== num));
+            target.value === 'month' && setMonth(month.filter((m) => m !== num));
             target.value === 'day' && setDay(day.filter((d) => d !== num));
             target.value === 'week' && setWeek(week.filter((w) => w !== num));
-            target.value === 'weekDay' &&
-                setWeekDay(weekDay.filter((wd) => wd !== num));
+            target.value === 'weekDay' && setWeekDay(weekDay.filter((wd) => wd !== num));
         }
     };
 
     const numSort = (arr) => {
-        return arr.sort((a, b) => a - b);
+        return arr.sort();
     };
 
     const savePattern = () => {
-        if (
-            (month.length === 0 || day.length === 0) &&
-            changePatternDetail === '0'
-        ) {
+        if ((month.length === 0 || day.length === 0) && changePatternDetail === '0') {
             alert('스케줄 설정은 월, 일별을 선택해 주세요.');
             return;
         }
@@ -142,47 +149,100 @@ function WorkSchCycle({ show, setShowCycle, parentHeight, cycle, setCycle }) {
         setShowCycle(false);
     };
 
+    const allToggleBtn = (e, setter) => {
+        const btnList = document.querySelectorAll('button[value=' + e.target.id + ']');
+
+        if (e.target.checked) {
+            for (let i = 0; i < btnList.length; i++) {
+                btnList[i].classList.add('on');
+            }
+
+            if (e.target.id === 'day') {
+                setter([
+                    '01',
+                    '02',
+                    '03',
+                    '04',
+                    '05',
+                    '06',
+                    '07',
+                    '08',
+                    '09',
+                    ..._.range(10, btnList.length),
+                    '말일',
+                ]);
+            } else {
+                setter([
+                    '01',
+                    '02',
+                    '03',
+                    '04',
+                    '05',
+                    '06',
+                    '07',
+                    '08',
+                    '09',
+                    ..._.range(10, btnList.length + 1),
+                ]);
+            }
+        } else {
+            for (let i = 0; i < btnList.length; i++) {
+                btnList[i].classList.remove('on');
+            }
+            setter([]);
+        }
+    };
+
     return (
-        <Modal
-            dialogAs={DraggableModal}
-            show={show}
-            onHide={setShowCycle}
-            animation={false}
-        >
+        <Modal dialogAs={DraggableModal} show={show} onHide={setShowCycle} animation={false}>
             <Modal.Header closeButton>
                 <Modal.Title>스케줄 사용자 설정</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <CycleContainer height={`${parentHeight}px`}>
                     <Card>
-                        <Card.Header>월별</Card.Header>
+                        <Card.Header>
+                            월별
+                            <AllSelectWrap>
+                                <input
+                                    id="month"
+                                    type="checkbox"
+                                    onChange={(e) => allToggleBtn(e, setMonth)}
+                                    checked={month.length === 12}
+                                />
+                                <label htmlFor="month">전체 선택</label>
+                            </AllSelectWrap>
+                        </Card.Header>
                         <Card.Body>{renderMonth()}</Card.Body>
                         <Card>
                             <Card.Header>
                                 <Form.Select
-                                    onChange={(e) =>
-                                        setChangePatternDetail(e.target.value)
-                                    }
+                                    onChange={(e) => setChangePatternDetail(e.target.value)}
                                     value={changePatternDetail}
                                 >
                                     <option value="0">일별</option>
                                     <option value="1">요일별</option>
                                 </Form.Select>
+                                {changePatternDetail === '0' && (
+                                    <AllSelectWrap>
+                                        <input
+                                            id="day"
+                                            type="checkbox"
+                                            onChange={(e) => allToggleBtn(e, setDay)}
+                                            checked={day.length === 32}
+                                        />
+                                        <label htmlFor="day">전체 선택</label>
+                                    </AllSelectWrap>
+                                )}
                             </Card.Header>
                             {changePatternDetail === '0' ? (
-                                <Card.Body className="monthBtn">
-                                    {renderDay()}
-                                </Card.Body>
+                                <Card.Body className="monthBtn">{renderDay()}</Card.Body>
                             ) : (
                                 <>
-                                    {/* <Card.Text>주간</Card.Text> */}
-                                    <Card.Body className="weekBtn">
-                                        {renderWeek()}
-                                    </Card.Body>
-                                    {/* <Card.Text>요일</Card.Text> */}
-                                    <Card.Body className="weekDayBtn">
-                                        {renderWeekDay()}
-                                    </Card.Body>
+                                    <Card.Text>주간</Card.Text>
+                                    <Card.Body className="weekBtn">{renderWeek()}</Card.Body>
+                                    <Card.Text>요일</Card.Text>
+                                    <Card.Body className="weekDayBtn">{renderWeekDay()}</Card.Body>
                                 </>
                             )}
                         </Card>
@@ -191,9 +251,7 @@ function WorkSchCycle({ show, setShowCycle, parentHeight, cycle, setCycle }) {
             </Modal.Body>
             <Modal.Footer>
                 <ButtonWrap>
-                    <WhiteButton onClick={() => setShowCycle(false)}>
-                        닫기
-                    </WhiteButton>
+                    <WhiteButton onClick={() => setShowCycle(false)}>닫기</WhiteButton>
                     <NormalButton
                         onClick={() => {
                             savePattern();
@@ -235,6 +293,25 @@ const CycleContainer = styled.div`
     & .weekDayBtn button {
         width: 51px;
     }
+
+    & .card-text {
+        margin: 15px 0 0 15px;
+    }
+
+    & .card-header {
+        display: flex;
+        justify-content: space-between;
+    }
+`;
+
+const AllSelectWrap = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    & > label {
+        font-size: 14px;
+    }
 `;
 
 const PatternBtn = styled.button`
@@ -247,8 +324,7 @@ const PatternBtn = styled.button`
     padding: 0px 15px;
     color: #383838;
     background-color: #ffffff;
-    border: 1px solid;
-    border-color: #c4c4c4;
+    border: 1px solid #c4c4c4;
     border-radius: 3px;
 
     &:hover {

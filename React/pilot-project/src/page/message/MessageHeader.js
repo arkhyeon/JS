@@ -1,10 +1,10 @@
-import React from 'react';
-import { Button, Form, FormControl, InputGroup } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
-import { MdSearch } from 'react-icons/md';
-import styled from 'styled-components';
-import { WhiteButton } from '../../component/button/R2wButton';
-import axios from 'axios';
+import React from "react";
+import { Button, Form, FormControl, InputGroup } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
+import { MdSearch } from "react-icons/md";
+import styled from "styled-components";
+import { WhiteButton } from "../../component/button/R2wButton";
+import axios from "axios";
 
 function MessageHeader({ msgRef }) {
     const location = useLocation();

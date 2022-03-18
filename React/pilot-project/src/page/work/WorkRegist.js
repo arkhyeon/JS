@@ -1,20 +1,20 @@
 import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import {
-    Col,
-    Form,
-    Modal,
-    OverlayTrigger,
-    Row,
-    Tooltip,
-} from 'react-bootstrap';
+import { Col, Form, Modal, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import styled from 'styled-components';
 import { NormalButton, WhiteButton } from '../../component/button/R2wButton';
 import WorkDbOption from './WorkDbOption';
 import DraggableModal from '../../utils/DraggableModal';
 
-function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
+function WorkRegist({
+    show,
+    setShowRegistWork,
+    registWorks,
+    parentGrid,
+    serverIdSrc,
+    serverIdDst,
+}) {
     const gridRef = useRef(null);
     const target = useRef(null);
     const [showDbOption, setShowDbOption] = useState(false);
@@ -38,16 +38,13 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
             .get(
                 process.env.REACT_APP_DB_HOST +
                     '/server_master?server_id=' +
-                    1 +
+                    serverIdSrc +
                     '&server_id=' +
-                    2,
+                    serverIdDst,
             )
             .then((res) => {
                 setDbmsType([res.data[0].dbms_type, res.data[1].dbms_type]);
-                setJconnectFlag([
-                    res.data[0].jconnect_flag,
-                    res.data[1].jconnect_flag,
-                ]);
+                setJconnectFlag([res.data[0].jconnect_flag, res.data[1].jconnect_flag]);
             })
             .catch((Error) => {
                 console.log(Error);
@@ -82,17 +79,12 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
         }
         registWorks.forEach((registWork) => {
             axios
-                .patch(
-                    process.env.REACT_APP_DB_HOST + '/Works/' + registWork.id,
-                    {
-                        enroll: 1,
-                    },
-                )
+                .patch(process.env.REACT_APP_DB_HOST + '/Works/' + registWork.id, {
+                    enroll: 1,
+                })
                 .then(() => {
                     setShowRegistWork(false);
-                    parentGrid.current.api
-                        .getRowNode(registWork.id)
-                        .setDataValue('enroll', 1);
+                    parentGrid.current.api.getRowNode(registWork.id).setDataValue('enroll', 1);
                 })
                 .catch((Error) => {
                     console.log(Error);
@@ -105,16 +97,9 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
 
     return (
         <>
-            <Modal
-                size={'xl'}
-                dialogAs={DraggableModal}
-                show={show}
-                onHide={setShowRegistWork}
-            >
+            <Modal size={'xl'} dialogAs={DraggableModal} show={show} onHide={setShowRegistWork}>
                 <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        작업 등록
-                    </Modal.Title>
+                    <Modal.Title id="contained-modal-title-vcenter">작업 등록</Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
@@ -122,11 +107,7 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
                         <Col sm={3}>
                             <OverlayTrigger
                                 placement={'right'}
-                                overlay={
-                                    <Tooltip>
-                                        작업명 : Prefix.DB.owner.table
-                                    </Tooltip>
-                                }
+                                overlay={<Tooltip>작업명 : Prefix.DB.owner.table</Tooltip>}
                             >
                                 <Form.Control
                                     ref={target}
@@ -159,9 +140,7 @@ function WorkRegist({ show, setShowRegistWork, registWorks, parentGrid }) {
                 </Modal.Body>
                 <Modal.Footer>
                     <ButtonWrap>
-                        <WhiteButton onClick={() => setShowRegistWork(false)}>
-                            닫기
-                        </WhiteButton>
+                        <WhiteButton onClick={() => setShowRegistWork(false)}>닫기</WhiteButton>
                         <NormalButton
                             onClick={() => {
                                 saveWork();
@@ -218,7 +197,7 @@ const GridOption = {
     columnDefs: [
         {
             headerName: '시스템명',
-            field: 'server_name',
+            field: 'system_name',
             width: 110,
         },
         {
@@ -228,17 +207,17 @@ const GridOption = {
         },
         {
             headerName: 'SID',
-            field: 'dbms_dsn',
+            field: 'server_name',
             width: 110,
         },
         {
             headerName: 'OWNER',
-            field: 'owner',
+            field: 'tbl_owner',
             width: 110,
         },
         {
             headerName: 'Table 영문명',
-            field: 'table_name',
+            field: 'tbl_name',
             width: 110,
         },
         {
@@ -247,12 +226,27 @@ const GridOption = {
             width: 400,
         },
         {
-            field: 'id',
+            field: 'task_id',
             hide: true,
+            suppressColumnsToolPanel: true,
         },
         {
-            field: 'enroll',
+            field: 'system_id',
             hide: true,
+            suppressColumnsToolPanel: true,
+        },
+        {
+            field: 'exe_cnt',
+            hide: true,
+            suppressColumnsToolPanel: true,
+        },
+        {
+            field: 'serverid_src',
+            suppressColumnsToolPanel: true,
+        },
+        {
+            field: 'serverid_dst',
+            suppressColumnsToolPanel: true,
         },
     ],
     defaultColDef: {

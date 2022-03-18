@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react';
-import axios from 'axios';
-import { Form, Modal } from 'react-bootstrap';
-import { AgGridReact } from 'ag-grid-react';
-import { NormalButton } from '../../../component/button/R2wButton';
-import styled from 'styled-components';
-import DetailLog from './DetailLog';
-import DraggableModal from '../../../utils/DraggableModal';
+import React, { useRef, useState } from "react";
+import axios from "axios";
+import { Form, Modal } from "react-bootstrap";
+import { AgGridReact } from "ag-grid-react";
+import { NormalButton } from "../../../component/button/R2wButton";
+import styled from "styled-components";
+import DetailLog from "./DetailLog";
+import DraggableModal from "../../../utils/DraggableModal";
 
 function SyncFailLog({ show, setShowFailLog, wid }) {
     const logGridRef = useRef();

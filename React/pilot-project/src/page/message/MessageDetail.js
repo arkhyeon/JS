@@ -1,11 +1,11 @@
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import axios from 'axios';
-import React from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { WhiteButton } from '../../component/button/R2wButton';
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import axios from "axios";
+import React from "react";
+import { Col, Form, Row } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { WhiteButton } from "../../component/button/R2wButton";
 
 function MessageDetail() {
     const msgData = useLocation().state;

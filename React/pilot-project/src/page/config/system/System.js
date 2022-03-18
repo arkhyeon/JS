@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import styled from 'styled-components';
 import 'ag-grid-enterprise';
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -8,102 +8,95 @@ import SystemAddModal from './SystemAddModal';
 import { Col, Row } from 'react-bootstrap';
 import { WhiteButton } from '../../../component/button/R2wButton';
 import { MdDeleteOutline } from 'react-icons/md';
-
-let rowData = [
-    {
-        system_name: '정보계',
-        serverid_src: 1,
-        serverid_dst: 4,
-        owners: 'TRANS1, TRANS2, TRANS3',
-        index: 1,
-    },
-    {
-        system_name: '계정계',
-        serverid_src: 2,
-        serverid_dst: 5,
-        owners: 'SCOTT1, SCOTT2',
-        index: 2,
-    },
-    {
-        system_name: '대외계',
-        serverid_src: 3,
-        serverid_dst: 6,
-        owners: 'AAA, BBB',
-        index: 3,
-    },
-];
-
-const serverMappings = {
-    1: 'ORA1',
-    2: 'ORA2',
-    3: 'ORA3',
-    4: 'ORA1_DST',
-    5: 'ORA2_DST',
-    6: 'ORA3_DST',
-};
+import axios from 'axios';
+import { testSystem } from '../../../resources/testData';
 
 const System = () => {
     const [gridApi, setGridApi] = useState(null);
     const [showAddModal, setShowAddModal] = useState(false);
+    const [serverList, setServerList] = useState([]);
     const gridRef = useRef(null);
-
-    // const serverMappings = async () => {
-    //     axios
-    //         .get(process.env.REACT_APP_DB_HOST + '/serverMappings')
-    //         .then((res) => {
-    //             console.log('res', res);
-    //             return res;
-    //         })
-    //         .catch((Error) => {
-    //             console.log('Error: ', Error);
-    //         });
-    // };
 
     const onGridReady = (params) => {
         setGridApi(params.api);
-        //serverMappings();
-        //getSystemList();
+        getSystemList();
     };
 
-    // const getSystemList = async () => {
-    //     console.log('getSystemList');
-    //     axios
-    //         .get(process.env.REACT_APP_DB_HOST + '/System')
-    //         .then((res) => {
-    //             gridRef.current.api.setRowData(res.data);
-    //         })
-    //         .catch((Error) => {
-    //             console.log(Error);
-    //         });
-    // };
+    const getSystemList = async () => {
+        await serverMappings();
 
-    const serverNames = Object.keys(serverMappings);
+        await axios
+            .get('find/systems')
+            .then((res) => {
+                gridRef.current.api.setRowData(res);
+            })
+            .catch((Error) => {
+                console.log(Error);
+            });
+    };
 
-    function lookupValue(mappings, key) {
-        return mappings[key];
-    }
+    const serverMappings = () => {
+        axios
+            .get('find/servers')
+            .then((res) => {
+                let objectification = {};
+                for (let key in res) {
+                    objectification[res[key].serverid] = res[key].server_name;
+                }
+                setServerList(objectification);
+            })
+            .catch((Error) => {
+                console.log('Error: ', Error);
+            });
+    };
 
-    function cellEditorParams(params) {
-        return { values: serverNames };
-    }
-
-    const onRowAdd = (systemName, serverSrc, serverDst, owners) => {
-        var newRow = {
+    const addSystem = (systemName, serverSrc, serverDst, owners) => {
+        const newRow = {
             system_name: systemName,
             serverid_src: serverSrc,
             serverid_dst: serverDst,
-            owners: owners,
+            owner_list: owners,
         };
         gridApi.applyTransaction({ add: [newRow] });
-        rowData = [...rowData, newRow];
     };
 
     const onRowDel = (node) => {
-        gridRef.current.api.updateRowData({ remove: [node.data] });
+        axios
+            .post('delete/systems', { delete_ids: [node.data.system_id] })
+            .then((res) => {
+                console.log(res);
+                gridRef.current.api.updateRowData({ remove: [node.data] });
+            })
+            .catch((e) => {
+                console.log(e);
+            });
     };
 
-    const open = () => {
-        setShowAddModal(true);
+    const onCellValueChanged = (e) => {
+        let newItem = { ...e.data };
+        const field = e.colDef.field;
+
+        if (field === 'serverid_src') {
+            newItem = { ...newItem, serverid_src: getKeyByValue(newItem[field]) };
+        }
+        if (field === 'serverid_dst') {
+            newItem = { ...newItem, serverid_dst: getKeyByValue(newItem[field]) };
+        }
+
+        updateSystem(newItem);
+    };
+
+    function getKeyByValue(value) {
+        return Object.keys(serverList).find((key) => serverList[key] === value);
+    }
+
+    const updateSystem = (newItem) => {
+        axios
+            .post('update/systems', newItem)
+            .then((res) => {})
+            .catch((Error) => {
+                console.log('schedule add error : ', Error);
+            });
     };
 
     const rowAddOn = (props) => {
@@ -128,17 +121,23 @@ const System = () => {
                     <h3>업무 등록</h3>
                 </Col>
                 <Col sm={8}>
-                    <WhiteButton onClick={open}>등록</WhiteButton>
+                    <WhiteButton
+                        onClick={() => {
+                            setShowAddModal(true);
+                        }}
+                    >
+                        등록
+                    </WhiteButton>
                 </Col>
             </Row>
             <SystemGridWrap className="ag-theme-alpine">
                 <AgGridReact
-                    rowData={rowData}
                     ref={gridRef}
                     rowSelection="multiple"
                     onGridReady={onGridReady}
                     defaultColDef={defaultColDef}
                     frameworkComponents={{ rowAddOn }}
+                    onCellValueChanged={onCellValueChanged}
                     rowHeight="35"
                     headerHeight="40"
                 >
@@ -152,11 +151,10 @@ const System = () => {
                         field="serverid_src"
                         headerName="원본서버"
                         editable={true}
-                        cellEditor="agRichSelectCellEditor" // cell 수정시 html <select> 처럼 사용
-                        cellEditorParams={cellEditorParams} // <select> 선택 목록
+                        cellEditor="agRichSelectCellEditor"
+                        cellEditorParams={{ values: Object.values(serverList) }} // <select> 선택 목록
                         valueFormatter={(params) => {
-                            // formatter로 데이터 변경해서 보여준다
-                            return lookupValue(serverMappings, params.value);
+                            return serverList[params.value];
                         }}
                     />
                     <AgGridColumn
@@ -164,28 +162,20 @@ const System = () => {
                         headerName="대상서버"
                         editable={true}
                         cellEditor="agRichSelectCellEditor"
-                        cellEditorParams={{ values: serverNames }}
+                        cellEditorParams={{ values: Object.values(serverList) }}
                         valueFormatter={(params) => {
-                            return lookupValue(serverMappings, params.value);
+                            return serverList[params.value];
                         }}
                     />
-                    <AgGridColumn
-                        field="owners"
-                        headerName="OWNERS"
-                        editable={true}
-                        flex={1}
-                    />
-                    <AgGridColumn
-                        field="index"
-                        headerName="index"
-                        hide={true}
-                    />
+                    <AgGridColumn field="owner_list" headerName="OWNERS" editable={true} flex={1} />
+                    <AgGridColumn field="system_id" headerName="system_id" hide={true} />
                 </AgGridReact>
             </SystemGridWrap>
             <SystemAddModal
                 show={showAddModal}
                 setShow={setShowAddModal}
-                add={onRowAdd}
+                addSystem={addSystem}
+                serverList={serverList}
             ></SystemAddModal>
         </SystemWrap>
     );

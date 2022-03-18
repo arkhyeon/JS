@@ -1,5 +1,5 @@
 import { AgGridReact } from 'ag-grid-react';
-import Axios from 'axios';
+import axios from 'axios';
 import React, { useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { MdDeleteOutline, MdEditCalendar } from 'react-icons/md';
@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { WhiteButton } from '../../../component/button/R2wButton';
 import WorkSchedule from './WorkSchedule';
 import SyncFailLog from './SyncFailLog';
+import { testSync, testSyncDetail } from '../../../resources/testData';
 
 function Main() {
     const [showSchedule, setShowSchedule] = useState(false);
@@ -21,19 +22,22 @@ function Main() {
     };
 
     const getSyncMain = () => {
-        Axios.get(process.env.REACT_APP_DB_HOST + '/SyncMain')
+        axios
+            .get('find/works')
             .then((res) => {
-                mainGridRef.current.api.setRowData(res.data);
+                mainGridRef.current.api.setRowData(res);
             })
             .catch((Error) => {
                 console.log(Error);
             });
     };
 
-    const getSyncSub = (id) => {
-        Axios.get(process.env.REACT_APP_DB_HOST + '/SyncSub?main_id=' + id)
+    const getSyncSub = (wid) => {
+        subGridRef.current.api.setRowData([]);
+        axios
+            .get('find/works/' + wid)
             .then((res) => {
-                subGridRef.current.api.setRowData(res.data);
+                subGridRef.current.api.setRowData(res);
             })
             .catch((Error) => {
                 console.log(Error);
@@ -52,7 +56,23 @@ function Main() {
                     />
                     <MdEditCalendar
                         onClick={() => {
-                            setEditSyncData(props.node.data);
+                            const syncData = props.node.data;
+                            console.log({
+                                ...syncData,
+                                emonth: syncData.emonth.split(' '),
+                                eday: syncData.eday.split(' '),
+                                ewday: syncData.ewday.split(' '),
+                                ewday_no: syncData.ewday_no.split(' '),
+                            });
+                            setEditSyncData({
+                                ...syncData,
+                                emonth: syncData.emonth.length ? syncData.emonth.split(' ') : [],
+                                eday: syncData.eday.length ? syncData.eday.split(' ') : [],
+                                ewday: syncData.ewday.length ? syncData.ewday.split(' ') : [],
+                                ewday_no: syncData.ewday_no.length
+                                    ? syncData.ewday_no.split(' ')
+                                    : [],
+                            });
                             setShowSchedule(true);
                         }}
                     />
@@ -62,10 +82,10 @@ function Main() {
     };
 
     const deleteRow = (node) => {
-        if (window.confirm(node.data.schName + '을 정말 삭제하시겠습니까?')) {
-            Axios.delete(
-                process.env.REACT_APP_DB_HOST + '/SyncMain/' + node.data.id,
-            )
+        console.log(node.data.wid);
+        if (window.confirm(node.data.wname + '을 정말 삭제하시겠습니까?')) {
+            axios
+                .post('delete/works/' + node.data.wid)
                 .then(() => {
                     mainGridRef.current.api.updateRowData({
                         remove: [node.data],
@@ -109,7 +129,12 @@ function Main() {
                     onGridReady={onGridReady}
                     onCellClicked={(e) => {
                         resultClick(e);
-                        getSyncSub();
+                        if (
+                            e.event.target.nodeName !== 'svg' ||
+                            e.event.target.nodeName !== 'path'
+                        ) {
+                            getSyncSub(e.data.wid);
+                        }
                     }}
                     defaultColDef={defaultColDef}
                     frameworkComponents={{ rowAddOn }}
@@ -127,6 +152,7 @@ function Main() {
             <SyncGridWrap className="ag-theme-alpine">
                 <AgGridReact
                     ref={subGridRef}
+                    rowData={[]}
                     gridOptions={syncDetailGridOption}
                     defaultColDef={defaultColDef}
                     overlayNoRowsTemplate={'해당 테이블은 상세 내역이 없습니다'}
@@ -143,11 +169,7 @@ function Main() {
                 />
             )}
             {showFailLog && (
-                <SyncFailLog
-                    show={showFailLog}
-                    setShowFailLog={setShowFailLog}
-                    wid={clickedWid}
-                />
+                <SyncFailLog show={showFailLog} setShowFailLog={setShowFailLog} wid={clickedWid} />
             )}
         </SyncWrap>
     );
@@ -222,28 +244,28 @@ const syncGridOption = {
     columnDefs: [
         {
             headerName: '스케줄명',
-            field: 'schName',
+            field: 'wname',
             cellRenderer: 'rowAddOn',
         },
         {
             headerName: '스케줄 설명',
-            field: 'schDesc',
+            field: 'wdesc',
         },
         {
             headerName: '주기',
-            field: 'schPattern',
+            field: 'pattern',
             valueFormatter: patternFmt,
         },
         {
             headerName: '시작 일시',
-            field: 'startDate',
+            field: 'start_d',
             valueFormatter: (props) => {
-                return props.value + ' ' + props.data.startTime;
+                return props.value + ' ' + props.data.ehour + ':' + props.data.emin;
             },
         },
         {
             headerName: '종료일',
-            field: 'endDate',
+            field: 'end_d',
         },
         {
             headerName: '상태',
@@ -262,8 +284,48 @@ const syncGridOption = {
             field: 'last_exe_dt',
         },
         {
-            headerName: 'id',
-            field: 'id',
+            headerName: 'wid',
+            field: 'wid',
+            hide: true,
+        },
+        {
+            headerName: 'exe_cnt',
+            field: 'exe_cnt',
+            hide: true,
+        },
+        {
+            headerName: 'emin',
+            field: 'emin',
+            hide: true,
+        },
+        {
+            headerName: 'ehour',
+            field: 'ehour',
+            hide: true,
+        },
+        {
+            headerName: 'eday',
+            field: 'eday',
+            hide: true,
+        },
+        {
+            headerName: 'emonth',
+            field: 'emonth',
+            hide: true,
+        },
+        {
+            headerName: 'ewday',
+            field: 'wid',
+            hide: true,
+        },
+        {
+            headerName: 'ewday_no',
+            field: 'ewday_no',
+            hide: true,
+        },
+        {
+            headerName: 'system_list',
+            field: 'system_list',
             hide: true,
         },
     ],
@@ -278,11 +340,11 @@ const syncDetailGridOption = {
         },
         {
             headerName: '소유자',
-            field: 'owner',
+            field: 'tbl_owner',
         },
         {
             headerName: '테이블',
-            field: 'table',
+            field: 'tbl_name',
         },
         {
             headerName: '상태',
@@ -298,11 +360,16 @@ const syncDetailGridOption = {
         },
         {
             headerName: '비고',
-            field: 'etc',
+            field: 'notes',
         },
         {
-            headerName: 'id',
-            field: 'id',
+            headerName: 'wid',
+            field: 'wid',
+            hide: true,
+        },
+        {
+            headerName: 'system_id',
+            field: 'system_id',
             hide: true,
         },
     ],

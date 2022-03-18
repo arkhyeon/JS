@@ -29,14 +29,7 @@ import styled from 'styled-components';
         align-items: center; >> 세로 중앙 정렬
     }
  */
-export const GrayRadioButton = ({
-    id,
-    name,
-    label,
-    checked = false,
-    reg,
-    defaultValue = '',
-}) => {
+export const GrayRadioButton = ({ id, name, label, checked = false, reg, defaultValue = '' }) => {
     return (
         <RadioItem>
             <Form.Check
@@ -82,7 +75,7 @@ const RadioItem = styled.div`
         width: 16px;
         height: 16px;
         border-radius: 11px;
-        background-color: gray;
+        border: 1px solid gray;
     }
 
     & input[type='radio']:checked + label:after {
@@ -93,6 +86,6 @@ const RadioItem = styled.div`
         margin: -13px 0px 24px 4px;
         content: '';
         display: block;
-        background: white;
+        background: gray;
     }
 `;

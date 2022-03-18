@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
-import { Col, Form, Modal, Row } from 'react-bootstrap';
-import styled from 'styled-components';
-import { NormalButton, WhiteButton } from '../../../component/button/R2wButton';
-import DraggableModal from '../../../utils/DraggableModal';
+import React, { useState } from "react";
+import { Col, Form, Modal, Row } from "react-bootstrap";
+import styled from "styled-components";
+import { NormalButton, WhiteButton } from "../../../component/button/R2wButton";
+import DraggableModal from "../../../utils/DraggableModal";
 
 const MacroAddModal = ({ show, setShowMacroModal, add }) => {
     const [macroKey, setMacroKey] = useState();
-    const [macroValue, setMacroValue] = useState();
 
     const open = () => {
         setMacroKey('');
-        setMacroValue('');
     };
 
     const cancel = () => {
@@ -18,11 +16,11 @@ const MacroAddModal = ({ show, setShowMacroModal, add }) => {
     };
 
     const ok = () => {
-        if (macroKey === '' || macroValue === '') {
-            alert('매크로 변수 또는 매크로 값이 없습니다.');
+        if (macroKey === '') {
+            alert('매크로 변수 값이 없습니다.');
             return;
         }
-        add(macroKey, macroValue);
+        add(macroKey);
         setShowMacroModal(false);
     };
 
@@ -48,17 +46,6 @@ const MacroAddModal = ({ show, setShowMacroModal, add }) => {
                                 type="text"
                                 onChange={(e) => {
                                     setMacroKey(e.target.value);
-                                }}
-                            />
-                        </Col>
-                        <Form.Label column sm={3}>
-                            매크로 값
-                        </Form.Label>
-                        <Col sm={9}>
-                            <Form.Control
-                                type="text"
-                                onChange={(e) => {
-                                    setMacroValue(e.target.value);
                                 }}
                             />
                         </Col>

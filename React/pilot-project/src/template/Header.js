@@ -12,7 +12,7 @@ function Header({ setAuth }) {
             <NavLink to="/">SQLCanvas Trans</NavLink>
             <CreateMenu
                 menus={DepthList1}
-                useDepth={true}
+                useDepth={false}
                 color={''}
                 fontColor={''}
                 size={''}

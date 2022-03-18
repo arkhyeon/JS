@@ -1,6 +1,6 @@
-import React from 'react';
-import { Form } from 'react-bootstrap';
-import { GrayRadioButton } from '../../../component/radio/R2wRadioButton';
+import React from "react";
+import { Form } from "react-bootstrap";
+import { GrayRadioButton } from "../../../component/radio/R2wRadioButton";
 
 export default function Etr({ register, CustomForm }) {
     return (

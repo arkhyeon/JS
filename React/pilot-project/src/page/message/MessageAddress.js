@@ -1,9 +1,9 @@
-import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
-import React, { useRef, useState } from 'react';
-import { Modal } from 'react-bootstrap';
-import styled from 'styled-components';
-import { NormalButton, WhiteButton } from '../../component/button/R2wButton';
-import DraggableModal from '../../utils/DraggableModal';
+import { AgGridReact } from "ag-grid-react/lib/agGridReact";
+import React, { useRef, useState } from "react";
+import { Modal } from "react-bootstrap";
+import styled from "styled-components";
+import { NormalButton, WhiteButton } from "../../component/button/R2wButton";
+import DraggableModal from "../../utils/DraggableModal";
 
 function MessageAddress({ show, setShowAddress, setAddress, userList }) {
     const addressGrid = useRef(null);

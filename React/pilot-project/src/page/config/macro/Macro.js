@@ -1,4 +1,5 @@
-import { AgGridReact } from 'ag-grid-react';
+import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
+import axios from 'axios';
 import React, { useRef, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { MdDeleteOutline } from 'react-icons/md';
@@ -6,55 +7,69 @@ import styled from 'styled-components';
 import { WhiteButton } from '../../../component/button/R2wButton';
 import MacroAddModal from './MacroAddModal';
 
-let initRowData = [
-    {
-        macroKey: ':V_기준년',
-        macroValue: '%y',
-        ex: '2022',
-        index: 0,
-    },
-    {
-        macroKey: ':V_기준년-1',
-        macroValue: '%y-1',
-        ex: '2021',
-        index: 1,
-    },
-    {
-        macroKey: ':V_기준년-2',
-        macroValue: '%y-2',
-        ex: '2020',
-        index: 2,
-    },
-];
-
-let initRowData2 = [
-    {
-        macroKey: ':V_ACTBT_국코드',
-        code: '"010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017","010017"',
-    },
-];
-
 function Main() {
     const [showMacroModal, setShowMacroModal] = useState(false);
     const codeRef = useRef();
     const macroRef = useRef();
+    let SelectRowData = null;
 
     const onGridReady = () => {
-        macroRef.current.api.setRowData(initRowData);
-        codeRef.current.api.setRowData(initRowData2);
+        macroRef.current.api.setRowData(null);
+        codeRef.current.api.setRowData(null);
+
+        getMacroInfo();
     };
 
-    const itemId = useRef(3);
+    const getMacroInfo = () => {
+        axios
+            .get('find/macros')
+            .then((res) => {
+                if (res.length > 0) {
+                    codeRef.current.api.setRowData(
+                        res.filter((macro) => macro.macro_name === ':V_ACTBT_국코드'),
+                    );
+                }
+
+                if (res.length > 1) {
+                    macroRef.current.api.setRowData(
+                        res.filter((macro) => macro.macro_name !== ':V_ACTBT_국코드'),
+                    );
+                }
+            })
+            .catch((Error) => {
+                console.log(Error);
+            });
+    };
+
+    const deleteMacroInfo = (macroName) => {
+        axios
+            .post('delete/macros/' + macroName)
+            .then((res) => {
+                macroRef.current.api.updateRowData({ remove: [SelectRowData] });
+            })
+            .catch((Error) => {
+                console.log(Error);
+            });
+    };
+
+    const addMacroInfo = (newRow) => {
+        axios
+            .post('save/macros', newRow, { withCredentials: true })
+            .then((res) => {
+                getMacroInfo();
+            })
+            .catch((Error) => {
+                console.log(Error.response);
+            });
+    };
 
     const onRowAdd = (key) => {
-        itemId.current++;
-        var newRow = {
-            macroKey: key,
-            ex: '2022',
-            index: itemId.current,
+        let newRow = {
+            macro_name: key,
+            macro_value: '',
         };
-        macroRef.current.api.applyTransaction({ add: [newRow] });
-        initRowData = [...initRowData, newRow];
+
+        addMacroInfo(newRow);
     };
 
     const rowAddOn = (props) => {
@@ -73,7 +88,8 @@ function Main() {
     };
 
     const deleteRow = (node) => {
-        macroRef.current.api.updateRowData({ remove: [node.data] });
+        SelectRowData = node.data;
+        deleteMacroInfo(node.value);
     };
 
     return (
@@ -167,7 +183,7 @@ const codeGrid = {
     HeaderInfo: [
         {
             headerName: '매크로 변수',
-            field: 'macroKey',
+            field: 'macro_name',
             cellEditor: 'agLargeTextCellEditor',
             cellStyle: {
                 'line-height': '25px',
@@ -180,7 +196,7 @@ const codeGrid = {
         },
         {
             headerName: '데이터',
-            field: 'code',
+            field: 'macro_value',
             flex: 2,
             cellEditor: 'agLargeTextCellEditor',
             editable: true,
@@ -203,21 +219,21 @@ const codeGrid = {
 const macroGrid = {
     HeaderInfo: [
         {
-            rowDrag: true,
+            rowDrag: false,
             flex: 0.1,
         },
         {
             headerName: '매크로 변수',
-            field: 'macroKey',
+            field: 'macro_name',
             cellEditor: 'agLargeTextCellEditor',
-            editable: true,
+            editable: false,
             flex: 1,
             cellEditorParams: { maxLength: 1024 },
             cellRenderer: 'rowAddOn',
         },
         {
             headerName: '예시',
-            field: 'ex',
+            field: 'macro_value',
             flex: 2,
         },
         {

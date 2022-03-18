@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Accordion, Col, Form, Modal, Row } from 'react-bootstrap';
-import styled from 'styled-components';
-import { NormalButton, WhiteButton } from '../../component/button/R2wButton';
-import { useForm } from 'react-hook-form';
-import Otr from './dataAdapter/Otr';
-import Etr from './dataAdapter/Etr';
-import Atr from './dataAdapter/Atr';
+import React, { useCallback, useEffect, useState } from "react";
+import { Accordion, Col, Form, Modal, Row } from "react-bootstrap";
+import styled from "styled-components";
+import { NormalButton, WhiteButton } from "../../component/button/R2wButton";
+import { useForm } from "react-hook-form";
+import Otr from "./dataAdapter/Otr";
+import Etr from "./dataAdapter/Etr";
+import Atr from "./dataAdapter/Atr";
 import {
     ExtAltibase,
     ExtASA,
@@ -28,9 +28,9 @@ import {
     LoadDB2,
     LoadIQ,
     LoadJava,
-    LoadORACLE,
-} from './dataAdapter/Sql';
-import Jtr from './dataAdapter/Jtr';
+    LoadORACLE
+} from "./dataAdapter/Sql";
+import Jtr from "./dataAdapter/Jtr";
 import {
     ALTIBASE,
     ASA,
@@ -46,10 +46,10 @@ import {
     ORACLE,
     POSTGRES,
     RAINSTOR,
-    TIBERO,
-} from './dataAdapter/DbInfo';
-import { StyledAlert } from '../../component/alert/R2wAlert';
-import DraggableModal from '../../utils/DraggableModal';
+    TIBERO
+} from "./dataAdapter/DbInfo";
+import { StyledAlert } from "../../component/alert/R2wAlert";
+import DraggableModal from "../../utils/DraggableModal";
 
 function WorkDbOption({
     show,

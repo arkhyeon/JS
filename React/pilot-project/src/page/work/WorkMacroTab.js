@@ -4,47 +4,28 @@ import { Offcanvas } from 'react-bootstrap';
 import { MdBuildCircle, MdContentCopy } from 'react-icons/md';
 import styled from 'styled-components';
 import { WhiteButton } from '../../component/button/R2wButton';
-
-let initRowData = [
-    {
-        macroKey: ':V_기준년',
-        macroValue: '%y',
-        ex: '2022',
-        index: 0,
-    },
-    {
-        macroKey: ':V_기준년-1',
-        macroValue: '%y-1',
-        ex: '2021',
-        index: 1,
-    },
-    {
-        macroKey: ':V_기준년-2',
-        macroValue: '%y-2',
-        ex: '2020',
-        index: 2,
-    },
-];
+import axios from 'axios';
 
 function WorkMacroTab({ show, setShowMacroTab }) {
-    const [gridApi, setGridApi] = useState(null);
     const [copyTip, setCopyTip] = useState(false);
     const [copyTarget, setCopyTarget] = useState('');
 
+    const getMacro = (api) => {
+        axios.get('find/macros').then((res) => api.setRowData(res));
+    };
+
     const onGridReady = (params) => {
-        setGridApi(params.api);
-        params.api.setRowData(initRowData); //? 의미없을것 같음.
-        params.api.closeToolPanel();
+        getMacro(params.api);
     };
 
     const onCellClicked = (props) => {
-        if (props.column.colId === 'macroKey') {
+        if (props.column.colId === 'macro_name') {
             navigator.clipboard.writeText(props.value);
             setCopyTarget(props.value);
             setCopyTip(true);
             setTimeout(() => {
                 setCopyTip(false);
-            }, 1800);
+            }, 800);
         }
     };
 
@@ -72,7 +53,12 @@ function WorkMacroTab({ show, setShowMacroTab }) {
                     headerHeight="40"
                 ></AgGridReact>
                 <TipWrap>
-                    <ToolTip style={{ opacity: copyTip ? '100' : '0', marginTop: copyTip ? '0px' : '15px' }}>
+                    <ToolTip
+                        style={{
+                            opacity: copyTip ? '100' : '0',
+                            marginTop: copyTip ? '0px' : '15px',
+                        }}
+                    >
                         <svg viewBox="0 0 426.667 426.667" width="18" height="18">
                             <path
                                 d="M213.333 0C95.518 0 0 95.514 0 213.333s95.518 213.333 213.333 213.333c117.828 0 213.333-95.514 213.333-213.333S331.157 0 213.333 0zm-39.134 322.918l-93.935-93.931 31.309-31.309 62.626 62.622 140.894-140.898 31.309 31.309-172.203 172.207z"
@@ -140,13 +126,12 @@ const ToolTip = styled.div`
     box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
     color: #000;
     border-radius: 4px;
-    margin: 0px;
+    margin: 15px 0px 0px;
     opacity: 1;
     transition: 0.3s all ease-in-out;
     min-height: 45px;
     border-left: 3px solid ${({ theme }) => theme.colors.normal_4};
     gap: 15px;
-    margin-top: 15px;
     max-width: 400px;
 `;
 
@@ -173,24 +158,14 @@ const ColumnInfo = {
     HeaderInfo: [
         {
             headerName: '매크로 변수',
-            field: 'macroKey',
+            field: 'macro_name',
             flex: 1,
             cellRenderer: 'copyContent',
         },
         {
             headerName: '매크로 값',
-            field: 'macroValue',
+            field: 'macro_value',
             flex: 0.8,
-        },
-        {
-            headerName: '예시',
-            field: 'ex',
-            flex: 0.8,
-        },
-        {
-            headerName: 'index',
-            field: 'index',
-            hide: true,
         },
     ],
     DefaultInfo: {

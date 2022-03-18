@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { MdNotificationImportant, MdNotifications } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MessageHeader from './MessageHeader';
+import { testMsg } from '../../resources/testData';
 
 const MessageList = () => {
     const msgRef = useRef();
@@ -15,6 +16,7 @@ const MessageList = () => {
     const location = useLocation();
 
     const getMessages = () => {
+        msgRef.current.api.setRowData(testMsg);
         axios
             .get(process.env.REACT_APP_API_MESSAGES)
             .then((res) => {
@@ -35,10 +37,7 @@ const MessageList = () => {
                 navigate('/Message/MessageWrite', { state: e.data });
                 break;
             case 'contents':
-                axios.patch(
-                    process.env.REACT_APP_DB_HOST + '/Messages/' + e.data.id,
-                    { read: 0 },
-                );
+                axios.patch(process.env.REACT_APP_DB_HOST + '/Messages/' + e.data.id, { read: 0 });
                 navigate('MessageDetail', { state: e.data });
                 break;
 

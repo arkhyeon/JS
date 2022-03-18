@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Draggable from 'react-draggable';
-import { ModalDialog } from 'react-bootstrap';
+import React, { useEffect, useRef, useState } from "react";
+import Draggable from "react-draggable";
+import { ModalDialog } from "react-bootstrap";
 
 /**
  * @param size : "xl"|"lg"|"sm" Bootstrap size props (default : sm)

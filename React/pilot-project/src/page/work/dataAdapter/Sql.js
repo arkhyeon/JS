@@ -1,7 +1,7 @@
-import React from 'react';
-import { Form } from 'react-bootstrap';
-import { GrayRadioButton } from '../../../component/radio/R2wRadioButton';
-import { IQ, TERADATA, VERTICA } from './DbInfo';
+import React from "react";
+import { Form } from "react-bootstrap";
+import { GrayRadioButton } from "../../../component/radio/R2wRadioButton";
+import { IQ, TERADATA, VERTICA } from "./DbInfo";
 
 export const ExtCommon = ({ register, CustomForm }) => {
     return (

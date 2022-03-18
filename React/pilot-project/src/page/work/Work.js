@@ -6,13 +6,12 @@ import styled from 'styled-components';
 import { WhiteButton } from '../../component/button/R2wButton';
 import { getCookie } from '../../utils/Cookie';
 import WorkDueDate from './WorkDueDate';
-import {
-    adminGridOption,
-    commonGridOption,
-    userGridOption,
-} from './WorkGridOption';
+import { adminGridOption, commonGridOption, userGridOption } from './WorkGridOption';
 import WorkMacroTab from './WorkMacroTab';
 import WorkRegist from './WorkRegist';
+import moment from 'moment';
+import _ from 'lodash';
+import { testData } from '../../resources/testData';
 
 function Work() {
     const [isOpen, setIsOpen] = useState(false);
@@ -22,12 +21,13 @@ function Work() {
     const [showRegistWork, setShowRegistWork] = useState(false);
     const [registWorks, setRegistWorks] = useState([]);
     const [showMacroTab, setShowMacroTab] = useState(false);
+    const [currentServerId, setCurrentServerId] = useState();
     const gridRef = useRef();
 
     useEffect(() => {
         getWorkIsOpen();
         getServers();
-        getWorks();
+
         const interval = setInterval(() => {
             getWorkIsOpen();
         }, 5000);
@@ -35,68 +35,44 @@ function Work() {
         return () => clearInterval(interval);
     }, []);
 
-    const getWorks = (search = '정보계') => {
+    const getWorks = (systemId) => {
+        gridRef.current.api.setRowData([]);
+        let urlInfo = '';
         if (getCookie('ulevel') === '1') {
-            axios
-                .get(
-                    process.env.REACT_APP_DB_HOST +
-                        '/Works?server_name=' +
-                        search +
-                        '&trans_yn=YES',
-                )
-                .then((res) => {
-                    gridRef.current.api.setRowData(res.data);
-                })
-                .catch((Error) => {
-                    console.log(Error);
-                });
+            urlInfo = '/find/task-admin/' + systemId;
         } else {
-            axios
-                .get(
-                    process.env.REACT_APP_DB_HOST +
-                        '/Works?server_name=' +
-                        search,
-                )
-                .then((res) => {
-                    gridRef.current.api.setRowData(res.data);
-                })
-                .catch((Error) => {
-                    console.log(Error);
-                });
+            // urlInfo = '/find/task-user/' + getCookie('uid') + '/' + systemId;
+            urlInfo = '/find/task-user/cms/' + systemId;
         }
+        axios.get(urlInfo).then((res) => {
+            gridRef.current.api.setRowData(res);
+        });
     };
 
     const getServers = () => {
-        axios
-            .get(process.env.REACT_APP_DB_HOST + '/Servers')
-            .then((res) => {
-                setServers(res.data);
-            })
-            .catch((Error) => {
-                console.log(Error);
-            });
+        axios.get('find/systems').then((res) => {
+            setServers(res);
+            getWorks(res[0].system_id);
+            setCurrentServerId([res[0].serverid_src, res[0].serverid_dst]);
+        });
     };
 
     const getWorkIsOpen = () => {
-        axios
-            .get(process.env.REACT_APP_DB_HOST + '/IsOpen')
-            .then((res) => {
-                setIsOpen(res.data.open);
-                setWorkDate(
-                    `[${res.data.open ? '개시' : '마감'}] ${
-                        res.data.startDate
-                    } ~ ${res.data.endDate} (기준일 : ${
-                        res.data.refDate || '미지정'
-                    })`,
-                );
-            })
-            .catch((Error) => {
-                console.log(Error);
-            });
+        axios.get('find/task-status').then((res) => {
+            setIsOpen(JSON.parse(res[0].task_open));
+
+            const startDate = moment(res[0].start_date).format('yyyy-MM-DD');
+            const endDate = moment(res[0].deadline_date).format('yyyy-MM-DD');
+            const workDate = moment(res[0].work_date).format('yyyy-MM-DD');
+
+            const stringBuilder = `[${JSON.parse(res[0].task_open) ? '개시' : '마감'}]
+                ${startDate} ~ ${endDate} (기준일 : ${workDate || '미지정'})`;
+
+            setWorkDate(stringBuilder);
+        });
     };
 
     const onGridReady = () => {
-        getWorks();
         gridRef.current.api.closeToolPanel();
     };
 
@@ -135,8 +111,7 @@ function Work() {
         });
 
         if (alertText) {
-            alertText +=
-                '위 테이블은 이관 작업 대상이 아니거나 추출조건이 없습니다.';
+            alertText += '위 테이블은 이관 작업 대상이 아니거나 추출조건이 없습니다.';
             alert(alertText);
             return;
         }
@@ -149,11 +124,23 @@ function Work() {
         <>
             <WorkHeader>
                 <Col sm={2}>
-                    <Form.Select onChange={(e) => getWorks(e.target.value)}>
+                    <Form.Select
+                        onChange={(e) => {
+                            // console.log(servers.);
+                            const mappingServer = _.find(servers, {
+                                system_id: Number(e.target.value),
+                            });
+                            setCurrentServerId([
+                                mappingServer.serverid_src,
+                                mappingServer.serverid_dst,
+                            ]);
+                            getWorks(e.target.value);
+                        }}
+                    >
                         {servers.map((server) => {
                             return (
-                                <option key={server.id} value={server.name}>
-                                    {server.name}
+                                <option key={server.system_id} value={server.system_id}>
+                                    {server.system_name}
                                 </option>
                             );
                         })}
@@ -164,9 +151,7 @@ function Work() {
                     {getCookie('ulevel') === '1' ? (
                         !isOpen ? (
                             <>
-                                <WhiteButton onClick={() => registWork()}>
-                                    작업 등록
-                                </WhiteButton>
+                                <WhiteButton onClick={() => registWork()}>작업 등록</WhiteButton>
                                 <WhiteButton
                                     onClick={() => {
                                         collapseAll();
@@ -210,9 +195,7 @@ function Work() {
                         headerHeight="40"
                         columnDefs={adminGridOption(isOpen).columnDefs}
                         defaultColDef={commonGridOption.defaultColDef}
-                        detailCellRendererParams={
-                            adminGridOption(isOpen).detailCellRendererParams
-                        }
+                        detailCellRendererParams={adminGridOption(isOpen).detailCellRendererParams}
                         sideBar={commonGridOption.sideBar}
                         onFirstDataRendered={onFirstDataRendered}
                     />
@@ -235,11 +218,7 @@ function Work() {
                 )}
             </WorkWrap>
             {showDueDate && (
-                <WorkDueDate
-                    show={showDueDate}
-                    setShowDueDate={setShowDueDate}
-                    open={isOpen}
-                />
+                <WorkDueDate show={showDueDate} setShowDueDate={setShowDueDate} open={isOpen} />
             )}
             {showRegistWork && (
                 <WorkRegist
@@ -247,14 +226,11 @@ function Work() {
                     setShowRegistWork={setShowRegistWork}
                     registWorks={registWorks}
                     parentGrid={gridRef}
+                    serverIdSrc={currentServerId[0]}
+                    serverIdDst={currentServerId[1]}
                 />
             )}
-            {showMacroTab && (
-                <WorkMacroTab
-                    show={showMacroTab}
-                    setShowMacroTab={setShowMacroTab}
-                />
-            )}
+            {showMacroTab && <WorkMacroTab show={showMacroTab} setShowMacroTab={setShowMacroTab} />}
         </>
     );
 }

@@ -1,8 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import MessageMain from './MessageMain';
-import { MessageMenus } from '../../utils/AsideMenu';
-import AsideMenuLayout from '../../template/AsideMenuLayout';
+import React from "react";
+import styled from "styled-components";
+import MessageMain from "./MessageMain";
+import { MessageMenus } from "../../utils/AsideMenu";
+import AsideMenuLayout from "../../template/AsideMenuLayout";
 
 function Message() {
     return (

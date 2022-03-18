@@ -1,8 +1,8 @@
-import React from 'react';
-import { Button, Nav } from 'react-bootstrap';
-import { MdEmail, MdSend } from 'react-icons/md';
-import { NavLink, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import { Button, Nav } from "react-bootstrap";
+import { MdEmail, MdSend } from "react-icons/md";
+import { NavLink, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 function MessageAside() {
     const navigate = useNavigate();

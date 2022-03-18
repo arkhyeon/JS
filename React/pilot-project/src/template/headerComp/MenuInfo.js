@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { BsFillChatDotsFill } from 'react-icons/bs';
-import Badge from 'react-bootstrap/Badge';
-import MessageTab from './MessageTab';
-import axios from 'axios';
-import { MdLogout } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
-import { removeCookie } from '../../utils/Cookie';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import { BsFillChatDotsFill } from "react-icons/bs";
+import Badge from "react-bootstrap/Badge";
+import MessageTab from "./MessageTab";
+import axios from "axios";
+import { MdLogout } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import { removeCookie } from "../../utils/Cookie";
 
 function MenuInfo({ setAuth }) {
     const navigate = useNavigate();
@@ -29,11 +29,18 @@ function MenuInfo({ setAuth }) {
         if (!window.confirm('로그아웃하시겠습니까?')) {
             return;
         }
-
-        setAuth(null);
-        removeCookie('uid');
-        removeCookie('ulevel');
-        navigate('/');
+        axios
+            .post('logout')
+            .then((res) => {
+                setAuth(null);
+                removeCookie('uid');
+                removeCookie('ulevel');
+                removeCookie('authorization');
+                navigate('/');
+            })
+            .catch((Error) => {
+                console.log(Error);
+            });
     };
 
     useEffect(() => {

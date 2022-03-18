@@ -1,12 +1,5 @@
-import {
-    MdBuildCircle,
-    MdEmail,
-    MdSend,
-    MdSettings,
-    MdSwapHorizontalCircle,
-    MdUploadFile,
-} from 'react-icons/md';
-import React from 'react';
+import { MdBuildCircle, MdEmail, MdSend, MdSettings, MdSwapHorizontalCircle, MdUploadFile } from "react-icons/md";
+import React from "react";
 
 export const ConfigMenus = [
     {

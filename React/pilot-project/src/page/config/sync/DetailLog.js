@@ -1,10 +1,10 @@
-import React from 'react';
-import { Modal } from 'react-bootstrap';
-import { NormalButton } from '../../../component/button/R2wButton';
-import styled from 'styled-components';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import DraggableModal from '../../../utils/DraggableModal';
+import React from "react";
+import { Modal } from "react-bootstrap";
+import { NormalButton } from "../../../component/button/R2wButton";
+import styled from "styled-components";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import DraggableModal from "../../../utils/DraggableModal";
 
 function DetailLog({ show, setShowDetailLog, log }) {
     return (

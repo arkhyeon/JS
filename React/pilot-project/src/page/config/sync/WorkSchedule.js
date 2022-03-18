@@ -9,9 +9,9 @@ import TimePicker from 'rc-time-picker';
 import 'rc-time-picker/assets/index.css';
 import moment from 'moment';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
-import Axios from 'axios';
 import { NormalButton, WhiteButton } from '../../../component/button/R2wButton';
 import DraggableModal from '../../../utils/DraggableModal';
+import axios from 'axios';
 
 registerLocale('ko', ko);
 
@@ -20,85 +20,84 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
     const systemGridRef = useRef();
     const [showCycle, setShowCycle] = useState(false);
     const [formData, setFormData] = useState({
-        schName: '',
-        schDesc: '',
-        schPattern: '1',
+        wname: '',
+        wdesc: '',
+        pattern: '1',
         directRun: false,
         noneEndDt: false,
-        startDate: new Date(),
-        startTime: moment().format('HH:mm'),
-        endDate: new Date(),
-        cycle: {
-            month: [],
-            day: [],
-            week: [],
-            weekDay: [],
-        },
-        systemList: {},
+        start_d: new Date(),
+        end_d: new Date(),
+        emin: '00',
+        ehour: '00',
+        emonth: [],
+        eday: [],
+        ewday: [],
+        ewday_no: [],
+        system_list: {},
     });
+
+    const {
+        wame,
+        wesc,
+        pattern,
+        directRun,
+        noneEndDt,
+        start_d,
+        end_d,
+        emin,
+        ehour,
+        eday,
+        emonth,
+        ewday,
+        ewday_no,
+    } = formData;
 
     useEffect(() => {
         if (editSyncData) {
             setFormData({
                 ...editSyncData,
-                startDate: new Date(editSyncData.startDate),
-                endDate: new Date(editSyncData.endDate),
+                start_d: new Date(editSyncData.start_d),
+                end_d: new Date(editSyncData.end_d),
             });
         }
     }, [editSyncData]);
 
-    const getDefaultSystem = () => {
-        Axios.get(process.env.REACT_APP_DB_HOST + '/SystemList/')
+    const getSystemList = () => {
+        systemGridRef.current.api.setRowData([]);
+        axios
+            .get('find/systems')
             .then((res) => {
-                systemGridRef.current.api.setRowData(res.data);
-                if (editSyncData) {
-                    setSelectedSystem(editSyncData);
-                }
+                systemGridRef.current.api.setRowData(res);
+                setSelectedSystem();
             })
             .catch((Error) => {
                 console.log(Error);
             });
     };
 
-    const setSelectedSystem = (editSyncData) => {
+    const setSelectedSystem = () => {
         systemGridRef.current.api.forEachNode(function (node) {
-            for (let i = 0; i < editSyncData.systemList.length; i++) {
-                if (editSyncData.systemList[i].id === node.data.id) {
-                    node.setSelected(
-                        editSyncData.systemList[i].id === node.data.id,
-                    );
+            for (let i = 0; i < editSyncData.system_list.length; i++) {
+                if (editSyncData.system_list[i].system_id === node.data.system_id) {
+                    node.setSelected(editSyncData.system_list[i].system_id === node.data.system_id);
                 }
             }
         });
     };
 
     const onSystemGridReady = () => {
-        getDefaultSystem();
+        getSystemList();
     };
 
     const setCycle = ({ month, day, week, weekDay }) => {
         setFormData({
             ...formData,
-            cycle: {
-                month: month,
-                day: day,
-                week: week,
-                weekDay: weekDay,
-            },
+            emonth: month,
+            eday: day,
+            ewday: week,
+            ewday_no: weekDay,
         });
     };
-
-    const {
-        schName,
-        schDesc,
-        schPattern,
-        directRun,
-        noneEndDt,
-        startDate,
-        startTime,
-        endDate,
-        cycle,
-    } = formData;
 
     const manageFormData = (e) => {
         const { value, name, checked, type } = e.target;
@@ -112,7 +111,7 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
         setCycle({ month: [], day: [], week: [], weekDay: [] });
         setFormData({
             ...formData,
-            schPattern: e.target.value,
+            pattern: e.target.value,
             directRun: false,
             noneEndDt: false,
         });
@@ -121,87 +120,133 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
     const convertCycle = (type) => {
         let str = '';
 
-        switch (type) {
-            case 'month':
-                str = cycle[type].join(', ') + (cycle[type].join(', ') && '월');
-                break;
-            case 'day':
-                str = cycle[type].join(', ') + (cycle[type].join(', ') && '일');
-                break;
-            case 'week':
-                str =
-                    cycle[type].join(', ') + (cycle[type].join(', ') && '째주');
-                break;
-            case 'weekDay':
-                const week = ['일', '월', '화', '수', '목', '금', '토'];
-                for (let i = 0; i < cycle[type].length; i++) {
-                    str += ', ' + week[cycle[type][i]];
-                }
-                str += cycle[type].join(', ') && '요일';
-                break;
-            default:
-                break;
+        if (type === 'month') {
+            str = emonth.join(', ') + (emonth.join(', ') && '월');
+        } else if (type === 'day') {
+            str = eday.includes('말일')
+                ? eday.join(', ')
+                : (str = eday.join(', ') + (eday.join(', ') && '일'));
+        } else if (type === 'week') {
+            str = ewday.join(', ') + (ewday.join(', ') && '째주');
+        } else if (type === 'weekDay') {
+            const week = ['일', '월', '화', '수', '목', '금', '토'];
+            for (let i = 0; i < ewday_no.length; i++) {
+                str += ', ' + week[ewday_no[i]];
+            }
+            str += ewday_no.join(', ') && '요일';
         }
 
         return str;
     };
 
     const setSaveData = () => {
-        const systemList = systemGridRef.current.api
-            .getSelectedRows()
-            .map((node) => {
-                node.selected = true;
-                return node;
-            });
+        const systemList = systemGridRef.current.api.getSelectedRows().map((node) => {
+            node.selected = true;
+            return node;
+        });
 
-        return {
-            ...formData,
-            systemList: systemList,
-            startDate: moment(startDate).format('yyyy-MM-DD'),
-            endDate: moment(endDate).format('yyyy-MM-DD'),
+        let schByPattern = {
+            start_d: moment(start_d).format('yyyy-MM-DD'),
+            end_d: noneEndDt ? '9999-12-31' : moment(end_d).format('yyyy-MM-DD'),
         };
+
+        if (pattern === '1') {
+            schByPattern = {
+                emin: directRun ? '' : emin,
+                ehour: directRun ? '' : ehour,
+                eday: directRun ? '' : moment(start_d).format('DD'),
+                emonth: directRun ? '' : moment(start_d).format('MM'),
+                ewday: directRun ? '' : '*',
+                ewday_no: directRun ? '' : '*',
+                start_d: directRun
+                    ? moment().format('yyyy-MM-DD')
+                    : moment(start_d).format('yyyy-MM-DD'),
+                end_d: '9999-12-31',
+            };
+        } else if (pattern === '2') {
+            schByPattern = {
+                eday: '*',
+                emonth: '*',
+                ewday: '*',
+                ewday_no: '*',
+            };
+        } else if (pattern === '3') {
+            schByPattern = {
+                eday: '*',
+                emonth: '*',
+                ewday: moment(start_d).day(),
+                ewday_no: '*',
+            };
+        } else if (pattern === '4') {
+            schByPattern = {
+                eday: moment(start_d).format('DD'),
+                emonth: '*',
+                ewday: '*',
+                ewday_no: '*',
+            };
+        } else if (pattern === '5') {
+            schByPattern = {
+                eday: moment(start_d).format('DD'),
+                emonth:
+                    moment(start_d).format('MM ') +
+                    moment(start_d).add(1, 'Q').format('MM ') +
+                    moment(start_d).add(2, 'Q').format('MM ') +
+                    moment(start_d).add(3, 'Q').format('MM'),
+                ewday: '*',
+                ewday_no: '*',
+            };
+        } else if (pattern === '6') {
+            schByPattern = {
+                eday: moment(start_d).format('DD'),
+                emonth: moment(start_d).format('MM'),
+                ewday: '*',
+                ewday_no: '*',
+            };
+        } else if (pattern === '7') {
+            schByPattern = {
+                eday: eday.length === 0 ? '*' : eday.join(' '),
+                emonth: emonth.join(' '),
+                ewday: ewday.length === 0 ? '*' : ewday.join(' '),
+                ewday_no: ewday_no.length === 0 ? '*' : ewday_no.join(' '),
+            };
+        }
+
+        return { ...formData, ...schByPattern, system_list: systemList };
+    };
+
+    const validationCheck = (data) => {
+        if (data.wname === '') {
+            alert('스케줄 명을 작성해 주세요.');
+            return false;
+        }
+
+        if (data.system_list.length === 0) {
+            alert('스케줄 명을 작성해 주세요.');
+            return false;
+        }
+
+        return true;
     };
 
     const saveSchedule = () => {
-        if (formData['schName'] === '') {
-            alert('스케줄 명을 작성해 주세요.');
-            return;
-        }
+        const saveData = setSaveData();
 
-        Axios.post(process.env.REACT_APP_DB_HOST + '/SyncMain', setSaveData())
-            .then(() => {
-                getSyncMain();
-            })
-            .catch((Error) => {
-                console.log('schedule add error : ', Error);
-            });
-    };
-
-    const editSchedule = () => {
-        if (formData['schName'] === '') {
-            alert('스케줄 명을 작성해 주세요.');
-            return;
-        }
-
-        Axios.patch(
-            process.env.REACT_APP_DB_HOST + '/SyncMain/' + editSyncData.id,
-            setSaveData(),
-        )
-            .then(() => {
-                getSyncMain();
-            })
-            .catch((Error) => {
-                console.log('schedule update error : ', Error);
-            });
+        validationCheck(saveData) &&
+            axios
+                .post(editSyncData ? '/update/works' : '/save/works', setSaveData())
+                .then(() => {
+                    setShowSchedule(false);
+                    getSyncMain();
+                    alert('테이블 동기화가 설정되었습니다.');
+                })
+                .catch((Error) => {
+                    console.log('schedule add error : ', Error);
+                });
     };
 
     return (
         <>
-            <Modal
-                dialogAs={DraggableModal}
-                show={show}
-                onHide={setShowSchedule}
-            >
+            <Modal dialogAs={DraggableModal} show={show} onHide={setShowSchedule}>
                 <Modal.Header closeButton>
                     <Modal.Title>작업 스케줄 추가</Modal.Title>
                 </Modal.Header>
@@ -213,9 +258,9 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                             </Form.Label>
                             <Col sm={9} className="mb-3">
                                 <Form.Control
-                                    name="schName"
+                                    name="wname"
                                     onChange={manageFormData}
-                                    value={schName}
+                                    value={formData.wname}
                                     type="text"
                                 />
                             </Col>
@@ -224,9 +269,9 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                             </Form.Label>
                             <Col sm={9} className="mb-3">
                                 <Form.Control
-                                    name="schDesc"
+                                    name="wdesc"
                                     onChange={manageFormData}
-                                    value={schDesc}
+                                    value={formData.wdesc}
                                     type="text"
                                 />
                             </Col>
@@ -235,11 +280,11 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                             </Form.Label>
                             <Col sm={9} className="mb-3">
                                 <Form.Select
-                                    name="schPattern"
+                                    name="pattern"
                                     onChange={(e) => {
                                         regroupFormData(e);
                                     }}
-                                    value={schPattern}
+                                    value={pattern}
                                 >
                                     <option value="1">한번</option>
                                     <option value="2">매일</option>
@@ -250,17 +295,14 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                                     <option value="7">사용자설정</option>
                                 </Form.Select>
                             </Col>
-                            {schPattern === '7' && (
+                            {pattern === '7' && (
                                 <>
                                     <Form.Label column sm={3}>
                                         월별
                                     </Form.Label>
                                     <Col sm={9} className="mb-3">
                                         <InputGroup>
-                                            <Form.Control
-                                                value={convertCycle('month')}
-                                                readOnly
-                                            />
+                                            <Form.Control value={convertCycle('month')} readOnly />
                                             <Button
                                                 onClick={() => {
                                                     setShowCycle(true);
@@ -276,13 +318,12 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                                     </Form.Label>
                                     <Col sm={9} className="mb-3">
                                         <Form.Control
+                                            readOnly
                                             value={
-                                                cycle['day'].length === 0
-                                                    ? convertCycle('week') +
-                                                      convertCycle('weekDay')
+                                                formData.eday.length === 0
+                                                    ? convertCycle('week') + convertCycle('weekDay')
                                                     : convertCycle('day')
                                             }
-                                            readOnly
                                             type="text"
                                         />
                                     </Col>
@@ -294,7 +335,7 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                             <Col sm={9} className="mb-3">
                                 <DatePicker
                                     className="form-control"
-                                    selected={startDate}
+                                    selected={start_d}
                                     locale="ko"
                                     showMonthDropdown
                                     showYearDropdown
@@ -303,27 +344,23 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                                     onChange={(date) => {
                                         setFormData({
                                             ...formData,
-                                            startDate: date,
+                                            start_d: date,
                                         });
                                     }}
                                     onChangeRaw={(e) => e.preventDefault()}
                                     selectsStart
-                                    startDate={startDate}
-                                    endDate={endDate}
+                                    startDate={start_d}
+                                    maxDate={end_d}
                                     disabled={directRun}
                                 />
                                 <TimePicker
                                     readOnly
-                                    value={moment()
-                                        .hours(formData.startTime.substr(0, 2))
-                                        .minute(
-                                            formData.startTime.substr(3, 2),
-                                        )}
+                                    value={moment().hours(formData.ehour).minute(formData.emin)}
                                     onChange={(time) =>
                                         setFormData({
                                             ...formData,
-                                            startTime:
-                                                moment(time).format('HH:mm'),
+                                            ehour: moment(time).format('HH'),
+                                            emin: moment(time).format('mm'),
                                         })
                                     }
                                     showSecond={false}
@@ -334,7 +371,7 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                                     onChange={manageFormData}
                                     checked={directRun}
                                     id="directRun"
-                                    disabled={schPattern !== '1'}
+                                    disabled={pattern !== '1'}
                                 />
                                 <Form.Label column sm={3} htmlFor="directRun">
                                     즉시실행
@@ -351,26 +388,25 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                                     showYearDropdown
                                     dropdownMode="select"
                                     dateFormat="yyyy-MM-dd"
-                                    selected={endDate}
+                                    selected={end_d}
                                     onChange={(date) =>
                                         setFormData({
                                             ...formData,
-                                            endDate: date,
+                                            end_d: date,
                                         })
                                     }
                                     onChangeRaw={(e) => e.preventDefault()}
                                     selectsEnd
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    minDate={startDate}
-                                    disabled={schPattern === '1' || noneEndDt}
+                                    endDate={end_d}
+                                    minDate={start_d}
+                                    disabled={pattern === '1' || noneEndDt}
                                 />
                                 <Form.Check
                                     name="noneEndDt"
                                     onChange={manageFormData}
                                     checked={noneEndDt}
                                     id="noneEndDt"
-                                    disabled={schPattern === '1'}
+                                    disabled={pattern === '1'}
                                 />
                                 <Form.Label column sm={3} htmlFor="noneEndDt">
                                     종료일 없음
@@ -378,10 +414,7 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                             </Col>
 
                             {/* 업무명 목록 */}
-                            <div
-                                className="ag-theme-alpine"
-                                style={{ height: 200, width: 1500 }}
-                            >
+                            <div className="ag-theme-alpine" style={{ height: 200, width: 1500 }}>
                                 <AgGridReact
                                     ref={systemGridRef}
                                     rowMultiSelectWithClick={true}
@@ -389,21 +422,17 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                                     onGridReady={onSystemGridReady}
                                 >
                                     <AgGridColumn
-                                        field="id"
-                                        headerName="id"
+                                        field="system_id"
+                                        headerName="system_id"
                                         hide={true}
                                     />
                                     <AgGridColumn
                                         field="system_name"
                                         headerName="업무명"
-                                        width={450}
+                                        flex={1}
                                         checkboxSelection={true}
                                     />
-                                    <AgGridColumn
-                                        field="index"
-                                        headerName="index"
-                                        hide={true}
-                                    />
+                                    <AgGridColumn field="index" headerName="index" hide={true} />
                                 </AgGridReact>
                             </div>
                         </Form.Group>
@@ -411,21 +440,10 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                 </Modal.Body>
                 <Modal.Footer>
                     <ButtonWrap>
-                        <WhiteButton
-                            variant="secondary"
-                            onClick={() => setShowSchedule(false)}
-                        >
+                        <WhiteButton variant="secondary" onClick={() => setShowSchedule(false)}>
                             닫기
                         </WhiteButton>
-                        <NormalButton
-                            variant="primary"
-                            type="submit"
-                            onClick={() => {
-                                editSyncData ? editSchedule() : saveSchedule();
-                                setShowSchedule(false);
-                                getSyncMain();
-                            }}
-                        >
+                        <NormalButton variant="primary" type="submit" onClick={saveSchedule}>
                             {editSyncData ? '수정' : '확인'}
                         </NormalButton>
                     </ButtonWrap>
@@ -436,7 +454,10 @@ function WorkSchedule({ show, setShowSchedule, editSyncData, getSyncMain }) {
                 <WorkSchCycle
                     show={showCycle}
                     setShowCycle={setShowCycle}
-                    cycle={cycle}
+                    eday={eday}
+                    emonth={emonth}
+                    ewday={ewday}
+                    ewday_no={ewday_no}
                     setCycle={setCycle}
                     parentHeight={ref.current.clientHeight}
                 />

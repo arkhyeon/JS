@@ -1,10 +1,10 @@
-import React, { Fragment, useState } from 'react';
-import { NavLink, Route } from 'react-router-dom';
-import styled from 'styled-components';
-import Message from '../page/message/Message';
-import MessageDetail from '../page/message/MessageDetail';
-import MessageList from '../page/message/MessageList';
-import MessageWrite from '../page/message/MessageWrite';
+import React, { Fragment, useState } from "react";
+import { NavLink, Route } from "react-router-dom";
+import styled from "styled-components";
+import Message from "../page/message/Message";
+import MessageDetail from "../page/message/MessageDetail";
+import MessageList from "../page/message/MessageList";
+import MessageWrite from "../page/message/MessageWrite";
 
 /**
  * @param {Array} menus

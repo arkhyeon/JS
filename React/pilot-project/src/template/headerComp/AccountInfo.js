@@ -1,6 +1,8 @@
-import React from 'react';
-import { Button, Form, Offcanvas } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { Button, Form, Offcanvas } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { getCookie, removeCookie } from "../../utils/Cookie";
 
 const AccountInfo = ({ toggleAccount, setToggleAccount, getAuth }) => {
     const navigate = useNavigate();
@@ -10,10 +12,19 @@ const AccountInfo = ({ toggleAccount, setToggleAccount, getAuth }) => {
     };
 
     const onHandleLogout = () => {
-        getAuth(null);
-        sessionStorage.removeItem('user_id');
-        sessionStorage.removeItem('userAuth');
-        navigate('/');
+        axios
+            .get('logout')
+            .then((res) => {
+                getAuth(null);
+                // removeCookie('user_id');
+                // removeCookie('userAuth');
+                removeCookie('authorization');
+                console.log(getCookie('authorization'));
+                navigate('/');
+            })
+            .catch((Error) => {
+                console.log(Error);
+            });
     };
 
     return (

@@ -1,8 +1,8 @@
-import React from 'react';
-import Footer from './Footer';
-import Header from './Header';
-import { Outlet } from 'react-router-dom';
-import '../scss/common.scss';
+import React from "react";
+import Footer from "./Footer";
+import Header from "./Header";
+import { Outlet } from "react-router-dom";
+import "../scss/common.scss";
 
 function Layout({ setAuth }) {
     return (

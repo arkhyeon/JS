@@ -7,6 +7,29 @@ import axios from 'axios';
 import RSAKey from 'react-native-rsa';
 import jwt_decode from 'jwt-decode';
 
+const loginAxios = axios.create();
+loginAxios.defaults.baseURL = '/KPOST47/';
+
+loginAxios.interceptors.response.use(
+    function (response) {
+        return {
+            authorization: response.headers.authorization,
+            data: response.data.data[0],
+        };
+    },
+    (error) => {
+        console.log(
+            '%cURL Info : ' + error.response.data.path + '-------------------------------------',
+            'background: #000; color: #2CD4A8',
+        );
+        console.log(
+            '%cError Code : ' + error.response.status + ' ' + error.response.statusText,
+            'background: #000; color: #2CD4A8',
+        );
+        return Promise.reject(error);
+    },
+);
+
 function Login({ setAuth }) {
     const navigate = useNavigate();
 
@@ -51,70 +74,51 @@ function Login({ setAuth }) {
             removeCookie('userId');
         }
 
-        var rsa = new RSAKey();
+        const rsa = new RSAKey();
         let encpwd = '';
 
-        await axios
-            .get('/KPOST47/rsa')
+        await loginAxios
+            .get('rsa')
             .then((res) => {
-                console.log(res.data.data[0].publicKeyModules);
-                console.log(res.data.data.publicKeyExponent);
-                rsa.setPublic(
-                    res.data.data[0].publicKeyModules,
-                    res.data.data[0].publicKeyExponent,
-                );
-                console.log(rsa);
+                console.log(res.data);
+                rsa.setPublic(res.data.publicKeyModules, res.data.publicKeyExponent);
                 encpwd = rsa.encrypt(userPwd);
-                //     encpwd = res.data.data.encPwd;
             })
             .catch((Error) => {
                 console.log(Error);
             });
-        console.log(userId);
-        console.log(userPwd);
-        console.log(encpwd);
-        await axios
-            .post('/KPOST47/login', { uid: userId, pwd: encpwd })
+
+        await loginAxios
+            .post('login', { uid: userId, pwd: encpwd })
             .then((res) => {
-                const decoded = jwt_decode(res.headers.authorization);
+                console.log(res.authorization);
+                const decoded = jwt_decode(res.authorization);
+                console.log(decoded);
                 setCookie('uid', decoded.uid);
                 setCookie('ulevel', decoded.level);
+                setCookie('authorization', res.authorization);
+                axios.defaults.headers.common['authorization'] = res.authorization;
+
+                setAuth(decoded.level);
             })
             .catch((error) => {
                 console.log(error.response);
-                if (
-                    error.response.data.status.message ===
-                    'User account has expired'
-                ) {
+                if (error.response.data.status.message === 'User account has expired') {
                     alert('계정이 만료되었습니다.');
-                } else if (
-                    error.response.data.status.message ===
-                    'User password has expired'
-                ) {
+                } else if (error.response.data.status.message === 'User password has expired') {
                     alert('비밀 번호가 만료되었습니다.');
-                } else if (
-                    error.response.data.status.message ===
-                    'User account is locked'
-                ) {
+                } else if (error.response.data.status.message === 'User account is locked') {
                     alert('계정이 잠겨있습니다.');
-                } else if (
-                    error.response.data.status.message === 'Username not found'
-                ) {
+                } else if (error.response.data.status.message === 'Username not found') {
                     alert('해당 아이디는 없는 아이디 입니다.');
-                } else if (
-                    error.response.data.status.message === 'Invalid password'
-                ) {
+                } else if (error.response.data.status.message === 'Invalid password') {
                     alert('비밀 번호가 틀렸습니다.');
-                } else if (
-                    error.response.data.status.message === 'Unauthorized'
-                ) {
+                } else if (error.response.data.status.message === 'Unauthorized') {
                     alert('로그인 없이 API가 요청되었습니다.');
                 } else if (error.response.data.status.message === 'Forbidden') {
                     alert('API 요청 시 권한 에러입니다.');
                 }
             });
-
-        setAuth(getCookie('ulevel'));
 
         navigate('/');
     };
@@ -137,11 +141,7 @@ function Login({ setAuth }) {
                         </h2>
                     </Col>
                     <Col sm={6}>
-                        <Form
-                            // method="get"
-                            onSubmit={onSubmit}
-                            // action="/KPOST47"
-                        >
+                        <Form onSubmit={onSubmit}>
                             <Form.Control
                                 value={userId}
                                 ref={inputUserId}
@@ -166,8 +166,8 @@ function Login({ setAuth }) {
                             </Button>
                             {/* 주 : API 변경, 부 : 새로운 기능, 수 : 버그 및 기타 수정  */}
                             <Copyright className="my-3 copyright text-center">
-                                Copyright(c)R2ware, All rights reserved. Version
-                                0.0.0.1 (release 2022.02.15)
+                                Copyright(c)R2ware, All rights reserved. Version 0.0.0.1 (release
+                                2022.02.15)
                             </Copyright>
                         </Form>
                     </Col>
@@ -184,14 +184,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: linear-gradient(
-        to right top,
-        #052437,
-        #1a3547,
-        #2d4858,
-        #405a69,
-        #546e7a
-    );
+    background-image: linear-gradient(to right top, #052437, #1a3547, #2d4858, #405a69, #546e7a);
     color: ${({ theme }) => theme.colors.light_2};
 `;
 

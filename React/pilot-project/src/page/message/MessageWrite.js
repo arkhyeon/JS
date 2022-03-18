@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Col, Form, FormControl, InputGroup, Row } from 'react-bootstrap';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import styled from 'styled-components';
-import { useLocation, useNavigate } from 'react-router-dom';
-import MessageAddress from './MessageAddress';
-import axios from 'axios';
-import { NormalButton, WhiteButton } from '../../component/button/R2wButton';
-import { FaAddressBook } from 'react-icons/fa';
-import { GrayRadioButton } from '../../component/radio/R2wRadioButton';
+import React, { useEffect, useState } from "react";
+import { Col, Form, FormControl, InputGroup, Row } from "react-bootstrap";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import styled from "styled-components";
+import { useLocation, useNavigate } from "react-router-dom";
+import MessageAddress from "./MessageAddress";
+import axios from "axios";
+import { NormalButton, WhiteButton } from "../../component/button/R2wButton";
+import { FaAddressBook } from "react-icons/fa";
+import { GrayRadioButton } from "../../component/radio/R2wRadioButton";
 
 function MessageWrite() {
     const location = useLocation();

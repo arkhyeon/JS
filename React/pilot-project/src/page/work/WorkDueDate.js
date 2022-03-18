@@ -14,7 +14,7 @@ registerLocale('ko', ko);
 
 function WorkDueDate({ show, setShowDueDate, open }) {
     const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+    const [deadLineDate, setDeadLineDate] = useState(new Date());
     const [refDate, setRefDate] = useState(new Date());
     const [ckeditorData, setCkeditorData] = useState('');
 
@@ -26,10 +26,10 @@ function WorkDueDate({ show, setShowDueDate, open }) {
 
     const getStartDate = () => {
         axios
-            .get(process.env.REACT_APP_DB_HOST + '/IsOpen')
+            .get('find/task-status')
             .then((res) => {
-                setStartDate(new Date(res.data.startDate));
-                setRefDate(new Date(res.data.refDate));
+                setStartDate(new Date(moment(res[0].start_date)));
+                setRefDate(new Date(moment(res[0].work_date)));
             })
             .catch((Error) => {
                 console.log(Error);
@@ -39,40 +39,39 @@ function WorkDueDate({ show, setShowDueDate, open }) {
     const sendNotice = () => {
         //TODO : 보낼대상 전체? 선택?
         const noiceText = open
-            ? `[마감 공지] ${moment(startDate).format('yyyy-MM-DD')}~${moment(
-                  endDate,
-              ).format('yyyy-MM-DD')} (기준일 : ${moment(refDate).format(
+            ? `[마감 공지] ${moment(startDate).format('yyyy-MM-DD')}~${moment(deadLineDate).format(
                   'yyyy-MM-DD',
-              )}) 업무가 마감되었습니다.\n`
-            : `[개시 공지] ${moment(startDate).format('yyyy-MM-DD')}~${moment(
-                  endDate,
-              ).format('yyyy-MM-DD')} (기준일 : ${moment(refDate).format(
+              )} (기준일 : ${moment(refDate).format('yyyy-MM-DD')}) 업무가 마감되었습니다.\n`
+            : `[개시 공지] ${moment(startDate).format('yyyy-MM-DD')}~${moment(deadLineDate).format(
                   'yyyy-MM-DD',
-              )}) 업무가 개시되었습니다.\n`;
-
-        axios.patch(process.env.REACT_APP_DB_HOST + '/IsOpen', {
-            startDate: moment(startDate).format('yyyy-MM-DD'),
-            endDate: moment(endDate).format('yyyy-MM-DD'),
-            refDate: moment(refDate).format('yyyy-MM-DD'),
-            open: !open,
-        });
-
+              )} (기준일 : ${moment(refDate).format('yyyy-MM-DD')}) 업무가 개시되었습니다.\n`;
         axios
-            .post(process.env.REACT_APP_DB_HOST + '/Messages', {
-                type: 2,
-                writer: 'admin',
-                date: moment().format('yyyy-MM-DD HH:mm'),
-                contents: noiceText + ckeditorData,
-                receiver: 'user',
-                read: 1,
+            .post('update/task-status', {
+                start_date: moment(startDate).format('yyyyMMDD'),
+                deadline_date: moment(deadLineDate).format('yyyyMMDD'),
+                work_date: moment(refDate).format('yyyyMMDD'),
+                task_open: !JSON.parse(open),
             })
-            .then(() => {
-                setShowDueDate(false);
-                alert(noiceText);
-            })
-            .catch((Error) => {
-                console.log(Error);
+            .then((res) => {
+                console.log(res);
             });
+
+        // axios
+        //     .post(process.env.REACT_APP_DB_HOST + '/Messages', {
+        //         type: 2,
+        //         writer: 'admin',
+        //         date: moment().format('yyyy-MM-DD HH:mm'),
+        //         contents: noiceText + ckeditorData,
+        //         receiver: 'user',
+        //         read: 1,
+        //     })
+        //     .then(() => {
+        setShowDueDate(false);
+        //         alert(noiceText);
+        //     })
+        //     .catch((Error) => {
+        //         console.log(Error);
+        //     });
     };
 
     return (
@@ -108,12 +107,12 @@ function WorkDueDate({ show, setShowDueDate, open }) {
                                 showYearDropdown
                                 dropdownMode="select"
                                 dateFormat="yyyy-MM-dd"
-                                selected={endDate}
-                                onChange={(date) => setEndDate(date)}
+                                selected={deadLineDate}
+                                onChange={(date) => setDeadLineDate(date)}
                                 onChangeRaw={(e) => e.preventDefault()}
                                 selectsEnd
                                 startDate={startDate}
-                                endDate={endDate}
+                                endDate={deadLineDate}
                                 minDate={startDate}
                                 disabled={open}
                             />
@@ -166,9 +165,7 @@ function WorkDueDate({ show, setShowDueDate, open }) {
             </Modal.Body>
             <Modal.Footer>
                 <ButtonWrap>
-                    <WhiteButton onClick={() => setShowDueDate(false)}>
-                        닫기
-                    </WhiteButton>
+                    <WhiteButton onClick={() => setShowDueDate(false)}>닫기</WhiteButton>
                     <NormalButton
                         onClick={() => {
                             sendNotice();

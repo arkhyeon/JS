@@ -5,13 +5,9 @@ import { MdNotificationImportant, MdNotificationsNone } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { NormalButton, WhiteButton } from '../../component/button/R2wButton';
+import { testMsg } from '../../resources/testData';
 
-function MessageTab({
-    toggleMessage,
-    setToggleMessage,
-    unReadMsg,
-    setUnReadMsg,
-}) {
+function MessageTab({ toggleMessage, setToggleMessage, unReadMsg, setUnReadMsg }) {
     /**---------------------------------------------------------------------------------
      *
      *  useState
@@ -45,16 +41,9 @@ function MessageTab({
     const allReadMessage = () => {
         for (let i = 0; i < unReadMsg.length; i++) {
             axios
-                .patch(
-                    process.env.REACT_APP_DB_HOST +
-                        '/Messages/' +
-                        unReadMsg[i].id,
-                    { read: 0 },
-                )
+                .patch(process.env.REACT_APP_DB_HOST + '/Messages/' + unReadMsg[i].id, { read: 0 })
                 .then((res) => {
-                    setUnReadMsg(
-                        unReadMsg.filter((msg) => msg.id !== res.data.id),
-                    );
+                    setUnReadMsg(unReadMsg.filter((msg) => msg.id !== res.data.id));
                 })
                 .catch((error) => {
                     console.log(error.response);
@@ -74,11 +63,7 @@ function MessageTab({
      *
      *---------------------------------------------------------------------------------*/
     return (
-        <StyledOffcanvas
-            show={toggleMessage}
-            onHide={setToggleMessage}
-            placement="end"
-        >
+        <StyledOffcanvas show={toggleMessage} onHide={setToggleMessage} placement="end">
             <StyledOffHeader closeButton>
                 <Offcanvas.Title>
                     <MdNotificationsNone />
@@ -87,7 +72,7 @@ function MessageTab({
             </StyledOffHeader>
             <StyledOffBody>
                 <ToastContainer>
-                    {unReadMsg.map((msg) => {
+                    {testMsg.map((msg) => {
                         let msgIcon;
                         switch (msg.type) {
                             case 1:
@@ -97,11 +82,7 @@ function MessageTab({
                                 msgIcon = <MdNotificationsNone />;
                                 break;
                             case 3:
-                                msgIcon = (
-                                    <MdNotificationImportant
-                                        style={{ color: '#F8520B' }}
-                                    />
-                                );
+                                msgIcon = <MdNotificationImportant style={{ color: '#F8520B' }} />;
                                 break;
                             default:
                                 msgIcon = '';
@@ -116,9 +97,7 @@ function MessageTab({
                             >
                                 <Toast.Header>
                                     {msgIcon}
-                                    <strong className="me-auto">
-                                        {msg.writer}
-                                    </strong>
+                                    <strong className="me-auto">{msg.writer}</strong>
                                     <small className="">{msg.date}</small>
                                 </Toast.Header>
                                 <Toast.Body

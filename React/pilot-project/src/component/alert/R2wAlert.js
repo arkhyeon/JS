@@ -1,7 +1,7 @@
-import React from 'react';
-import { Alert } from 'react-bootstrap';
-import { MdReport } from 'react-icons/md';
-import styled from 'styled-components';
+import React from "react";
+import { Alert } from "react-bootstrap";
+import { MdReport } from "react-icons/md";
+import styled from "styled-components";
 
 /**
  * @param {HTML/TEXT} children

@@ -46,8 +46,8 @@ function AsideMenuLayout({ menus, children }) {
     const collapseStyle = (currentWidth) => {
         const classList = resizeAside.current.classList;
 
-        classList.toggle('narrow', currentWidth > 160 && currentWidth < 193);
-        classList.toggle('narrower', currentWidth <= 160);
+        classList.toggle('narrow', currentWidth > 183 && currentWidth < 203);
+        classList.toggle('narrower', currentWidth <= 183);
 
         if (!resizer.mouseActive) {
             resizeAside.current.style.width = currentWidth + 'px';
@@ -60,7 +60,6 @@ function AsideMenuLayout({ menus, children }) {
 
     const resizingDone = () => {
         document.body.style.userSelect = 'unset';
-        console.log(resizer);
         setResizer({ ...resizer, mouseActive: false });
     };
 

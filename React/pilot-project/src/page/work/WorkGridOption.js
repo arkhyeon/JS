@@ -1,13 +1,11 @@
 import { MdOutlineOpenInNew, MdOutlineOpenInNewOff } from 'react-icons/md';
 import styled from 'styled-components';
 import { NormalButton } from '../../component/button/R2wButton';
+import axios from 'axios';
 
 const AffectSqlRenderer = (props) => {
     const setExtSql = (e) => {
-        props.context.masterGrid.node.setDataValue(
-            'extract_sql',
-            e.target.value,
-        );
+        props.context.masterGrid.node.setDataValue('extract_sql', e.target.value);
         props.context.masterGrid.props.api.flashCells({
             rowNodes: [props.context.masterGrid.node],
         });
@@ -15,10 +13,7 @@ const AffectSqlRenderer = (props) => {
 
     return (
         <GridButtonWrap>
-            <NormalButton
-                onClick={setExtSql}
-                value={props.data.user_extract_sql}
-            >
+            <NormalButton onClick={setExtSql} value={props.data.extract_sql}>
                 쿼리 적용
             </NormalButton>
         </GridButtonWrap>
@@ -34,50 +29,53 @@ const cellEditorSelector = () => {
     return {
         component: 'agRichSelectCellEditor',
         params: {
-            values: ['YES', 'NO'],
+            values: ['Y', 'N'],
         },
     };
 };
 
-const onCellEditingStopped = (props) => {
-    //이관 변경
-    //TODO : if문 너무 복잡함.
-    if (props.newValue !== props.oldValue) {
-        if (props.colDef.field === 'trans_yn') {
-            if (props.newValue === 'YES' && props.data.extract_sql === '') {
-                props.node.setDataValue(
-                    'extract_sql',
-                    `select * from ${props.data.table_name}`,
-                );
-            } else if (props.newValue === 'NO') {
-                if (
-                    window.confirm(
-                        '이관 작업 등록을 해제하시면 추출 조건이 삭제됩니다.\n그래도 해제하시겠습니까?',
-                    )
-                ) {
-                    props.node.setDataValue('extract_sql', '');
-                } else {
-                    props.node.setDataValue('trans_yn', 'YES');
-                    return;
-                }
+const onCellValueChanged = (props) => {
+    console.log('onCellValueChanged');
+    console.log(props);
+    if (props.colDef.field === 'tx_yn') {
+        if (props.newValue === 'YES' && props.data.extract_sql === '') {
+            props.node.setDataValue('extract_sql', `select * from ${props.data.table_name}`);
+        } else if (props.newValue === 'NO') {
+            if (
+                window.confirm(
+                    '이관 작업 등록을 해제하시면 추출 조건이 삭제됩니다.\n그래도 해제하시겠습니까?',
+                )
+            ) {
+                props.node.setDataValue('extract_sql', '');
+            } else {
+                props.node.setDataValue('tx_yn', 'YES');
+                return;
             }
         }
-
-        props.api.flashCells({ rowNodes: [props.node] });
     }
+
+    if (props.colDef.field === 'truncate_yn' || props.colDef.field === 'extract_sql') {
+        updateTask(props);
+    }
+
+    props.api.flashCells({ rowNodes: [props.node] });
+};
+
+const updateTask = (props) => {
+    const data = {
+        task_id: props.data.task_id,
+        truncate_yn: props.data.truncate_yn,
+        extract_sql: props.data.extract_sql,
+    };
+
+    axios.post('update/task-admin', data).then((res) => {});
 };
 
 const enrollCheck = (props) => {
     if (props.data.enroll === 1) {
-        return (
-            <MdOutlineOpenInNew style={{ fontSize: '24px', fill: '#19972c' }} />
-        );
+        return <MdOutlineOpenInNew style={{ fontSize: '24px', fill: '#19972c' }} />;
     } else {
-        return (
-            <MdOutlineOpenInNewOff
-                style={{ fontSize: '24px', fill: '#929292' }}
-            />
-        );
+        return <MdOutlineOpenInNewOff style={{ fontSize: '24px', fill: '#929292' }} />;
     }
 };
 
@@ -118,23 +116,14 @@ export const adminGridOption = (isOpen) => {
             return props ? props.users_query.length > 1 : false;
         },
         frameworkComponents: { enrollCheck },
-        rowClassRules: {
-            //css70line
-            // alreadyEnroll: function (params) {
-            //     return params.data.enroll === 1;
-            // },
-        },
-        getRowNodeId: function (data) {
-            return data.id;
-        },
         rowMultiSelectWithClick: () => {
             return !isOpen;
         },
-        onCellEditingStopped: onCellEditingStopped,
+        onCellValueChanged: onCellValueChanged,
         columnDefs: [
             {
                 headerName: '시스템 명',
-                field: 'server_name',
+                field: 'system_name',
                 checkboxSelection: () => {
                     return !isOpen;
                 },
@@ -146,7 +135,7 @@ export const adminGridOption = (isOpen) => {
             },
             {
                 headerName: '등록',
-                field: 'enroll1',
+                field: 'enroll',
                 pinned: 'left',
                 cellRenderer: 'enrollCheck',
             },
@@ -157,43 +146,57 @@ export const adminGridOption = (isOpen) => {
             },
             {
                 headerName: 'SID',
-                field: 'dbms_dsn',
+                field: 'server_name',
                 pinned: 'left',
             },
             {
                 headerName: 'OWNER',
-                field: 'owner',
+                field: 'tbl_owner',
                 pinned: 'left',
             },
             {
                 headerName: 'Table 영문명',
-                field: 'table_name',
+                field: 'tbl_name',
                 pinned: 'left',
             },
             {
                 headerName: 'Table 한글명',
-                field: 'table_desc',
+                field: 'tbl_desc',
                 pinned: 'left',
             },
             {
                 headerName: '변환 컬럼 존재',
                 field: 'trrule_yn',
+                valueFormatter: (props) => {
+                    return props.value.toUpperCase();
+                },
             },
             {
                 headerName: '상태(신규,변경)',
-                field: 'table_status',
+                field: 'status',
                 cellStyle: (params) => {
-                    if (params.value === '신규') {
+                    if (params.value === 1) {
                         return { color: '#e91e63' };
-                    } else if (params.value === '변경') {
+                    } else if (params.value === 2) {
                         return { color: '#1976d2' };
                     }
                     return { color: '#000' };
                 },
+                valueFormatter: (props) => {
+                    if (props.value === 1) {
+                        return '신규';
+                    } else if (props.value === 2) {
+                        return '변경';
+                    }
+                    return '';
+                },
             },
             {
                 headerName: '이관 작업 등록',
-                field: 'trans_yn',
+                field: 'tx_yn',
+                valueFormatter: (props) => {
+                    return props.value.toUpperCase();
+                },
                 // editable: !isOpen,
                 // cellEditorSelector: cellEditorSelector,
             },
@@ -206,6 +209,9 @@ export const adminGridOption = (isOpen) => {
                 field: 'truncate_yn',
                 editable: !isOpen,
                 cellEditorSelector: cellEditorSelector,
+                valueFormatter: (props) => {
+                    return props.value.toUpperCase();
+                },
             },
             {
                 headerName: '@추출 조건',
@@ -219,22 +225,35 @@ export const adminGridOption = (isOpen) => {
                 headerName: '등록 사용자 수',
                 field: 'users',
                 cellStyle: { textAlign: 'right' },
+                valueFormatter: (props) => {
+                    return props.data.users_query.length;
+                },
             },
             {
                 headerName: 'Real Size(M)',
-                field: 'table_real_size',
+                field: 'real_size',
             },
             {
                 headerName: 'Dev Size(M)',
-                field: 'table_dev_size',
+                field: 'dev_size',
             },
             {
-                field: 'id',
+                field: 'task_id',
                 hide: true,
                 suppressColumnsToolPanel: true,
             },
             {
-                field: 'enroll',
+                field: 'system_id',
+                hide: true,
+                suppressColumnsToolPanel: true,
+            },
+            {
+                field: 'exe_cnt',
+                hide: true,
+                suppressColumnsToolPanel: true,
+            },
+            {
+                field: 'serverid_src',
                 hide: true,
                 suppressColumnsToolPanel: true,
             },
@@ -242,10 +261,10 @@ export const adminGridOption = (isOpen) => {
         detailCellRendererParams: (props) => ({
             detailGridOptions: {
                 columnDefs: [
-                    { headerName: '사용자', field: 'userid' },
+                    { headerName: '사용자', field: 'uid' },
                     {
                         headerName: '등록 쿼리',
-                        field: 'user_extract_sql',
+                        field: 'extract_sql',
                         width: 450,
                     },
                     {
@@ -291,11 +310,11 @@ export const adminGridOption = (isOpen) => {
 
 export const userGridOption = (isOpen) => {
     const userGridOption = {
-        onCellEditingStopped: onCellEditingStopped,
+        onCellValueChanged: onCellValueChanged,
         columnDefs: [
             {
                 headerName: '시스템 명',
-                field: 'server_name',
+                field: 'system_name',
                 pinned: 'left',
             },
             {
@@ -305,23 +324,23 @@ export const userGridOption = (isOpen) => {
             },
             {
                 headerName: 'SID',
-                field: 'dbms_dsn',
+                field: 'server_name',
                 pinned: 'left',
             },
             {
                 headerName: 'OWNER',
-                field: 'owner',
+                field: 'tbl_owner',
                 pinned: 'left',
             },
             {
                 headerName: 'Table 영문명',
-                field: 'table_name',
+                field: 'tbl_name',
                 suppressMenu: false,
                 pinned: 'left',
             },
             {
                 headerName: 'Table 한글명',
-                field: 'table_desc',
+                field: 'tbl_desc',
                 pinned: 'left',
             },
             {
@@ -330,7 +349,7 @@ export const userGridOption = (isOpen) => {
             },
             {
                 headerName: '상태(신규,변경)',
-                field: 'table_status',
+                field: 'status',
                 cellStyle: (params) => {
                     if (params.value === '신규') {
                         return { color: '#e91e63' };
@@ -342,7 +361,7 @@ export const userGridOption = (isOpen) => {
             },
             {
                 headerName: '＠이관 작업 등록',
-                field: 'trans_yn',
+                field: 'tx_yn',
                 editable: isOpen,
                 cellStyle: { textAlign: 'center' },
                 cellEditorSelector: cellEditorSelector,
@@ -373,13 +392,38 @@ export const userGridOption = (isOpen) => {
             },
             {
                 headerName: 'Real Size(M)',
-                field: 'table_real_size',
+                field: 'real_size',
                 width: 120,
             },
             {
                 headerName: 'Dev Size(M)',
-                field: 'table_dev_size',
+                field: 'dev_size',
                 width: 120,
+            },
+            {
+                headerName: 'id',
+                field: 'id',
+                hide: true,
+            },
+            {
+                headerName: 'task_id',
+                field: 'task_id',
+                hide: true,
+            },
+            {
+                headerName: 'system_id',
+                field: 'system_id',
+                hide: true,
+            },
+            {
+                headerName: 'server_src',
+                field: 'server_src',
+                hide: true,
+            },
+            {
+                headerName: 'exe_cnt',
+                field: 'exe_cnt',
+                hide: true,
             },
         ],
     };
