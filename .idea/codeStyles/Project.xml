@@ -24,7 +24,7 @@
       <option name="SPACES_WITHIN_IMPORTS" value="true" />
     </TypeScriptCodeStyleSettings>
     <codeStyleSettings language="HTML">
-      <option name="SOFT_MARGINS" value="100" />
+      <option name="SOFT_MARGINS" value="60" />
       <indentOptions>
         <option name="CONTINUATION_INDENT_SIZE" value="4" />
       </indentOptions>
@@ -36,10 +36,10 @@
       </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="JavaScript">
-      <option name="SOFT_MARGINS" value="100" />
+      <option name="SOFT_MARGINS" value="60" />
     </codeStyleSettings>
     <codeStyleSettings language="TypeScript">
-      <option name="SOFT_MARGINS" value="100" />
+      <option name="SOFT_MARGINS" value="60" />
     </codeStyleSettings>
   </code_scheme>
 </component>

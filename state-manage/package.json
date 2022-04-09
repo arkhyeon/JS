@@ -1,5 +1,5 @@
 {
-  "name": "vite-project",
+  "name": "state-manage",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -8,21 +8,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "eslint-config-react-app": "^7.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^1.0.7",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "prettier": "^2.6.2",
     "vite": "^2.9.0"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   }
 }
