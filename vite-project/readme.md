@@ -2,6 +2,7 @@
 
 # Vite
 $ npm create vite@latest
+  yarn create vite
 1. Bundling의 시작
    - node_modules 용량 큼
    - import require 문법은 브라우저 친화적이지 않음
