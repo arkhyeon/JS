@@ -1,11 +1,13 @@
 import CounterContainer from './containers/CounterContainer';
 import TodosContainer from './containers/TodosContainer';
-import { useState } from 'react';
+import { jsx, css } from '@emotion/react';
 
+const mainWrap = css`
+  background-color: hotpink;
+`;
 function App() {
-  const [state, setState] = useState();
   return (
-    <div>
+    <div css={mainWrap}>
       <CounterContainer />
       <hr />
       <TodosContainer />
