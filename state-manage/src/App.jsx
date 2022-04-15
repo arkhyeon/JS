@@ -1,13 +1,14 @@
 import CounterContainer from './containers/CounterContainer';
 import TodosContainer from './containers/TodosContainer';
-import { jsx, css } from '@emotion/react';
+import { css, jsx } from '@emotion/react';
 
-const mainWrap = css`
-  background-color: hotpink;
+const base = css`
+  background-color: darkgreen;
+  color: turquoise;
 `;
 function App() {
   return (
-    <div css={mainWrap}>
+    <div css={base}>
       <CounterContainer />
       <hr />
       <TodosContainer />
