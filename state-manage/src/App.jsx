@@ -1,21 +1,32 @@
 import CounterContainer from './containers/CounterContainer';
 import TodosContainer from './containers/TodosContainer';
+/** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
 import Cart from './Page/Cart';
 import Shop from './Page/Shop';
 
-const base = css`
-  background-color: darkgreen;
-  color: turquoise;
+const divStyle = css`
+  width: 80%;
+  background-color: hotpink;
+  margin: 0 auto;
+  display: flex;
 `;
+
 function App() {
   return (
-    <div css={base}>
+    <div css={divStyle}>
       <Cart></Cart>
+      <Cart></Cart>
+      <Cart></Cart>
+      <Cart></Cart>
+
       <Shop></Shop>
-      <CounterContainer />
-      <hr />
-      <TodosContainer />
+      <Shop></Shop>
+      <Shop></Shop>
+      <Shop></Shop>
+      <Shop></Shop>
+      {/*<CounterContainer />*/}
+      {/*<TodosContainer />*/}
     </div>
   );
 }

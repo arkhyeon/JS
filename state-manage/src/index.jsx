@@ -6,6 +6,7 @@ import { createStore } from 'redux';
 import rootReducer from './modules';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import './exercise';
+import './scss/common.scss';
 
 const store = createStore(rootReducer, composeWithDevTools());
 ReactDOM.render(
