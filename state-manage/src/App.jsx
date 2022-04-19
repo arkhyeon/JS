@@ -2,8 +2,8 @@ import CounterContainer from './containers/CounterContainer';
 import TodosContainer from './containers/TodosContainer';
 /** @jsxImportSource @emotion/react */
 import { css, jsx } from '@emotion/react';
-import Cart from './Page/Cart';
 import Shop from './Page/Shop';
+import { Route, Routes } from 'react-router-dom';
 import { ShopData } from './Data';
 import styled from 'styled-components';
 
@@ -52,6 +52,9 @@ const Header = styled.div`
 function App() {
   return (
     <>
+      <Routes>
+        <Route path="/" element={<Main />} />
+      </Routes>
       <Header>
         <h1>r2ware</h1>
         <ul>
