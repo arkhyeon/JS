@@ -1,21 +1,21 @@
-const ADD_SHOP = 'shop/ADD_SHOP';
+export const INCREASE = 'COUNT/INCREASE';
 
-let nextId = 1;
-export const addShop = text => ({
-  type: ADD_SHOP,
-  todo: {
-    id: nextId++,
-    text,
-  },
-});
+export const increaseCount = count => ({ type: INCREASE });
 
-const initialState = [];
+const initialState = {
+  count: 0,
+};
 
-export default function shop(state = initialState, action) {
+export const shop = (state = initialState, action) => {
+  console.log(state);
   switch (action.type) {
-    case ADD_SHOP:
-      return state.concat(action.todo);
+    case INCREASE:
+      return {
+        ...state,
+        count: state.count + 1,
+      };
+
     default:
       return state;
   }
-}
+};

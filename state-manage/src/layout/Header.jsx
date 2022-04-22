@@ -9,7 +9,7 @@ function Header() {
       <ul>
         <NavLink to="/">
           <li className="shop">
-            SHOP<li className="line-bottom"></li>
+            SHOP<div className="line-bottom"></div>
           </li>
         </NavLink>
         <NavLink to="/cart">
@@ -53,11 +53,11 @@ const HeaderComponent = styled.div`
       //font-family: 'DINPro-Medium';
     }
 
-    & a.active .shop li {
-      left: 0px;
+    & a.active .shop div {
+      left: 20px;
     }
-    & a .shop li {
-      left: 90px;
+    & a .shop div {
+      left: 110px;
     }
 
     & .line-bottom {

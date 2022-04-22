@@ -9,7 +9,7 @@
 //
 // export default rootReducer;
 import { combineReducers } from 'redux';
-import shop from './counter';
+import { shop } from './shop';
 
 const rootReducer = combineReducers({
   shop,

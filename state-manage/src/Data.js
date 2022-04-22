@@ -13,7 +13,8 @@ export const ShopData = [
   },
   {
     img: 'https://image-proxy.sta1.com/_up/brand/2019/10/29/1572329474663-f.jpg',
-    name: '스포츠 의류 다국적 기업',
+    name: '뉴발란스',
+    desc: '스포츠 의류 다국적 기업',
     category: 'Sports',
   },
   {
