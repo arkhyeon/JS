@@ -7,7 +7,7 @@ function Header() {
     <HeaderComponent>
       <h1>r2ware</h1>
       <ul>
-        <NavLink to="/shop">
+        <NavLink to="/">
           <li className="shop">
             SHOP<li className="line-bottom"></li>
           </li>
