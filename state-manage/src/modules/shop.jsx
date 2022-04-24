@@ -1,18 +1,22 @@
 export const INCREASE = 'COUNT/INCREASE';
+export const ADD_CART = 'COUNT/ADD_CART';
 
-export const increaseCount = count => ({ type: INCREASE });
+export const addToCart = state => ({ type: ADD_CART, state });
 
 const initialState = {
-  count: 0,
+  img: '',
+  name: '',
+  desc: '',
+  category: '',
 };
 
 export const shop = (state = initialState, action) => {
-  console.log(state);
+  console.log(action);
   switch (action.type) {
-    case INCREASE:
+    case ADD_CART:
       return {
         ...state,
-        count: state.count + 1,
+        state,
       };
 
     default:

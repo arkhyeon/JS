@@ -1,7 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, shop } from '../modules/shop';
 
 function Product({ props, index }) {
+  const dispatch = useDispatch();
+
+  const { cartItem } = useSelector(state => state.shop);
+
+  const add = () => {
+    console.log('start');
+    console.log(addToCart);
+    console.log(cartItem);
+    dispatch(addToCart());
+  };
   return (
     <ProductWrap>
       <span>{index + 1}위</span>
@@ -12,7 +24,7 @@ function Product({ props, index }) {
         <p>{props.category}</p>
       </ShopInfo>
       <ButtonWrap>
-        <div>장바구니 🛒</div>
+        <div onClick={add}>장바구니 🛒</div>
         <div>관심 ✨</div>
       </ButtonWrap>
     </ProductWrap>
