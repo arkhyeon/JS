@@ -1,13 +1,10 @@
-export const INCREASE = 'COUNT/INCREASE';
-export const ADD_CART = 'COUNT/ADD_CART';
+export const ADD_CART = 'CART/ADD_CART';
 
 export const addToCart = state => ({ type: ADD_CART, product: state });
 
-const initialState = [{}];
+const initialState = [];
 
-export const shop = (state = initialState, action) => {
-  console.log(action);
-  console.log(state);
+export const cart = (state = initialState, action) => {
   switch (action.type) {
     case ADD_CART:
       return [

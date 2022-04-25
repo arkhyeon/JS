@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '../modules/shop';
+import { addToCart } from '../modules/cart';
+import { addInterest } from '../modules/interest';
 
 function Product({ props, index }) {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ function Product({ props, index }) {
       </ShopInfo>
       <ButtonWrap>
         <div onClick={() => add(props)}>장바구니 🛒</div>
-        <div>관심 ✨</div>
+        <div onClick={() => dispatch(addInterest(props.id))}>관심 ✨</div>
       </ButtonWrap>
     </ProductWrap>
   );
