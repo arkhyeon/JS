@@ -1,15 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart } from '../modules/cart';
-import { addInterest } from '../modules/interest';
+import { addCart, removeCart } from '../modules/cart';
+import { addInterest, removeInterest } from '../modules/interest';
 
 function Product({ props, index }) {
   const dispatch = useDispatch();
+  const interest = useSelector(state => state.interest);
 
-  const add = () => {
-    dispatch(addToCart(props));
+  const toggleCart = () => {
+    if (interest.includes(props.id)) {
+      dispatch(removeCart(props));
+    } else {
+      dispatch(addCart(props));
+    }
   };
+
+  const toggleInterest = () => {
+    if (interest.includes(props.id)) {
+      dispatch(removeInterest(props.id));
+    } else {
+      dispatch(addInterest(props.id));
+    }
+  };
+
   return (
     <ProductWrap>
       <span>{index + 1}위</span>
@@ -20,8 +34,11 @@ function Product({ props, index }) {
         <p>{props.category}</p>
       </ShopInfo>
       <ButtonWrap>
-        <div onClick={() => add(props)}>장바구니 🛒</div>
-        <div onClick={() => dispatch(addInterest(props.id))}>관심 ✨</div>
+        <div onClick={toggleCart}>장바구니 🛒</div>
+        <div onClick={toggleInterest}>
+          관심
+          {interest.includes(props.id) ? ' 🧡' : ' 🤍'}
+        </div>
       </ButtonWrap>
     </ProductWrap>
   );

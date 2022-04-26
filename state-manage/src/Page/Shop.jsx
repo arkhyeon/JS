@@ -3,8 +3,6 @@ import { ShopData } from '../Data';
 import Product from '../components/Product';
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
-import { cart } from '../modules/cart';
-import { interest } from '../modules/interest';
 
 function Shop() {
   const cartItem = useSelector(state => state.cart);
