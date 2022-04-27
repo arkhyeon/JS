@@ -7,7 +7,6 @@ export const removeCart = state => ({ type: REMOVE_CART, product: state });
 const initialState = [];
 
 export const cart = (state = initialState, action) => {
-  console.log([...state.filter(s => s.id !== action.product.id)]);
   switch (action.type) {
     case ADD_CART:
       return [

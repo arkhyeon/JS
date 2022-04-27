@@ -3,13 +3,15 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCart, removeCart } from '../modules/cart';
 import { addInterest, removeInterest } from '../modules/interest';
+import _ from 'lodash';
 
 function Product({ props, index }) {
   const dispatch = useDispatch();
   const interest = useSelector(state => state.interest);
+  const cartItem = useSelector(state => state.cart);
 
   const toggleCart = () => {
-    if (interest.includes(props.id)) {
+    if (_.find(cartItem, { id: props.id })) {
       dispatch(removeCart(props));
     } else {
       dispatch(addCart(props));
@@ -34,7 +36,7 @@ function Product({ props, index }) {
         <p>{props.category}</p>
       </ShopInfo>
       <ButtonWrap>
-        <div onClick={toggleCart}>장바구니 🛒</div>
+        <div onClick={toggleCart}>{_.find(cartItem, { id: props.id }) ? '✅' : '장바구니 🛒'}</div>
         <div onClick={toggleInterest}>
           관심
           {interest.includes(props.id) ? ' 🧡' : ' 🤍'}
