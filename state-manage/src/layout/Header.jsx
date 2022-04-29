@@ -16,6 +16,7 @@ function Header() {
           <li className="cart">CART</li>
         </NavLink>
       </ul>
+      <p>LOGIN</p>
     </HeaderComponent>
   );
 }
@@ -26,15 +27,24 @@ const HeaderComponent = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   margin-bottom: 40px;
   display: flex;
+  justify-content: space-between;
   background-color: white;
   & a {
     color: #303030;
   }
+  
+  & p {
+    width: 150px;
+    color: #303030;
+    padding-right:30px;
+    text-align: right;
+    line-height: 59px;
+    cursor: pointer;
+  }
+  
   & ul {
     display: flex;
-    margin: 0 auto;
     position: relative;
-    left: -90px;
 
     & li {
       width: 50px;
@@ -70,5 +80,9 @@ const HeaderComponent = styled.div`
     }
   }
 `;
+
+const LoginAside = () => {
+
+}
 
 export default Header;

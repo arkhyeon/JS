@@ -1,17 +1,25 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import {useDispatch} from "react-redux";
+import {removeCart} from "../modules/cart";
 
-function ShopItem({ props }) {
-  console.log(props);
+function ShopItem({ props, modifyMode }) {
+  const dispatch = useDispatch();
+
+  const modifyShopItem = () =>{
+    dispatch(removeCart(props));
+  }
   return (
     <ShopItemWrap>
       <img src={props.img} />
       <p>{props.name}</p>
+      {modifyMode && <a onClick={modifyShopItem}>제거</a>}
     </ShopItemWrap>
   );
 }
 
 export default ShopItem;
+
 const ShopItemWrap = styled.div`
   width: 72px;
   height: 80px;
@@ -26,9 +34,13 @@ const ShopItemWrap = styled.div`
     border-radius: 100%;
   }
 
-  & p {
+  & p, a {
     font-size: 11px;
     text-align: center;
     color: #909090;
+  }
+  
+  & a{
+    cursor: pointer;
   }
 `;

@@ -3,6 +3,7 @@ import { ShopData } from '../Data';
 import Product from '../components/Product';
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
+import {NavLink} from "react-router-dom";
 
 function Shop() {
   const cartItem = useSelector(state => state.cart);
@@ -11,6 +12,7 @@ function Shop() {
   return (
     <>
       <MyShop>
+        <NavLink to='/cart'>
         <ShopInfo>
           <img src="https://www.sta1.com/_nuxt/img/icon-myshop@3x.00de977.png" />
           <p>
@@ -28,6 +30,7 @@ function Shop() {
             </li>
           </ul>
         </ShopInfo>
+        </NavLink>
       </MyShop>
       {ShopData.map((sd, index) => {
         return <Product key={index} index={index} props={sd} />;
