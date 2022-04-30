@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from '@emotion/styled';
 import ShopItem from '../components/ShopItem';
@@ -16,7 +16,7 @@ function Cart() {
       </div>
       <MyShop>
         {cartItem.map(ci => {
-          return <ShopItem key={ci.id} props={ci} modifyMode={modifyMode}/>;
+          return <ShopItem key={ci.id} props={ci} modifyMode={modifyMode} />;
         })}
       </MyShop>
     </MyCartWrap>
@@ -34,8 +34,8 @@ const MyCartWrap = styled.div`
   & span {
     color: #ff6b00;
   }
-  
-  & a{
+
+  & a {
     float: right;
     font-size: 11px;
     cursor: pointer;
