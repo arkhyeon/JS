@@ -1,6 +1,6 @@
 import React from 'react';
 
-function LoginAside(props) {
+function LoginAside() {
   return <div></div>;
 }
 
