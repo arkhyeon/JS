@@ -1,23 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import LoginAside from '../components/LoginAside';
 
 function Header() {
+  const [viewAside, setViewAside] = useState(false);
+
   return (
-    <HeaderComponent>
-      <h1>r2ware</h1>
-      <ul>
-        <NavLink to="/">
-          <li className="shop">
-            SHOP<div className="line-bottom"></div>
-          </li>
-        </NavLink>
-        <NavLink to="/cart">
-          <li className="cart">CART</li>
-        </NavLink>
-      </ul>
-      <p>LOGIN</p>
-    </HeaderComponent>
+    <>
+      <HeaderComponent>
+        <h1>r2ware</h1>
+        <ul>
+          <NavLink to="/">
+            <li className="shop">
+              SHOP<div className="line-bottom"></div>
+            </li>
+          </NavLink>
+          <NavLink to="/cart">
+            <li className="cart">CART</li>
+          </NavLink>
+        </ul>
+        <p onClick={() => setViewAside(!viewAside)}>LOGIN</p>
+      </HeaderComponent>
+      {viewAside && <LoginAside />}
+    </>
   );
 }
 
@@ -32,16 +38,16 @@ const HeaderComponent = styled.div`
   & a {
     color: #303030;
   }
-  
+
   & p {
     width: 150px;
     color: #303030;
-    padding-right:30px;
+    padding-right: 30px;
     text-align: right;
     line-height: 59px;
     cursor: pointer;
   }
-  
+
   & ul {
     display: flex;
     position: relative;
@@ -80,9 +86,5 @@ const HeaderComponent = styled.div`
     }
   }
 `;
-
-const LoginAside = () => {
-
-}
 
 export default Header;
