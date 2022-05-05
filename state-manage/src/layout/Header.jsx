@@ -22,7 +22,7 @@ function Header() {
         </ul>
         <p onClick={() => setViewAside(!viewAside)}>LOGIN</p>
       </HeaderComponent>
-      {viewAside && <LoginAside />}
+      {viewAside && <LoginAside setViewAside={setViewAside} />}
     </>
   );
 }
@@ -46,6 +46,7 @@ const HeaderComponent = styled.div`
     text-align: right;
     line-height: 59px;
     cursor: pointer;
+    font-size: 12px;
   }
 
   & ul {
